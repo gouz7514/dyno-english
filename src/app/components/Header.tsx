@@ -3,6 +3,9 @@ import styled from 'styled-components'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 
+import HeaderDropdown from './HeaderDropdown'
+import ClickAwayListener from './ClickAwayListener'
+
 const HeaderStyle = styled.header`
   background-color: var(--primary-green);
   color: #fff;
@@ -163,11 +166,84 @@ const Overlay = styled.div`
   }
 `
 
+const DropdownIntro = [
+  {
+    title: '공부방 소개',
+    link: '/intro/place'
+  },
+  {
+    title: '선생님 소개',
+    link: '/intro/teacher'
+  },
+  {
+    title: '오시는 길',
+    link: '/intro/map'
+  },
+  {
+    title: '후기',
+    link: '/intro/review'
+  }
+]
+
+const DropdownCurriculumn = [
+  {
+    title: '파닉스',
+    link: '/curriculum/phonics'
+  },
+  {
+    title: '리딩',
+    link: '/curriculum/reading'
+  },
+]
+
+const DropdownStudy = [
+  {
+    title: '시간표',
+    link: '/study/table'
+  },
+  {
+    title: '수강생 모집',
+    link: '/study/recruit'
+  }
+]
+
 export default function Header() {
   const [isMobile, setIsMobile] = useState(false)
   const [isMenuVisible, setIsMenuVisible] = useState(false)
   const pathname = usePathname()
   const currentPathNameRef = useRef(pathname)
+
+  const [dropdownList, setDropdownList] = useState(DropdownIntro)
+  const [isDropdownVisible, setIsDropdownVisible] = useState({
+    intro: false,
+    curriculum: false,
+    study: false
+  })
+  const [clickedDropdown, setClickedDropdown] = useState('')
+
+  const handleDropdownClick = function(type: keyof typeof isDropdownVisible) {
+    setIsDropdownVisible((prevState) => ({
+      ...prevState,
+      [type]: !prevState[type]
+    }))
+
+    setClickedDropdown(type)
+
+    if (type === 'intro') {
+      setDropdownList(DropdownIntro)
+    } else if (type === 'curriculum') {
+      setDropdownList(DropdownCurriculumn)
+    } else if (type === 'study') {
+      setDropdownList(DropdownStudy)
+    }
+  }
+
+  const handleClickAway = function(type: keyof typeof isDropdownVisible) {
+    setIsDropdownVisible((prevState) => ({
+      ...prevState,
+      [type]: false
+    }))
+  }
 
   const handleMenuClick = function() {
     setIsMenuVisible(!isMenuVisible)
@@ -205,21 +281,48 @@ export default function Header() {
           <div className="header-menu">
             <div className={ `header-toggle ${isMenuVisible ? 'close' : 'open' }` } onClick={handleMenuClick} />
             <div className="header-links">
-              <Link href="/intro" className="header-link">
-                <div className="header-link-text">
-                  소개
+              <ClickAwayListener onClickAway={() => handleClickAway('intro')}>
+                <div className='header-link' onClick={() => handleDropdownClick('intro')}>
+                  <div className="header-link-text">
+                    소개
+                  </div>
+                  {
+                    isDropdownVisible.intro && clickedDropdown === 'intro' ?
+                    (
+                      <HeaderDropdown list={dropdownList} />
+                    ) :
+                    null
+                  }
                 </div>
-              </Link>
-              <Link href="/curriculum" className="header-link">
-                <div className="header-link-text">
-                  커리큘럼
+              </ClickAwayListener>
+              <ClickAwayListener onClickAway={() => handleClickAway('curriculum')}>
+                <div className='header-link' onClick={() => handleDropdownClick('curriculum')}>
+                  <div className="header-link-text">
+                    커리큘럼
+                  </div>
+                  {
+                    isDropdownVisible.curriculum && clickedDropdown === 'curriculum' ?
+                    (
+                      <HeaderDropdown list={dropdownList} />
+                    ) :
+                    null
+                  }
                 </div>
-              </Link>
-              <Link href="/study" className="header-link">
-                <div className="header-link-text">
-                  수업
+              </ClickAwayListener>
+              <ClickAwayListener onClickAway={() => handleClickAway('study')}>
+                <div className='header-link' onClick={() => handleDropdownClick('study')}>
+                  <div className="header-link-text">
+                    수업
+                  </div>
+                  {
+                    isDropdownVisible.study && clickedDropdown === 'study' ?
+                    (
+                      <HeaderDropdown list={DropdownStudy} />
+                    ) :
+                    null
+                  }
                 </div>
-              </Link>
+              </ClickAwayListener>
               <Link href="/notice" className="header-link">
                 <div className="header-link-text">
                   공지사항
