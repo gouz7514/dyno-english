@@ -18,9 +18,9 @@ const ClickAwayListener: React.FC<ClickAwayListenerProps> = ({
   }
 
   useEffect(() => {
-    document.addEventListener('mousedown', handleClickOutside)
+    document.addEventListener('mouseenter', handleClickOutside)
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside)
+      document.removeEventListener('mouseenter', handleClickOutside)
     }
   }, [])
 

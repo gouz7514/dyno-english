@@ -7,13 +7,14 @@ import HeaderDropdown from './HeaderDropdown'
 import ClickAwayListener from './ClickAwayListener'
 
 const HeaderStyle = styled.header`
-  background-color: var(--primary-green);
+  // background-color: var(--primary-green);
   color: #fff;
   padding: 1rem;
   display: flex;
   height: var(--height-header);
   position: relative;
   z-index: 10;
+  border: 1px black solid;
 
   .header {
     display: flex;
@@ -50,45 +51,22 @@ const HeaderStyle = styled.header`
 
       .header-links {
         display: flex;
-        gap: 12px;
+        gap: 18px;
 
         .header-link {
           cursor: pointer;
           background-color: var(--primary-yellow);
           padding: 12px;
           position: relative;
-          transform: scale(0.95);
+          display: flex;
+          align-items: center;
+          gap: 2px;
 
-          &:hover {
-            transform: scale(0.92);
-          }
-
-          .header-link-text {
-            font-size: 20px;
-            font-weight: bold;
-            color: white;
-
-            &:before {
-              content: '';
-              position: absolute;
-              bottom: -4px;
-              height: 4px;
-              width: 100%;
-              left: 2px;
-              transform: skewX(45deg);
-              background-color: #E2B537;
-            }
-
-            &:after {
-              content: '';
-              position: absolute;
-              right: -4px;
-              height: 100%;
-              width: 4px;
-              bottom: -2px;
-              transform: skewY(45deg);
-              background-color: #E2B537;
-            }
+          .arrow {
+            background-image: url('/icon/icon-arrow-down.svg');
+            width: 16px;
+            height: 9px;
+            background-size: 16px 9px;
           }
         }
 
@@ -213,36 +191,25 @@ export default function Header() {
   const pathname = usePathname()
   const currentPathNameRef = useRef(pathname)
 
-  const [dropdownList, setDropdownList] = useState(DropdownIntro)
   const [isDropdownVisible, setIsDropdownVisible] = useState({
     intro: false,
     curriculum: false,
     study: false
   })
-  const [clickedDropdown, setClickedDropdown] = useState('')
 
-  const handleDropdownClick = function(type: keyof typeof isDropdownVisible) {
-    setIsDropdownVisible((prevState) => ({
-      ...prevState,
-      [type]: !prevState[type]
-    }))
-
-    setClickedDropdown(type)
-
-    if (type === 'intro') {
-      setDropdownList(DropdownIntro)
-    } else if (type === 'curriculum') {
-      setDropdownList(DropdownCurriculumn)
-    } else if (type === 'study') {
-      setDropdownList(DropdownStudy)
-    }
+  const handleDropdown = function(dropdownName: string, flag: boolean) {
+    setIsDropdownVisible({
+      ...isDropdownVisible,
+      [dropdownName]: flag
+    })
   }
 
-  const handleClickAway = function(type: keyof typeof isDropdownVisible) {
-    setIsDropdownVisible((prevState) => ({
-      ...prevState,
-      [type]: false
-    }))
+  const closeDropdown = function() {
+    setIsDropdownVisible({
+      intro: false,
+      curriculum: false,
+      study: false
+    })
   }
 
   const handleMenuClick = function() {
@@ -269,6 +236,7 @@ export default function Header() {
   useEffect(() => {
     if (currentPathNameRef.current !== pathname) {
       handleMenuClose()
+      closeDropdown()
       currentPathNameRef.current = pathname
     }
   })
@@ -281,48 +249,48 @@ export default function Header() {
           <div className="header-menu">
             <div className={ `header-toggle ${isMenuVisible ? 'close' : 'open' }` } onClick={handleMenuClick} />
             <div className="header-links">
-              <ClickAwayListener onClickAway={() => handleClickAway('intro')}>
-                <div className='header-link' onClick={() => handleDropdownClick('intro')}>
+              <div className="header-dropdown d-flex flex-column" onMouseOver={() => handleDropdown('intro', true)} onMouseOut={() => handleDropdown('intro', false)}>
+                <div className='header-link'>
                   <div className="header-link-text">
-                    소개
+                    소개 
                   </div>
-                  {
-                    isDropdownVisible.intro && clickedDropdown === 'intro' ?
-                    (
-                      <HeaderDropdown list={dropdownList} />
-                    ) :
-                    null
-                  }
+                  <div className="arrow" />
                 </div>
-              </ClickAwayListener>
-              <ClickAwayListener onClickAway={() => handleClickAway('curriculum')}>
-                <div className='header-link' onClick={() => handleDropdownClick('curriculum')}>
+                {
+                  isDropdownVisible.intro ? (
+                    <HeaderDropdown list={DropdownIntro} />
+                  ) :
+                  null
+                }
+              </div>
+              <div className="header-dropdown d-flex flex-column" onMouseOver={() => handleDropdown('curriculum', true)} onMouseOut={() => handleDropdown('curriculum', false)}>
+                <div className='header-link'>
                   <div className="header-link-text">
                     커리큘럼
                   </div>
-                  {
-                    isDropdownVisible.curriculum && clickedDropdown === 'curriculum' ?
-                    (
-                      <HeaderDropdown list={dropdownList} />
-                    ) :
-                    null
-                  }
+                  <div className="arrow" />
                 </div>
-              </ClickAwayListener>
-              <ClickAwayListener onClickAway={() => handleClickAway('study')}>
-                <div className='header-link' onClick={() => handleDropdownClick('study')}>
+                {
+                  isDropdownVisible.curriculum ? (
+                    <HeaderDropdown list={DropdownCurriculumn} />
+                  ) :
+                  null
+                }
+              </div>
+              <div className="header-dropdown d-flex flex-column" onMouseOver={() => handleDropdown('study', true)} onMouseOut={() => handleDropdown('study', false)}>
+                <div className='header-link'>
                   <div className="header-link-text">
                     수업
                   </div>
-                  {
-                    isDropdownVisible.study && clickedDropdown === 'study' ?
-                    (
-                      <HeaderDropdown list={DropdownStudy} />
-                    ) :
-                    null
-                  }
+                  <div className="arrow" />
                 </div>
-              </ClickAwayListener>
+                {
+                  isDropdownVisible.study ? (
+                    <HeaderDropdown list={DropdownStudy} />
+                  ) :
+                  null
+                }
+              </div>
               <Link href="/notice" className="header-link">
                 <div className="header-link-text">
                   공지사항

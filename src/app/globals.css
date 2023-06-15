@@ -1,6 +1,7 @@
 :root {
   --primary-green: #009222;
   --primary-yellow: #ffC10C;
+  --primary-yellow-hover: #ffD42C;
 
   --height-header: 80px;
 }
