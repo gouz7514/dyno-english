@@ -6,6 +6,8 @@ import { usePathname } from 'next/navigation'
 import HeaderDropdown from './HeaderDropdown'
 import HeaderMobile from './HeaderMobile'
 
+import { DropdownIntro, DropdownCurriculumn, DropdownStudy } from '@/lib/constants/constatns'
+
 const HeaderStyle = styled.header`
   // background-color: var(--primary-green);
   color: #fff;
@@ -143,47 +145,6 @@ const Overlay = styled.div`
     transition: opacity 0.3s ease-in-out;
   }
 `
-
-const DropdownIntro = [
-  {
-    title: '공부방 소개',
-    link: '/intro/place'
-  },
-  {
-    title: '선생님 소개',
-    link: '/intro/teacher'
-  },
-  {
-    title: '오시는 길',
-    link: '/intro/map'
-  },
-  {
-    title: '후기',
-    link: '/intro/review'
-  }
-]
-
-const DropdownCurriculumn = [
-  {
-    title: '파닉스',
-    link: '/curriculum/phonics'
-  },
-  {
-    title: '리딩',
-    link: '/curriculum/reading'
-  },
-]
-
-const DropdownStudy = [
-  {
-    title: '시간표',
-    link: '/study/table'
-  },
-  {
-    title: '수강생 모집',
-    link: '/study/recruit'
-  }
-]
 
 export default function Header() {
   const [isMobile, setIsMobile] = useState(false)
