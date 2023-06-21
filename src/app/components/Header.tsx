@@ -26,7 +26,7 @@ const HeaderStyle = styled.header`
 
     .header-home {
       margin-right: auto;
-      background-image: url('/logo/logo_dyno_english.png');
+      background-image: url('/logo/logo_dyno_english.webp');
       width: 180px;
       height: 40px;
       background-repeat: no-repeat;
