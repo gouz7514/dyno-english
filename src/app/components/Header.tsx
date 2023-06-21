@@ -4,7 +4,6 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 
 import HeaderDropdown from './HeaderDropdown'
-import ClickAwayListener from './ClickAwayListener'
 
 const HeaderStyle = styled.header`
   // background-color: var(--primary-green);
