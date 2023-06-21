@@ -6,27 +6,8 @@ const DropdownStyle = styled.article`
   display: flex;
   flex-direction: column;
   gap: 12px;
-  background-color: var(--primary-yellow);
-  margin-top: 6px;
-
-  .arrow,
-  .arrow::before {
-    content: '';
-    position: absolute;
-    width: 0;
-    height: 0;
-    border-style: solid;
-    border-color: transparent;
-  }
-
-  .arrow {
-    border-width: 0 6px 6px 6px;
-    border-color: transparent transparent var(--primary-yellow) transparent;
-    top: -6px;
-    left: 24px;
-    transform: translateX(-50%);
-  }
-
+  background-color: var(--second-yellow);
+  
   &.show {
     display: flex;
   }
@@ -52,7 +33,6 @@ interface DropdownProps {
 export default function HeaderDropdown({ list }: DropdownProps) {
   return (
     <DropdownStyle>
-      <div className="arrow"></div>
       {
         list && 
         list.map((item, index) => (

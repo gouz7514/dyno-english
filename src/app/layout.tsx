@@ -8,8 +8,8 @@ import GlobalHeader from '@/lib/globalHeader'
 import Header from './components/Header'
 
 const metadata = {
-  title: '다이노 잉글리시',
-  description: '다이노 잉글리시와 함께 영어를 배워보세요!',
+  title: '다이노 영어',
+  description: '다이노 영어와 함께 영어를 배워보세요!',
 }
 
 export default function RootLayout({
