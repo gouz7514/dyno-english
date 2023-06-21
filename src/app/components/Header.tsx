@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 
 import HeaderDropdown from './HeaderDropdown'
+import HeaderMobile from './HeaderMobile'
 
 const HeaderStyle = styled.header`
   // background-color: var(--primary-green);
@@ -298,23 +299,7 @@ export default function Header() {
             </div>
           </div>
           { isMobile && 
-            <div className={ `header-links-mobile ${isMenuVisible ? 'open' : 'hide'}` }>
-              <div className="header-close" onClick={handleMenuClose}/>
-              <div className="header-links">
-                <div className="header-link">
-                  <Link href="/intro">소개</Link>
-                </div>
-                <div className="header-link">
-                  <Link href="/curriculum">커리큘럼</Link>
-                </div>
-                <div className="header-link">
-                  <Link href="/study">수업</Link>
-                </div>
-                <div className="header-link">
-                  <Link href="/notice">공지사항</Link>
-                </div>
-              </div>
-            </div>
+            <HeaderMobile isMenuVisible={isMenuVisible} handleMenuClose={handleMenuClose} />
           }
         </div>
       </HeaderStyle>
