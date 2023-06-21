@@ -77,54 +77,6 @@ const HeaderStyle = styled.header`
         }
       }
     }
-
-    .header-links-mobile {
-      position: absolute;
-      display: flex;
-      flex-direction: column;
-      height: 100vh;
-      background-color: var(--primary-yellow);
-      right: 0;
-      top: 0;
-      transform: translateX(100%);
-      --webkit-transform: translateX(100%);
-      transition: all 0.3s ease-in-out;
-      color: black;
-      font-weight: bold;
-      z-index: 10;
-
-      .header-close {
-        background-image: url('/icon/icon_menu.svg');
-        width: 30px;
-        height: 30px;
-        background-size: 30px 30px;
-        background-image: url('/icon/icon_close.svg');
-        cursor: pointer;
-        position: absolute;
-        right: 1em;
-        top: 1em;
-      }
-
-      .header-links {
-        padding-top: var(--height-header);
-        
-        .header-link {
-          padding: 2rem;
-          cursor: pointer;
-          text-align: center;
-          box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 6px -1px, rgba(0, 0, 0, 0.06) 0px 2px 4px -1px;
-  
-          &:hover {
-            backdrop-filter: brightness(1.1);
-          }
-        }
-      }
-
-      &.open {
-        transform: translateX(0);
-        position: fixed;
-      }
-    }
   }
 `
 
