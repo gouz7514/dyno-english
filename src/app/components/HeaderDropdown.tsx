@@ -7,7 +7,7 @@ const DropdownStyle = styled.article`
     display: flex;
     flex-direction: column;
     gap: 12px;
-    background-color: var(--second-yellow);
+    padding-top: 18px;
     
     &.show {
       display: flex;
@@ -16,9 +16,9 @@ const DropdownStyle = styled.article`
     .dropdown-link {
       padding: 12px;
 
-      &:hover {
-        background-color: var(--primary-yellow-hover);
-      }
+      .dropdown-link-text {
+        font-weight: normal;
+        font-size: 14px;
     }
   }
 
@@ -31,13 +31,8 @@ const DropdownStyle = styled.article`
       text-align: center;
 
       .dropdown-link-text {
-        padding: 12px 0;
+        padding: 20px 0;
         background-color: var(--primary-white);
-        box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
-
-        &:hover {
-          background-color: var(--primary-white-hover);
-        }
       }
     }
   }

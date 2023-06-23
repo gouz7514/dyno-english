@@ -13,7 +13,7 @@ const HeaderMobileStyle = styled.header`
     display: flex;
     flex-direction: column;
     height: 100vh;
-    background-color: var(--primary-yellow);
+    background-color: white;
     right: 0;
     top: 0;
     transform: translateX(100%);
@@ -22,6 +22,7 @@ const HeaderMobileStyle = styled.header`
     color: black;
     font-weight: bold;
     z-index: 10;
+    filter: opacity(0.75);
 
     .header-close {
       background-image: url('/icon/icon_menu.svg');
@@ -31,18 +32,17 @@ const HeaderMobileStyle = styled.header`
       background-image: url('/icon/icon_close.svg');
       cursor: pointer;
       position: absolute;
-      right: 1em;
-      top: 1em;
+      right: 1.6em;
+      top: 1.6em;
     }
 
     .header-links {
       padding-top: var(--height-header);
       
       .header-link {
-        padding: 1.5rem;
+        padding: 1.8rem;
         cursor: pointer;
         text-align: center;
-        box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 6px -1px, rgba(0, 0, 0, 0.06) 0px 2px 4px -1px;
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -62,10 +62,6 @@ const HeaderMobileStyle = styled.header`
             height: 9px;
             background-size: 16px 9px;
           }
-        }
-
-        &:hover {
-          backdrop-filter: brightness(1.1);
         }
       }
     }
@@ -124,7 +120,6 @@ export default function HeaderMobile({ isMenuVisible, handleMenuClose }: HeaderM
             <div className="header-link-text">
               소개
             </div>
-            <div className={ `header-dropdown-icon ${dropdownVisible.intro ? 'up' : 'down'}` } />
           </div>
           {
             dropdownVisible.intro ? (
@@ -136,7 +131,6 @@ export default function HeaderMobile({ isMenuVisible, handleMenuClose }: HeaderM
             <div className="header-link-text">
               커리큘럼
             </div>
-            <div className={ `header-dropdown-icon ${dropdownVisible.curriculumn ? 'up' : 'down'}` } />
           </div>
           {
             dropdownVisible.curriculumn ? (
@@ -148,7 +142,6 @@ export default function HeaderMobile({ isMenuVisible, handleMenuClose }: HeaderM
             <div className="header-link-text">
               수업
             </div>
-            <div className={ `header-dropdown-icon ${dropdownVisible.study ? 'up' : 'down'}` } />
           </div>
           {
             dropdownVisible.study ? (

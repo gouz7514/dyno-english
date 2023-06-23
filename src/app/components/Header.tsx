@@ -9,21 +9,20 @@ import HeaderMobile from './HeaderMobile'
 import { DropdownIntro, DropdownCurriculumn, DropdownStudy } from '@/lib/constants/constatns'
 
 const HeaderStyle = styled.header`
-  // background-color: var(--primary-green);
   color: #fff;
   padding: 1rem;
   display: flex;
   height: var(--height-header);
   position: relative;
   z-index: 10;
-  border: 1px black solid;
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 3px 12px;
 
   .header {
     display: flex;
     justify-content: flex-end;
     align-items: center;
     width: 100%;
-    height: 40px;
+    height: calc(var(--height-header) - 2rem);
     color: black;
     font-weight: bold;
 
@@ -41,10 +40,10 @@ const HeaderStyle = styled.header`
       .header-toggle {
         display: none;
         cursor: pointer;
-        background-image: url('/icon/icon_menu.svg');
-        width: 30px;
-        height: 30px;
-        background-size: 30px 30px;
+        background-image: url('/images/image-dyno-egg.png');
+        width: 50px;
+        height: 50px;
+        background-size: 50px 50px;
 
         @media screen and (max-width: 600px) {
           display: block;
@@ -53,11 +52,10 @@ const HeaderStyle = styled.header`
 
       .header-links {
         display: flex;
-        gap: 18px;
+        gap: 40px;
 
         .header-link {
           cursor: pointer;
-          background-color: var(--primary-yellow);
           padding: 12px;
           position: relative;
           display: flex;
@@ -167,7 +165,7 @@ export default function Header() {
                   <div className="header-link-text">
                     소개 
                   </div>
-                  <div className="arrow" />
+                  {/* <div className="arrow" /> */}
                 </div>
                 {
                   isDropdownVisible.intro ? (
@@ -181,7 +179,7 @@ export default function Header() {
                   <div className="header-link-text">
                     커리큘럼
                   </div>
-                  <div className="arrow" />
+                  {/* <div className="arrow" /> */}
                 </div>
                 {
                   isDropdownVisible.curriculum ? (
@@ -195,7 +193,7 @@ export default function Header() {
                   <div className="header-link-text">
                     수업
                   </div>
-                  <div className="arrow" />
+                  {/* <div className="arrow" /> */}
                 </div>
                 {
                   isDropdownVisible.study ? (
