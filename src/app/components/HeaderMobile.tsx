@@ -123,7 +123,7 @@ export default function HeaderMobile({ isMenuVisible, handleMenuClose }: HeaderM
           </div>
           {
             dropdownVisible.intro ? (
-              <HeaderDropdown list={DropdownIntro} mobile />
+              <HeaderDropdown list={DropdownIntro} mobile={true} />
             ) : 
             null
           }
@@ -134,7 +134,7 @@ export default function HeaderMobile({ isMenuVisible, handleMenuClose }: HeaderM
           </div>
           {
             dropdownVisible.curriculumn ? (
-              <HeaderDropdown list={DropdownCurriculumn} mobile />
+              <HeaderDropdown list={DropdownCurriculumn} mobile={true} />
             ) : 
             null
           }
@@ -145,7 +145,7 @@ export default function HeaderMobile({ isMenuVisible, handleMenuClose }: HeaderM
           </div>
           {
             dropdownVisible.study ? (
-              <HeaderDropdown list={DropdownStudy} mobile />
+              <HeaderDropdown list={DropdownStudy} mobile={true} />
             ) : 
             null
           }

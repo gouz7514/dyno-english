@@ -19,10 +19,12 @@ const DropdownStyle = styled.article`
       .dropdown-link-text {
         font-weight: normal;
         font-size: 14px;
+      }
     }
   }
 
   .mobile {
+    display: flex;
     flex-direction: column;
     align-items: center;
 
@@ -31,8 +33,9 @@ const DropdownStyle = styled.article`
       text-align: center;
 
       .dropdown-link-text {
-        padding: 20px 0;
+        padding: 12px 0;
         background-color: var(--primary-white);
+        font-weight: normal;
       }
     }
   }
@@ -51,7 +54,7 @@ interface DropdownProps {
 export default function HeaderDropdown({ list, mobile = false }: DropdownProps) {
   return (
     <DropdownStyle className={ `${mobile ? 'header-mobile' : ''}` }>
-      <div className={ `${mobile ? 'mobile': 'desktop'}` }>
+      <div className={ `${mobile ? 'mobile': 'desktop' }` }>
         {
           list && 
           list.map((item, index) => (
