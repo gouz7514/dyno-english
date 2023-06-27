@@ -8,10 +8,6 @@ const DropdownStyle = styled.article`
     flex-direction: column;
     gap: 12px;
     padding-top: 18px;
-    
-    &.show {
-      display: flex;
-    }
 
     .dropdown-link {
       padding: 12px;
@@ -24,7 +20,6 @@ const DropdownStyle = styled.article`
   }
 
   .mobile {
-    display: flex;
     flex-direction: column;
     align-items: center;
 
@@ -38,6 +33,46 @@ const DropdownStyle = styled.article`
         font-weight: normal;
       }
     }
+
+    &.mobile-visible {
+      display: flex;
+      animation: rotateMenu 400ms ease-in-out forwards;
+      transform-origin: top center;
+    }
+
+    &.mobile-hide {
+      display: none;
+      animation: rotateOut 400ms ease-in-out forwards;
+      transform-origin: top center;;
+    }
+
+    @keyframes rotateMenu {
+      0% {
+      transform: rotateX(-90deg);
+      }
+
+      70% {
+        transform: rotateX(20deg);
+      }
+
+      100% {
+        transform: rotateX(0deg);
+      }
+    }
+
+    @keyframes rotateOut {
+      0% {
+        transform: rotateX(0deg);
+      }
+
+      70% {
+        transform: rotateX(20deg);
+      }
+
+      100% {
+        transform: rotateX(-90deg);
+      }
+    }
   }
 `
 
@@ -49,12 +84,13 @@ interface DropdownItem {
 interface DropdownProps {
   list: DropdownItem[] | null
   mobile?: boolean
+  visible?: boolean
 }
 
-export default function HeaderDropdown({ list, mobile = false }: DropdownProps) {
+export default function HeaderDropdown({ list, mobile = false, visible = false }: DropdownProps) {
   return (
     <DropdownStyle className={ `${mobile ? 'header-mobile' : ''}` }>
-      <div className={ `${mobile ? 'mobile': 'desktop' }` }>
+      <div className={ `${mobile ? 'mobile': 'desktop' } ${mobile && visible ? 'mobile-visible' : 'mobile-hide' }` }>
         {
           list && 
           list.map((item, index) => (

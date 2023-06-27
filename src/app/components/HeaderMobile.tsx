@@ -121,34 +121,19 @@ export default function HeaderMobile({ isMenuVisible, handleMenuClose }: HeaderM
               소개
             </div>
           </div>
-          {
-            dropdownVisible.intro ? (
-              <HeaderDropdown list={DropdownIntro} mobile={true} />
-            ) : 
-            null
-          }
+          <HeaderDropdown list={DropdownIntro} mobile={true} visible={dropdownVisible.intro} />
           <div className="header-link" onClick={() => handleDropdownClick('curriculumn')}>
             <div className="header-link-text">
               커리큘럼
             </div>
           </div>
-          {
-            dropdownVisible.curriculumn ? (
-              <HeaderDropdown list={DropdownCurriculumn} mobile={true} />
-            ) : 
-            null
-          }
+          <HeaderDropdown list={DropdownCurriculumn} mobile={true} visible={dropdownVisible.curriculumn} />
           <div className="header-link" onClick={() => handleDropdownClick('study')}>
             <div className="header-link-text">
               수업
             </div>
           </div>
-          {
-            dropdownVisible.study ? (
-              <HeaderDropdown list={DropdownStudy} mobile={true} />
-            ) : 
-            null
-          }
+          <HeaderDropdown list={DropdownStudy} mobile={true} visible={dropdownVisible.study} />
           <div className="header-link">
             <Link href="/notice">공지사항</Link>
           </div>
