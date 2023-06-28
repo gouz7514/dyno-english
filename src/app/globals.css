@@ -56,14 +56,18 @@ body {
   height: 100vh;
 }
 
-body {
-  /* color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb)); */
+.container {
+  max-width: 600px;
+  padding: 16px 12px;
+  margin: 0 auto;
+}
+
+.text-bold {
+  font-weight: 800;
+}
+
+.text-normal {
+  font-weight: normal;
 }
 
 a {
