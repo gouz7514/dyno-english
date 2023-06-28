@@ -40,7 +40,7 @@ const HeaderStyle = styled.header`
       .header-toggle {
         display: none;
         cursor: pointer;
-        background-image: url('/images/image-dyno-egg.png');
+        background-image: url('/images/image-dyno-egg.webp');
         width: 50px;
         height: 50px;
         background-size: 50px 50px;
