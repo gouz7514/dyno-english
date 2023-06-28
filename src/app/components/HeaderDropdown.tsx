@@ -6,8 +6,8 @@ const DropdownStyle = styled.article`
     position: absolute;
     display: flex;
     flex-direction: column;
+    padding: 12px 0;
     gap: 12px;
-    padding-top: 18px;
 
     .dropdown-link {
       padding: 12px;
@@ -90,7 +90,7 @@ interface DropdownProps {
 export default function HeaderDropdown({ list, mobile = false, visible = false }: DropdownProps) {
   return (
     <DropdownStyle className={ `${mobile ? 'header-mobile' : ''}` }>
-      <div className={ `${mobile ? 'mobile': 'desktop' } ${mobile && visible ? 'mobile-visible' : 'mobile-hide' }` }>
+      <div className={ `${mobile ? (visible ? 'mobile mobile-visible' : 'mobile mobile-hide') : 'desktop' }` }>
         {
           list && 
           list.map((item, index) => (
