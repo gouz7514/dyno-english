@@ -18,6 +18,14 @@ export const ArticleStyle = styled.article`
     line-height: 2em;
   }
 
+  .article-section {
+    padding-bottom: 40px;
+
+    .section-content {
+      line-height: 2em;
+    }
+  }
+
   .spacing {
     padding-top: 24px;
   }
