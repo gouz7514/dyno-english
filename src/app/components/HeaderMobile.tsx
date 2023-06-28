@@ -21,7 +21,7 @@ const HeaderMobileStyle = styled.header`
     transition: all 0.3s ease-in-out;
     color: black;
     font-weight: bold;
-    z-index: 10;
+    z-index: 11;
     filter: opacity(0.75);
 
     .header-close {

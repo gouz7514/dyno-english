@@ -2,9 +2,6 @@
 
 import styled from 'styled-components'
 
-import AnimationDynoEnglish from '../../public/lottie/lottie-dyno-english.json'
-import LottieAnimation from './components/Lottie'
-
 const MainStyle = styled.main`
   display: flex;
   flex-direction: column;
@@ -13,6 +10,20 @@ const MainStyle = styled.main`
   gap: 1rem;
   padding: 1rem;
   min-height: calc(100vh - var(--height-header));
+
+  .main-image {
+    width: 420px;
+    height: 280px;
+
+    .img-container {
+      width: 100%;
+      height: 100%;
+      background-image: url('/images/image-dyno-english-full.webp');
+      background-position: center;
+      background-size: cover;
+      transform: scale(1.5);
+    }
+  }
 
   .main-text {
     display: flex;
@@ -26,7 +37,9 @@ export default function Home() {
     <main>
       <div>
         <MainStyle className="main-container">
-          <LottieAnimation json={AnimationDynoEnglish} />
+          <div className="main-image">
+            <div className="img-container"></div>
+          </div>
           <div className='main-text'>
             <h2>
               다이노 영어에 오신 것을 환영해요!

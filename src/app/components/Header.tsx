@@ -14,7 +14,6 @@ const HeaderStyle = styled.header`
   display: flex;
   height: var(--height-header);
   position: relative;
-  z-index: 10;
   box-shadow: rgba(149, 157, 165, 0.2) 0px 3px 12px;
 
   .header {
@@ -28,12 +27,34 @@ const HeaderStyle = styled.header`
 
     .header-home {
       margin-right: auto;
-      background-image: url('/logo/logo_dyno_english.webp');
-      width: 180px;
-      height: 40px;
-      background-repeat: no-repeat;
-      background-size: 180px 40px;
-      z-index: 10;
+      margin-left: 12px;
+      z-index: 2;
+      width: 50px;
+      height: 50px;
+
+      .header-home-logo {
+        background-image: url('/images/image-dyno.webp');
+        width: 100%;
+        height: 100%;
+        background-repeat: no-repeat;
+        background-size: 50px 50px;
+
+        &:hover {
+          animation: float-animation 1s ease-in-out infinite;
+        }
+
+        @keyframes float-animation {
+          0% {
+            transform: translateY(0);
+          }
+          50% {
+            transform: translateY(-10px);
+          }
+          100% {
+            transform: translateY(0);
+          }
+        }
+      }
     }
 
     .header-menu {
@@ -86,7 +107,7 @@ const Overlay = styled.div`
   left: 0;
   opacity: 0;
   visibility: hidden;
-  z-index: 2;
+  z-index: 10;
 
   &.visible {
     opacity: 0.5;
@@ -156,7 +177,9 @@ export default function Header() {
     <>
       <HeaderStyle>
         <div className="header">
-          <Link href={"/"} className="header-home" />
+          <Link href={"/"} className='header-home'>
+            <div className="header-home-logo" />
+          </Link>
           <div className="header-menu">
             <div className={ `header-toggle ${isMenuVisible ? 'close' : 'open' }` } onClick={handleMenuClick} />
             <div className="header-links">
