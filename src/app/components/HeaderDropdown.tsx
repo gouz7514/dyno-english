@@ -5,16 +5,25 @@ const DropdownStyle = styled.article`
   .desktop {
     position: absolute;
     display: flex;
+    align-items: center;
     flex-direction: column;
     padding: 12px 0;
-    gap: 12px;
+    background-color: var(--primary-white);
+    border-radius: 8px;
+    box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px;
 
     .dropdown-link {
-      padding: 12px;
+      padding: 18px 12px;
 
       .dropdown-link-text {
         font-weight: normal;
         font-size: 14px;
+      }
+
+      &:hover {
+        .dropdown-link-text {
+          transform: scale(1.05);
+        }
       }
     }
   }
