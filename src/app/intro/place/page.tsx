@@ -40,7 +40,7 @@ export default function IntroPlace() {
           </p>
           <div className="spacing"></div>
           <Image
-            src="/images/image-dyno-intro-place.webp"
+            src="/images/intro/image-dyno-intro-place.webp"
             alt="다이노영어 공부방 소개"
             width={0}
             height={0}
