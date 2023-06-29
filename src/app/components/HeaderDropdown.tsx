@@ -11,6 +11,7 @@ const DropdownStyle = styled.article`
     background-color: var(--primary-white);
     border-radius: 8px;
     box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px;
+    z-index: 2;
 
     .dropdown-link {
       padding: 18px 12px;
