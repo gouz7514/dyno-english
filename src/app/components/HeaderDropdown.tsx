@@ -2,12 +2,17 @@ import styled from 'styled-components'
 import Link from 'next/link'
 
 const DropdownStyle = styled.article`
-  .desktop {
+  &.header-mobile-desktop {
     position: absolute;
+    top: var(--height-header);
+    height: 100%;
+  }
+
+  .desktop {
     display: flex;
     align-items: center;
     flex-direction: column;
-    padding: 12px 0;
+    padding: 12px 12px;
     background-color: var(--primary-white);
     border-radius: 8px;
     box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px;
@@ -99,7 +104,7 @@ interface DropdownProps {
 
 export default function HeaderDropdown({ list, mobile = false, visible = false }: DropdownProps) {
   return (
-    <DropdownStyle className={ `${mobile ? 'header-mobile' : ''}` }>
+    <DropdownStyle className={ `${mobile ? 'header-mobile-dropdown' : 'header-mobile-desktop'}` }>
       <div className={ `${mobile ? (visible ? 'mobile mobile-visible' : 'mobile mobile-hide') : 'desktop' }` }>
         {
           list && 

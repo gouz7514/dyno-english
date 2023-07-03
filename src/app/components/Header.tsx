@@ -10,18 +10,20 @@ import { DropdownIntro, DropdownCurriculumn, DropdownStudy } from '@/lib/constan
 
 const HeaderStyle = styled.header`
   color: #fff;
-  padding: 1rem;
   display: flex;
   height: var(--height-header);
-  position: relative;
   box-shadow: rgba(149, 157, 165, 0.2) 0px 3px 12px;
+
+  position: sticky;
+  top: 0;
+  background-color: var(--primary-white);
+  width: 100%;
 
   .header {
     display: flex;
     justify-content: flex-end;
     align-items: center;
     width: 100%;
-    height: calc(var(--height-header) - 2rem);
     color: black;
     font-weight: bold;
 
@@ -59,6 +61,10 @@ const HeaderStyle = styled.header`
     }
 
     .header-menu {
+      display: flex;
+      align-items: center;
+      height: 100%;
+
       .header-toggle {
         display: none;
         cursor: pointer;
@@ -74,7 +80,17 @@ const HeaderStyle = styled.header`
 
       .header-links {
         display: flex;
-        gap: 40px;
+        gap: 30px;
+        height: 100%;
+        align-items: center;
+
+        .header-dropdown {
+          height: 100%;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+        }
 
         .header-link {
           cursor: pointer;
@@ -189,7 +205,6 @@ export default function Header() {
                   <div className="header-link-text">
                     소개 
                   </div>
-                  {/* <div className="arrow" /> */}
                 </div>
                 {
                   isDropdownVisible.intro ? (
@@ -203,7 +218,6 @@ export default function Header() {
                   <div className="header-link-text">
                     커리큘럼
                   </div>
-                  {/* <div className="arrow" /> */}
                 </div>
                 {
                   isDropdownVisible.curriculum ? (
@@ -217,7 +231,6 @@ export default function Header() {
                   <div className="header-link-text">
                     수업
                   </div>
-                  {/* <div className="arrow" /> */}
                 </div>
                 {
                   isDropdownVisible.study ? (
@@ -233,11 +246,11 @@ export default function Header() {
               </Link>
             </div>
           </div>
-          { isMobile && 
-            <HeaderMobile isMenuVisible={isMenuVisible} handleMenuClose={handleMenuClose} />
-          }
         </div>
       </HeaderStyle>
+      { (isMobile) && 
+        <HeaderMobile isMenuVisible={isMenuVisible} handleMenuClose={handleMenuClose} />
+      }
       <Overlay className={ `${isMenuVisible ? 'visible' : ''}` } onClick={handleMenuClose}></Overlay>
     </>
   )

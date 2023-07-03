@@ -7,9 +7,11 @@ import { usePathname } from 'next/navigation'
 import HeaderDropdown from './HeaderDropdown'
 import { DropdownIntro, DropdownCurriculumn, DropdownStudy } from '@/lib/constants/constatns'
 
-const HeaderMobileStyle = styled.header`
+const HeaderMobileStyle = styled.div`
+  position: absolute;
+
   .header-links-mobile {
-    position: absolute;
+    position: fixed;
     display: flex;
     flex-direction: column;
     height: 100vh;
@@ -23,6 +25,7 @@ const HeaderMobileStyle = styled.header`
     font-weight: bold;
     z-index: 11;
     filter: opacity(0.75);
+    border-left: 1px solid #e5e5e5;
 
     .header-close {
       background-image: url('/icon/icon_menu.svg');
