@@ -40,14 +40,6 @@ export default function Home() {
           <div className="main-image">
             <div className="img-container"></div>
           </div>
-          <div className='main-text'>
-            <h2>
-              다이노 영어에 오신 것을 환영해요!
-            </h2>
-            <h2>
-              오른쪽 위 메뉴를 둘러보세요!
-            </h2>
-          </div>
         </MainStyle>
       </div>
     </main>

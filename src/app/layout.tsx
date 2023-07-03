@@ -6,6 +6,7 @@ import StyledComponentsRegistry from '@/lib/registry'
 import GlobalHeader from '@/lib/globalHeader'
 
 import Header from './components/Header'
+import Footer from './components/Footer'
 
 const metadata = {
   title: '다이노 영어',
@@ -32,10 +33,9 @@ export default function RootLayout({
       </head>
       <body>
         <StyledComponentsRegistry>
-          <GlobalHeader>
-            <Header />
-          </GlobalHeader>
+          <Header />
           {children}
+          <Footer />
         </StyledComponentsRegistry>
       </body>
     </html>
