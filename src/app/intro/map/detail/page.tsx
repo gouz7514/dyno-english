@@ -12,8 +12,8 @@ const MapStyle = styled.div`
   height: calc(100vh - var(--height-header) - var(--height-footer));
 
   .map-container {
-    width: 450px;
-    height: 450px;
+    width: 500px;
+    height: 500px;
 
     @media screen and (max-width: 600px) {
       width: 325px;
@@ -29,8 +29,7 @@ export default function IntroMapDetail() {
     const { naver } = window
     if (!mapElement.current || !naver) return
 
-    // 지도에 표시할 위치의 위도와 경도 좌표를 파라미터로 넣어줍니다.
-    const location = new naver.maps.LatLng( 37.5603, 127.19972)
+    const location = new naver.maps.LatLng(37.5603, 127.19972)
     const mapOptions: naver.maps.MapOptions = {
       center: location,
       zoom: 17,
