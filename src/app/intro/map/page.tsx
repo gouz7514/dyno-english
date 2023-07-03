@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import Link from 'next/link'
 
 const IntroMapStyle = styled.div`
-  height: calc(100vh - var(--height-header) - var(--height-footer));
+height: calc(100vh - var(--height-header) - var(--height-footer));
   display: flex;
   align-items: center;
   justify-content: center;
@@ -18,14 +18,14 @@ const IntroMapStyle = styled.div`
     text-align: center;
     gap: 24px;
 
-    @media screen and (max-width: 1024px) {
+    @media screen and (max-width: 600px) {
       flex-direction: column;
       gap: 12px;
     }
 
     .map-link {
-      width: 450px;
-      height: 450px;
+      width: 325px;
+      height: 325px;
       border-radius: 12px;
       color: white;
       font-size: 24px;
@@ -39,14 +39,10 @@ const IntroMapStyle = styled.div`
         transition: transform 0.3s ease-in-out;
       }
 
-      @media screen and (max-width: 1024px) {
-        width: 375px;
-        height: 375px;
-      }
-
-      @media screen and (max-width: 600px) {
-        width: 300px;
-        height: 300px;
+      @media screen and (max-width: 700px) {
+        width: 250px;
+        height: 250px;
+        font-size: 18px;
       }
   
       &:first-child {

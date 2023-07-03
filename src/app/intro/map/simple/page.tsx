@@ -27,11 +27,6 @@ const SwiperStyleRoot = styled.div`
     height: 100%;
     width: 100%;
 
-    .swiper-text {
-      margin-bottom: 12px;
-      text-align: center;
-    }
-
     .swiper-image {
       text-align: center;
 
@@ -41,6 +36,11 @@ const SwiperStyleRoot = styled.div`
         align-items: center;
         gap: 4px;
       }
+    }
+
+    .swiper-text {
+      margin-bottom: 12px;
+      text-align: center;
     }
   }
 `
@@ -57,9 +57,6 @@ export default function IntroMapSimple() {
         pagination={{ clickable: true }}
       >
         <SwiperSlide>
-          <div className="swiper-text">
-            1) 미사중앙초등학교 정문 앞
-          </div>
           <div className="swiper-image">
             <Image
               src="/images/intro/image-dyno-english-map-1.webp"
@@ -68,11 +65,11 @@ export default function IntroMapSimple() {
               height={320}
             />
           </div>
+          <div className="swiper-text">
+            1) 미사중앙초등학교 정문 앞
+          </div>
         </SwiperSlide>
         <SwiperSlide>
-          <div className="swiper-text">
-            2) 왼쪽 횡단보도 건너기
-          </div>
           <div className="swiper-image">
             <Image
               src="/images/intro/image-dyno-english-map-2-1.webp"
@@ -87,11 +84,11 @@ export default function IntroMapSimple() {
               height={200}
             />
           </div>
+          <div className="swiper-text">
+            2) 왼쪽 횡단보도 건너기
+          </div>
         </SwiperSlide>
         <SwiperSlide>
-          <div className="swiper-text">
-            3) 이디야 커피 방향으로 쭉 걷기
-          </div>
           <div className="swiper-image">
             <Image
               src="/images/intro/image-dyno-english-map-3.webp"
@@ -100,11 +97,11 @@ export default function IntroMapSimple() {
               height={320}
             />
           </div>
+          <div className="swiper-text">
+            3) 이디야 커피 방향으로 쭉 걷기
+          </div>
         </SwiperSlide>
         <SwiperSlide>
-          <div className="swiper-text">
-            4) 마카롱 가게에서 오른쪽으로 돌기
-          </div>
           <div className="swiper-image">
             <Image
               src="/images/intro/image-dyno-english-map-4.webp"
@@ -113,11 +110,11 @@ export default function IntroMapSimple() {
               height={320}
             />
           </div>
+          <div className="swiper-text">
+            4) 마카롱 가게에서 오른쪽으로 돌기
+          </div>
         </SwiperSlide>
         <SwiperSlide>
-          <div className="swiper-text">
-            5) 쭉 걸어 건물 3개 지나가기
-          </div>
           <div className="swiper-image">
             <Image
               src="/images/intro/image-dyno-english-map-5.webp"
@@ -126,11 +123,11 @@ export default function IntroMapSimple() {
               height={320}
             />
           </div>
+          <div className="swiper-text">
+            5) 쭉 걸어 건물 3개 지나가기
+          </div>
         </SwiperSlide>
         <SwiperSlide>
-          <div className="swiper-text">
-            6) 노란색 어닝이 있는 신발 가게가 보이면 멈추기
-          </div>
           <div className="swiper-image">
             <Image
               src="/images/intro/image-dyno-english-map-6.webp"
@@ -139,11 +136,11 @@ export default function IntroMapSimple() {
               height={320}
             />
           </div>
+          <div className="swiper-text">
+            6) 노란색 어닝이 있는 신발 가게가 보이면 멈추기
+          </div>
         </SwiperSlide>
         <SwiperSlide>
-          <div className="swiper-text">
-            7) 다이노 영어 간판 확인하기
-          </div>
           <div className="swiper-image">
             <Image
               src="/images/intro/image-dyno-english-map-7.webp"
@@ -152,11 +149,11 @@ export default function IntroMapSimple() {
               height={320}
             />
           </div>
+          <div className="swiper-text">
+            7) 다이노 영어 간판 확인하기
+          </div>
         </SwiperSlide>
         <SwiperSlide>
-          <div className="swiper-text">
-            8) 간판 아래 안쪽으로 들어가기
-          </div>
           <div className="swiper-image">
             <Image
               src="/images/intro/image-dyno-english-map-8.webp"
@@ -165,11 +162,11 @@ export default function IntroMapSimple() {
               height={320}
             />
           </div>
+          <div className="swiper-text">
+            8) 간판 아래 안쪽으로 들어가기
+          </div>
         </SwiperSlide>
         <SwiperSlide>
-          <div className="swiper-text">
-            { '9) 공동현관 "202호+종" 누르기' }
-          </div>
           <div className="swiper-image">
             <Image
               src="/images/intro/image-dyno-english-map-9.webp"
@@ -178,11 +175,11 @@ export default function IntroMapSimple() {
               height={320}
             />
           </div>
+          <div className="swiper-text">
+            { '9) 공동현관 "202호+종" 누르기' }
+          </div>
         </SwiperSlide>
         <SwiperSlide>
-          <div className="swiper-text">
-            10) 엘레베이터 또는 계단 이용해서 2층으로 올라가기
-          </div>
           <div className="swiper-image">
             <Image
               src="/images/intro/image-dyno-english-map-10-1.webp"
@@ -197,11 +194,11 @@ export default function IntroMapSimple() {
               height={200}
             />
           </div>
+          <div className="swiper-text">
+            10) 엘레베이터 또는 계단 이용해서 2층으로 올라가기
+          </div>
         </SwiperSlide>
         <SwiperSlide>
-          <div className="swiper-text">
-            11) 우측으로 돌아 202호 초인종 누르기
-          </div>
           <div className="swiper-image">
             <Image
               src="/images/intro/image-dyno-english-map-11.webp"
@@ -209,6 +206,9 @@ export default function IntroMapSimple() {
               width={320}
               height={320}
             />
+          </div>
+          <div className="swiper-text">
+            11) 우측으로 돌아 202호 초인종 누르기
           </div>
         </SwiperSlide>
       </Swiper>

@@ -18,6 +18,7 @@ const HeaderStyle = styled.header`
   top: 0;
   background-color: var(--primary-white);
   width: 100%;
+  z-index: 101;
 
   .header {
     display: flex;
@@ -124,7 +125,7 @@ const Overlay = styled.div`
   left: 0;
   opacity: 0;
   visibility: hidden;
-  z-index: 10;
+  z-index: 102;
 
   &.visible {
     opacity: 0.5;

@@ -8,6 +8,8 @@ const FooterStyle = styled.footer`
   justify-content: center;
   width: 100%;
   box-shadow: 0px -1px 2px rgba(149, 157, 165, 0.2);
+  background-color: var(--primary-white);
+  z-index: 101;
 `
 
 export default function Footer() {

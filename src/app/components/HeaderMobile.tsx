@@ -23,8 +23,8 @@ const HeaderMobileStyle = styled.div`
     transition: all 0.3s ease-in-out;
     color: black;
     font-weight: bold;
-    z-index: 11;
-    filter: opacity(0.75);
+    z-index: 103;
+    filter: opacity(0.85);
     border-left: 1px solid #e5e5e5;
 
     .header-close {
