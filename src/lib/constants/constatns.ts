@@ -13,7 +13,7 @@ export const DropdownIntro = [
   },
   {
     title: '후기',
-    link: '/intro/review'
+    link: '/intro/testimonial'
   }
 ]
 
