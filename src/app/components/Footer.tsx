@@ -1,12 +1,12 @@
 import styled from 'styled-components'
 
 const FooterStyle = styled.footer`
+  height: var(--height-footer);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   width: 100%;
-  padding: 12px 0;
   box-shadow: 0px -1px 2px rgba(149, 157, 165, 0.2);
 `
 

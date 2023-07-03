@@ -12,6 +12,10 @@ export const DropdownIntro = [
     link: '/intro/map'
   },
   {
+    title: '수업료',
+    link: '/intro/price'
+  },
+  {
     title: '후기',
     link: '/intro/testimonial'
   }
