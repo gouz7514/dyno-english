@@ -38,6 +38,7 @@ const HeaderStyle = styled.header`
         height: 100%;
         background-repeat: no-repeat;
         background-size: 50px 50px;
+        border-bottom-left-radius: 50%;
 
         &:hover {
           animation: float-animation 1s ease-in-out infinite;
