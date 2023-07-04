@@ -44,7 +44,7 @@ const HeaderStyle = styled.header`
         border-bottom-left-radius: 50%;
 
         &:hover {
-          animation: float-animation 1s ease-in-out infinite;
+          animation: float-animation 0.8s ease-in-out infinite;
         }
 
         @keyframes float-animation {
@@ -52,7 +52,7 @@ const HeaderStyle = styled.header`
             transform: translateY(0);
           }
           50% {
-            transform: translateY(-10px);
+            transform: translateY(-8px);
           }
           100% {
             transform: translateY(0);
