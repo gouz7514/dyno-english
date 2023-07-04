@@ -16,7 +16,7 @@ const HeaderStyle = styled.header`
 
   position: sticky;
   top: 0;
-  background-color: var(--primary-white);
+  background-color: var(--primary-background-color);
   width: 100%;
   z-index: 101;
 

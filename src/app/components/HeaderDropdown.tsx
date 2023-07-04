@@ -13,7 +13,7 @@ const DropdownStyle = styled.article`
     align-items: center;
     flex-direction: column;
     padding: 12px 12px;
-    background-color: var(--primary-white);
+    background-color: var(--primary-background-color);
     border-radius: 8px;
     box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px;
     z-index: 2;
@@ -44,7 +44,7 @@ const DropdownStyle = styled.article`
 
       .dropdown-link-text {
         padding: 12px 0;
-        background-color: var(--primary-white);
+        background-color: var(--primary-background-color);
         font-weight: normal;
       }
     }

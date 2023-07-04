@@ -8,7 +8,7 @@ const FooterStyle = styled.footer`
   justify-content: center;
   width: 100%;
   box-shadow: 0px -1px 2px rgba(149, 157, 165, 0.2);
-  background-color: var(--primary-white);
+  background-color: var(--primary-background-color);
   z-index: 101;
 `
 
