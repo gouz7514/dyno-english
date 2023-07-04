@@ -7,6 +7,7 @@ import Script from 'next/script'
 
 import Header from './components/Header'
 import Footer from './components/Footer'
+import DynoTalk from './components/DynoTalk'
 
 const metadata = {
   title: '다이노 영어',
@@ -39,6 +40,7 @@ export default function RootLayout({
         <StyledComponentsRegistry>
           <Header />
           {children}
+          <DynoTalk />
           <Footer />
         </StyledComponentsRegistry>
       </body>

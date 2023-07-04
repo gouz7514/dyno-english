@@ -2,6 +2,8 @@
 
 import styled from 'styled-components'
 
+import Link from 'next/link'
+
 const MainStyle = styled.main`
   display: flex;
   flex-direction: column;
@@ -61,10 +63,19 @@ const MainStyle = styled.main`
     }
   }
 
-  .main-text {
+  .main-links {
     display: flex;
-    flex-direction: column;
-    align-items: center;
+    gap: 24px;
+    z-index: 3;
+
+    .dyno-btn {
+      padding: 12px;
+      background-color: var(--primary-green);
+      color: white;
+      border-radius: 8px;
+      font-weight: bold;
+      font-size: 16px;
+    }
   }
 `
 
@@ -76,6 +87,18 @@ export default function Home() {
           <div className="main-image">
             <div className="img-dyno"></div>
             <div className="img-container"></div>
+          </div>
+          <div className="main-links">
+            <Link href="/intro/map">
+              <div className='dyno-btn'>
+                오시는 길
+              </div>
+            </Link>
+            <Link href="/intro/testimonial">
+              <div className='dyno-btn'>
+                소중한 후기 보기
+              </div>
+            </Link>
           </div>
         </MainStyle>
       </div>
