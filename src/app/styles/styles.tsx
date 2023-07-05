@@ -21,6 +21,16 @@ export const ArticleStyle = styled.article`
   .article-section {
     padding-bottom: 40px;
 
+    .section-title {
+      &.toggle {
+        cursor: pointer;
+
+        &:hover {
+          transform: scale(1.05);
+        }
+      }
+    }
+
     .section-content {
       line-height: 2em;
     }
