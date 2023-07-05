@@ -10,6 +10,7 @@ const DynoTalkContainer = styled.div`
   flex-direction: column;
   bottom: 18px;
   right: 24px;
+  z-index: 11;
 
   .dyno-talk-text {
     position: absolute;
@@ -39,6 +40,7 @@ const DynoTalkStyle = styled.div`
   width: 60px;
   height: 60px;
   background-color: var(--primary-background-color);
+  cursor: pointer;
 
   .dyno-talk-image {
     background-image: url('/images/image-dyno.webp');

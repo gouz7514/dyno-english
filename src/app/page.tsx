@@ -29,27 +29,28 @@ const MainStyle = styled.main`
       z-index: 3;
 
       &:hover {
-        animation: climb 2s ease-in-out infinite;
+        animation: pop 1s ease-in-out infinite;
         animation-timing-function: ease-in-out;
       }
 
       @keyframes climb {
-        0% {
-          transform: translate(0%, 0%);
+        from {
+          transform: translateY(0);
         }
-        25% {
-          transform: translate(10%, -10%) rotate(3deg)
-        }
-        50% {
-          transform: translate(20%, -20%) rotate(-3deg)
-        }
-        75% {
-          transform: translate(30%, -30%) rotate(3deg)
-        }
-        100% {
-          transform: translate(40%, -40%)
+        to {
+          transform: translateY(-10px);
         }
       }
+
+      @keyframes pop {
+        0% { transform: translate(0%, 0%) scale(1.1, 0.9); }
+        50% { transform: translate(0%, -20%) scale(1, 1); }
+        55% { transform: translate(0%, -20%) rotate(5deg); }
+        60% { transform: translate(0%, -20%) rotate(-5deg); }
+        65% { transform: translate(0%, -20%) rotate(5deg); }
+        70% { transform: translate(0%, -20%) rotate(-5deg); }
+        100% { transform: translate(0%, 0%) scale(1.1, 0.9); }
+    }
     }
 
     .img-container {

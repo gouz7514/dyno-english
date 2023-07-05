@@ -42,22 +42,6 @@ const HeaderStyle = styled.header`
         background-repeat: no-repeat;
         background-size: 50px 50px;
         border-bottom-left-radius: 50%;
-
-        &:hover {
-          animation: float-animation 0.8s ease-in-out infinite;
-        }
-
-        @keyframes float-animation {
-          0% {
-            transform: translateY(0);
-          }
-          50% {
-            transform: translateY(-8px);
-          }
-          100% {
-            transform: translateY(0);
-          }
-        }
       }
     }
 

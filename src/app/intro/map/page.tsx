@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import Link from 'next/link'
 
 const IntroMapStyle = styled.div`
-height: calc(100vh - var(--height-header) - var(--height-footer));
+  height: calc(100vh - var(--height-header) - var(--height-footer));
   display: flex;
   align-items: center;
   justify-content: center;
