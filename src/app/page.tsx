@@ -45,10 +45,10 @@ const MainStyle = styled.main`
       @keyframes pop {
         0% { transform: translate(0%, 0%) scale(1.1, 0.9); }
         50% { transform: translate(0%, -20%) scale(1, 1); }
-        55% { transform: translate(0%, -20%) rotate(5deg); }
+        55% { transform: translate(0%, -20%) }
         60% { transform: translate(0%, -20%) rotate(-5deg); }
         65% { transform: translate(0%, -20%) rotate(5deg); }
-        70% { transform: translate(0%, -20%) rotate(-5deg); }
+        70% { transform: translate(0%, -20%) }
         100% { transform: translate(0%, 0%) scale(1.1, 0.9); }
     }
     }
