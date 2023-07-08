@@ -25,7 +25,7 @@ const TestimonialStyle = styled.div`
   white-space: nowrap;
   overflow: hidden;
   background: white;
-  padding: 20px 0;
+  padding: 12px 0;
 
   @keyframes slide {
     from {
