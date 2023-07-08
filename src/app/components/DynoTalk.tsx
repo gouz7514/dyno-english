@@ -11,48 +11,43 @@ const DynoTalkContainer = styled.div`
   bottom: 18px;
   right: 24px;
   z-index: 11;
-
-  .dyno-talk-text {
-    position: absolute;
-    background-color: var(--primary-background-color);
-    top: -80px;
-    width: 140px;
-    right: 0;
-    padding: 12px;
-    border-radius: 12px;
-    box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
-    transition: opacity 0.2s ease-in-out;
-    text-align: center;
-
-    &.visible {
-      opacity: 1;
-    }
-
-    &.hide {
-      opacity: 0;
-    }
-  }
 `
 
 const DynoTalkStyle = styled.div`
   box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
-  border-radius: 12px;
   width: 60px;
   height: 60px;
   background-color: var(--primary-background-color);
   cursor: pointer;
+  position: relative;
+  border-radius: 18px;
+  overflow: hidden;
+  transition: width 0.2s ease-in-out;
+  display: flex;
+  align-items: center;
+
+  .dyno-talk-text {
+    position: absolute;
+    left: 12px;
+    font-size: 14px;
+  }
 
   .dyno-talk-image {
-    background-image: url('/images/image-dyno.webp');
-    width: 100%;
+    position: absolute;
+    background-image: url('/icon/icon-question-4.png');
+    width: 60px;
     height: 100%;
     background-repeat: no-repeat;
-    background-size: 40px 40px;
+    background-size: 55px 55px;
     background-position: center;
+    transform: translate(4px, 6px);
+    right: 0;
   }
 
   &:hover {
-    transform: scale(1.05);
+    width: 150px;
+    border-radius: 18px;
+    transition: width 0.2s ease-in-out;
   }
 `
 
@@ -74,15 +69,22 @@ export default function DynoTalk() {
 
   return (
     <DynoTalkContainer className='dyno-talk-container'>
-      <div className={ `dyno-talk-text ${talkVisible ? 'visible': 'hide'}` }>
+      {/* <div className={ `dyno-talk-text ${talkVisible ? 'visible': 'hide'}` }>
         <span>
           교육 상담 문의는
         </span><br />
         <span>
           여기로 주세요!
         </span>
-      </div>
-      <DynoTalkStyle onClick={onClickDynoTalk}>
+      </div> */}
+      <DynoTalkStyle onMouseEnter = {() => setTimeout(() => setTalkVisible(true), 100)} onMouseLeave={() => setTalkVisible(false)}>
+        {
+          talkVisible && (
+            <div className='dyno-talk-text'>
+              교육 상담 문의
+            </div>
+          )
+        }
         <div className='dyno-talk-image'></div>
       </DynoTalkStyle>
     </DynoTalkContainer>

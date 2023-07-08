@@ -27,10 +27,10 @@ const HeaderStyle = styled.header`
     width: 100%;
     color: black;
     font-weight: bold;
+    padding: 0 24px;
 
     .header-home {
       margin-right: auto;
-      margin-left: 12px;
       z-index: 2;
       width: 50px;
       height: 50px;
@@ -53,10 +53,10 @@ const HeaderStyle = styled.header`
       .header-toggle {
         display: none;
         cursor: pointer;
-        background-image: url('/images/image-dyno-egg.webp');
-        width: 50px;
-        height: 50px;
-        background-size: 50px 50px;
+        background-image: url('/icon/icon-menu.svg');
+        width: 40px;
+        height: 40px;
+        background-size: 40px 40px;
 
         @media screen and (max-width: 600px) {
           display: block;

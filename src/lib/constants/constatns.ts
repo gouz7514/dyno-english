@@ -12,10 +12,6 @@ export const DropdownIntro = [
     link: '/intro/map'
   },
   {
-    title: '수업료',
-    link: '/intro/price'
-  },
-  {
     title: '후기',
     link: '/intro/testimonial'
   }
@@ -30,6 +26,10 @@ export const DropdownCurriculumn = [
     title: '리딩',
     link: '/curriculum/reading'
   },
+  {
+    title: '라이팅',
+    link: '/curriculum/writing'
+  }
 ]
 
 export const DropdownStudy = [
@@ -40,5 +40,9 @@ export const DropdownStudy = [
   {
     title: '수강생 모집',
     link: '/study/recruit'
+  },
+  {
+    title: '수업료',
+    link: '/study/price'
   }
 ]

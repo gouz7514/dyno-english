@@ -17,6 +17,7 @@ const MainStyle = styled.main`
     width: 420px;
     height: 280px;
     position: relative;
+    transform: translateX(-13px);
 
     .img-dyno {
       position: absolute;
@@ -24,7 +25,7 @@ const MainStyle = styled.main`
       height: 110px;
       background-image: url('/images/image-dyno-english-just-dyno.webp');
       background-size: cover;
-      left: 46px;
+      left: 30px;
       top: 28px;
       z-index: 3;
 
@@ -59,7 +60,7 @@ const MainStyle = styled.main`
       background-image: url('/images/image-dyno-english-just-logo.webp');
       background-position: center;
       background-size: cover;
-      transform: scale(1.5);
+      transform: scale(1.8);
       z-index: 2;
     }
   }
@@ -71,11 +72,17 @@ const MainStyle = styled.main`
 
     .dyno-btn {
       padding: 12px;
-      background-color: var(--primary-green);
+      width: 120px;
+      background-color: var(--second-green);
       color: white;
       border-radius: 8px;
       font-weight: bold;
       font-size: 16px;
+      text-align: center;
+
+      &:hover {
+        transform: scale(1.02);
+      }
     }
   }
 `
@@ -97,7 +104,7 @@ export default function Home() {
             </Link>
             <Link href="/intro/testimonial">
               <div className='dyno-btn'>
-                소중한 후기 보기
+                소중한 후기
               </div>
             </Link>
           </div>

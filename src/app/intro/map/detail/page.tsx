@@ -48,7 +48,7 @@ export default function IntroMapDetail() {
   return (
     <MapStyle>
       <div>
-        주소 : 경기 하남시 미사강변한강로334번길 25
+        경기 하남시 미사강변한강로334번길 25
       </div>
       <div ref={mapElement} className="map-container" ></div>
     </MapStyle>
