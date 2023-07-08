@@ -35,7 +35,7 @@ export const DropdownCurriculumn = [
 export const DropdownStudy = [
   {
     title: '시간표',
-    link: '/study/table'
+    link: '/study/calendar'
   },
   {
     title: '수강생 모집',

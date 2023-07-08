@@ -4,8 +4,6 @@ import styled from 'styled-components'
 import { useEffect } from "react"
 
 import dynamic from 'next/dynamic'
-// import Calendar from "@toast-ui/calendar"
-// import '@toast-ui/calendar/dist/toastui-calendar.min.css'
 
 const CalendarContainer = styled.div`
   width: 100%;
@@ -21,7 +19,7 @@ const CalendarContainer = styled.div`
   }
 `
 
-export default function StudyTable() {
+export default function StudyCalendar() {
   const date = new Date()
   const year = date.getFullYear()
   const month = date.getMonth() + 1
