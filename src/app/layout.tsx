@@ -29,7 +29,7 @@ export default function RootLayout({
         <meta property="og:type" content="website" />
         <meta property="og:title" content={metadata.title} />
         <meta property="og:description" content={metadata.description} />
-        <meta property="og:image" content="https://dyno-english.vercel.app/image/og_dyno_english.webp" />
+        <meta property="og:image" content="https://dyno-english.vercel.app/logo/og_dyno_english.webp" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <Script
           type="text/javascript"
