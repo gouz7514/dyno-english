@@ -1,74 +1,77 @@
 'use client'
 
+import { useEffect, useRef } from 'react'
 import styled from 'styled-components'
 import Link from 'next/link'
 
-const IntroMapStyle = styled.div`
-  height: calc(100vh - var(--height-header) - var(--height-footer));
+const MapStyle = styled.div`
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  gap: 12px;
   justify-content: center;
-  width: 100%;
-  margin: 0 auto;
+  align-items: center;
+  height: calc(100vh - var(--height-header) - var(--height-footer));
 
-  .map-links {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    text-align: center;
-    gap: 24px;
+  .map-container {
+    width: 500px;
+    height: 500px;
 
     @media screen and (max-width: 600px) {
-      flex-direction: column;
-      gap: 12px;
-    }
-
-    .map-link {
       width: 325px;
       height: 325px;
-      border-radius: 12px;
-      color: white;
-      font-size: 24px;
-      font-weight: bold;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      
-      &:hover {
-        transform: translateY(-6px);
-        transition: transform 0.3s ease-in-out;
-      }
+    }
+  }
 
-      @media screen and (max-width: 700px) {
-        width: 250px;
-        height: 250px;
-        font-size: 18px;
-      }
-  
-      &:first-child {
-        background: radial-gradient(ellipse farthest-corner at 90% 90%, #ff723a, #ff506e);
-      }
-  
-      &:nth-child(2) {
-        background: radial-gradient(ellipse farthest-corner at 90% 90%, #00e244, #00b48e);
-      }
+  .dyno-btn {
+    padding: 12px;
+    width: 240px;
+    background-color: var(--second-green);
+    color: white;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 16px;
+    text-align: center;
+
+    &:hover {
+      transform: scale(1.02);
     }
   }
 `
 
 export default function IntroMap() {
+  const mapElement = useRef(null)
+
+  useEffect(() => {
+    const { naver } = window
+    if (!mapElement.current || !naver) return
+
+    const location = new naver.maps.LatLng(37.5603, 127.19972)
+    const mapOptions: naver.maps.MapOptions = {
+      center: location,
+      zoom: 17,
+      zoomControl: true,
+      zoomControlOptions: {
+        position: naver.maps.Position.TOP_RIGHT,
+      },
+    }
+    const map = new naver.maps.Map(mapElement.current, mapOptions)
+    new naver.maps.Marker({
+      position: location,
+      map,
+    })
+  }, [])
+
   return (
-    <IntroMapStyle>
+    <MapStyle>
+      <div ref={mapElement} className='map-container'></div>
       <div>
-        <div className="map-links">
-          <Link href="/intro/map/simple" className='map-link'>
-            미사중앙초에서 걸어오는 길
-          </Link>
-          <Link href="/intro/map/detail" className='map-link'>
-            지도로 보기
-          </Link>
-        </div>
+        경기 하남시 미사강변한강로334번길 25
       </div>
-    </IntroMapStyle>
+      <Link href='/intro/map/detail'>
+        <div className='dyno-btn'>
+          미사중앙초에서 걸어오는 길 👉
+        </div>
+      </Link>
+    </MapStyle>
   )
 }
