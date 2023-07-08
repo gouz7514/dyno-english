@@ -16,11 +16,11 @@ export default function IntroPlace() {
             <span className="text-bold">하남 미사중앙초</span> 건너편에 위치한
           </p>
           <p>
-            다이노영어 입니다.
+            다이노 영어 입니다.
           </p>
           <div className="spacing"></div>
           <p>
-            다이노영어는 <span className="text-bold">소수정예</span> 맞춤식 
+            다이노 영어는 <span className="text-bold">소수정예</span> 맞춤식 
           </p>
           <p>
             <span className="text-bold">유·초등 영어 그룹과외</span> 공부방입니다.
@@ -41,7 +41,7 @@ export default function IntroPlace() {
           <div className="spacing"></div>
           <Image
             src="/images/intro/image-dyno-intro-place.webp"
-            alt="다이노영어 공부방 소개"
+            alt="다이노 영어 공부방 소개"
             width={0}
             height={0}
             sizes="100vw"
