@@ -8,12 +8,12 @@ export const DropdownIntro = [
     link: '/intro/teacher'
   },
   {
-    title: '오시는 길',
-    link: '/intro/map'
+    title: '소중한 후기',
+    link: '/intro/testimonial'
   },
   {
-    title: '후기',
-    link: '/intro/testimonial'
+    title: '오시는 길',
+    link: '/intro/map'
   }
 ]
 
@@ -23,7 +23,7 @@ export const DropdownCurriculumn = [
     link: '/curriculum/phonics'
   },
   {
-    title: '리딩',
+    title: '원서리딩',
     link: '/curriculum/reading'
   },
   {
@@ -38,11 +38,11 @@ export const DropdownStudy = [
     link: '/study/calendar'
   },
   {
-    title: '수강생 모집',
-    link: '/study/recruit'
-  },
-  {
     title: '수업료',
     link: '/study/price'
+  },
+  {
+    title: '수강생 모집',
+    link: '/study/recruit'
   }
 ]
