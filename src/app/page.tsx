@@ -1,94 +1,114 @@
-import Image from 'next/image'
-import styles from './page.module.css'
+'use client'
+
+import styled from 'styled-components'
+
+import Link from 'next/link'
+
+const MainStyle = styled.main`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding: 1rem;
+  min-height: calc(100vh - var(--height-header));
+
+  .main-image {
+    width: 420px;
+    height: 280px;
+    position: relative;
+    transform: translateX(-13px);
+
+    .img-dyno {
+      position: absolute;
+      width: 120px;
+      height: 110px;
+      background-image: url('/images/image-dyno-english-just-dyno.webp');
+      background-size: cover;
+      left: 30px;
+      top: 28px;
+      z-index: 3;
+
+      &:hover {
+        animation: pop 1s ease-in-out infinite;
+        animation-timing-function: ease-in-out;
+      }
+
+      @keyframes climb {
+        from {
+          transform: translateY(0);
+        }
+        to {
+          transform: translateY(-10px);
+        }
+      }
+
+      @keyframes pop {
+        0% { transform: translate(0%, 0%) scale(1.1, 0.9); }
+        50% { transform: translate(0%, -20%) scale(1, 1); }
+        55% { transform: translate(0%, -20%) }
+        60% { transform: translate(0%, -20%) rotate(-5deg); }
+        65% { transform: translate(0%, -20%) rotate(5deg); }
+        70% { transform: translate(0%, -20%) }
+        100% { transform: translate(0%, 0%) scale(1.1, 0.9); }
+    }
+    }
+
+    .img-container {
+      width: 100%;
+      height: 100%;
+      background-image: url('/images/image-dyno-english-just-logo.webp');
+      background-position: center;
+      background-size: cover;
+      transform: scale(1.8);
+      z-index: 2;
+    }
+  }
+
+  .main-links {
+    display: flex;
+    gap: 24px;
+    z-index: 3;
+
+    .dyno-btn {
+      padding: 12px;
+      width: 120px;
+      background-color: var(--second-green);
+      color: white;
+      border-radius: 8px;
+      font-weight: bold;
+      font-size: 16px;
+      text-align: center;
+
+      &:hover {
+        transform: scale(1.02);
+      }
+    }
+  }
+`
 
 export default function Home() {
   return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>src/app/page.tsx</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
-      </div>
-
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore the Next.js 13 playground.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
+    <main>
+      <div>
+        <MainStyle className="main-container">
+          <div className="main-image">
+            <div className="img-dyno"></div>
+            <div className="img-container"></div>
+          </div>
+          <div className="main-links">
+            <Link href="/intro/map">
+              <div className='dyno-btn'>
+                오시는 길
+              </div>
+            </Link>
+            <Link href="/intro/testimonial">
+              <div className='dyno-btn'>
+                소중한 후기
+              </div>
+            </Link>
+          </div>
+        </MainStyle>
       </div>
     </main>
   )
