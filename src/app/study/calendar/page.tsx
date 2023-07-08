@@ -1,7 +1,7 @@
 'use client'
 
 import styled from 'styled-components'
-import React, { useEffect, useRef, ForwardedRef } from "react"
+import React, { useRef } from "react"
 
 import dynamic from 'next/dynamic'
 
