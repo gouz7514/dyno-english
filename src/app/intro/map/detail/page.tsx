@@ -14,33 +14,96 @@ import styled from 'styled-components'
 SwiperCore.use([Pagination])
 
 const SwiperStyleRoot = styled.div`
-  height: calc(100vh - var(--height-header));
   display: flex;
+  height: calc(100vh - var(--height-header) - var(--height-footer));
+  min-height: calc(100vh - var(--height-header) - var(--height-footer));
+  position: relative;
 
   .swiper {
     height: 500px;
     position: relative;
-    margin: auto;
+    position: relative;
+    padding-top: 24px;
+    margin-top: 24px;
+
+    .swiper-pagination {
+      position: absolute;
+      bottom: 0 !important;
+      top: 0 !important;
+      width: 100% !important;
+      height: 24px;
+      margin: 0 auto !important;
+
+      &-bullet {
+        background-color: var(--primary-green);
+      }
+    }
   }
 
   .swiper-slide {
     height: 100%;
     width: 100%;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+
+    @media screen and (max-width: 600px) {
+      // height: 75%;
+      justify-content: flex-start;
+    }
 
     .swiper-image {
+      display: flex;
+      justify-content: center;
       text-align: center;
+      height: 400px;
+      gap: 8px;
+      margin: 0 auto;
 
       @media screen and (max-width: 600px) {
-        display: flex;
         flex-direction: column;
         align-items: center;
-        gap: 4px;
+      }
+
+      img {
+        position: relative !important;
+        max-width: 400px !important;
+        max-height: 400px !important;
+        margin: 0 auto;
+
+        &:not(.img-flex) {
+          @media screen and (max-width: 600px) {
+            max-width: 300px !important;
+            max-height: 300px !important;
+          }
+        }
+
+        &.img-flex {
+          max-width: 350px !important;
+          max-height: 350px !important;
+          position: relative !important;
+          margin: 0 auto !important;
+
+          @media screen and (max-width: 600px) {
+            max-width: 200px !important;
+            max-height: 200px !important;
+          }
+        }
       }
     }
 
     .swiper-text {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
       margin-bottom: 12px;
       text-align: center;
+      font-size: 24px;
+      font-weight: 700;
+
+      @media screen and (max-width: 600px) {
+        font-size: 16px;
+      }
     }
   }
 `
@@ -52,8 +115,6 @@ export default function IntroMapDetail() {
         modules={[Pagination]}
         spaceBetween={12}
         slidesPerView={1}
-        onSlideChange={() => console.log('slide change')}
-        onSwiper={(swiper) => console.log(swiper)}
         pagination={{ clickable: true }}
       >
         <SwiperSlide>
@@ -61,8 +122,7 @@ export default function IntroMapDetail() {
             <Image
               src="/images/intro/image-dyno-english-map-1.webp"
               alt="다이노 영어 찾아오는 길 1"
-              width={320}
-              height={320}
+              fill
             />
           </div>
           <div className="swiper-text">
@@ -72,16 +132,16 @@ export default function IntroMapDetail() {
         <SwiperSlide>
           <div className="swiper-image">
             <Image
+              className='img-flex'
               src="/images/intro/image-dyno-english-map-2-1.webp"
               alt="다이노 영어 찾아오는 길 2-1"
-              width={200}
-              height={200}
+              fill
             />
             <Image
+              className='img-flex'
               src="/images/intro/image-dyno-english-map-2-2.webp"
               alt="다이노 영어 찾아오는 길 2-2"
-              width={200}
-              height={200}
+              fill
             />
           </div>
           <div className="swiper-text">
@@ -93,8 +153,7 @@ export default function IntroMapDetail() {
             <Image
               src="/images/intro/image-dyno-english-map-3.webp"
               alt="다이노 영어 찾아오는 길 3"
-              width={320}
-              height={320}
+              fill
             />
           </div>
           <div className="swiper-text">
@@ -106,8 +165,7 @@ export default function IntroMapDetail() {
             <Image
               src="/images/intro/image-dyno-english-map-4.webp"
               alt="다이노 영어 찾아오는 길 4"
-              width={320}
-              height={320}
+              fill
             />
           </div>
           <div className="swiper-text">
@@ -119,8 +177,7 @@ export default function IntroMapDetail() {
             <Image
               src="/images/intro/image-dyno-english-map-5.webp"
               alt="다이노 영어 찾아오는 길 5"
-              width={320}
-              height={320}
+              fill
             />
           </div>
           <div className="swiper-text">
@@ -132,8 +189,7 @@ export default function IntroMapDetail() {
             <Image
               src="/images/intro/image-dyno-english-map-6.webp"
               alt="다이노 영어 찾아오는 길 6"
-              width={320}
-              height={320}
+              fill
             />
           </div>
           <div className="swiper-text">
@@ -145,8 +201,7 @@ export default function IntroMapDetail() {
             <Image
               src="/images/intro/image-dyno-english-map-7.webp"
               alt="다이노 영어 찾아오는 길 7"
-              width={320}
-              height={320}
+              fill
             />
           </div>
           <div className="swiper-text">
@@ -158,8 +213,7 @@ export default function IntroMapDetail() {
             <Image
               src="/images/intro/image-dyno-english-map-8.webp"
               alt="다이노 영어 찾아오는 길 8"
-              width={320}
-              height={320}
+              fill
             />
           </div>
           <div className="swiper-text">
@@ -171,8 +225,7 @@ export default function IntroMapDetail() {
             <Image
               src="/images/intro/image-dyno-english-map-9.webp"
               alt="다이노 영어 찾아오는 길 9"
-              width={320}
-              height={320}
+              fill
             />
           </div>
           <div className="swiper-text">
@@ -182,16 +235,16 @@ export default function IntroMapDetail() {
         <SwiperSlide>
           <div className="swiper-image">
             <Image
+              className='img-flex'
               src="/images/intro/image-dyno-english-map-10-1.webp"
               alt="다이노 영어 찾아오는 길 10-1"
-              width={200}
-              height={200}
+              fill
             />
             <Image
+              className='img-flex'
               src="/images/intro/image-dyno-english-map-10-2.webp"
               alt="다이노 영어 찾아오는 길 10-2"
-              width={200}
-              height={200}
+              fill
             />
           </div>
           <div className="swiper-text">
@@ -203,8 +256,7 @@ export default function IntroMapDetail() {
             <Image
               src="/images/intro/image-dyno-english-map-11.webp"
               alt="다이노 영어 찾아오는 길 11"
-              width={320}
-              height={320}
+              fill
             />
           </div>
           <div className="swiper-text">

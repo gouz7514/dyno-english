@@ -51,7 +51,7 @@ const MainStyle = styled.main`
         65% { transform: translate(0%, -20%) rotate(5deg); }
         70% { transform: translate(0%, -20%) }
         100% { transform: translate(0%, 0%) scale(1.1, 0.9); }
-    }
+      }
     }
 
     .img-container {
@@ -104,7 +104,7 @@ export default function Home() {
             </Link>
             <Link href="/intro/testimonial">
               <div className='dyno-btn'>
-                소중한 후기
+                상담 신청
               </div>
             </Link>
           </div>
