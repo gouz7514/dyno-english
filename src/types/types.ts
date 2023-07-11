@@ -23,3 +23,9 @@ export type CalendarProps = {
     backgroundColor: string,
   }[]
 }
+
+export type SkeletonProps = {
+  width?: number,
+  height?: number,
+  marginBottom?: number
+}
