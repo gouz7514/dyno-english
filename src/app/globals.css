@@ -11,6 +11,8 @@
 
   --height-header: 80px;
   --height-footer: 40px;
+
+  --header-icon-size: 32px;
 }
 
 @media (prefers-color-scheme: dark) {

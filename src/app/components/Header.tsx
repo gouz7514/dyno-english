@@ -54,9 +54,9 @@ const HeaderStyle = styled.header`
         display: none;
         cursor: pointer;
         background-image: url('/icon/icon-menu.svg');
-        width: 40px;
-        height: 40px;
-        background-size: 40px 40px;
+        width: var(--header-icon-size);
+        height: var(--header-icon-size);
+        background-size: var(--header-icon-size) var(--header-icon-size);
 
         @media screen and (max-width: 600px) {
           display: block;
