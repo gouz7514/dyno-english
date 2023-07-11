@@ -1,8 +1,9 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { db } from '@/firebase/config'
+import { rdb } from '@/firebase/config'
 import { collection, getDocs } from "firebase/firestore"
+import { getDatabase, ref, onValue } from "firebase/database"
 
 import styled from 'styled-components'
 
@@ -27,97 +28,6 @@ const TesitmonialPage = styled.div`
 
   .title-text {
     font-size: 16px;
-  }
-`
-
-const TestimonialStyle = styled.div<{ $length?: number }>`
-  --testimonial-item-width: 400px;
-  --testimonial-item-height: 300px;
-  --testimonial-item-margin-right: 12px;
-  --animation-duration: 40s;
-
-  position: relative;
-  white-space: nowrap;
-  overflow: hidden;
-  background: white;
-  padding: 16px 0;
-
-  @keyframes slide {
-    from {
-      transform: translateX(0);
-    }
-    to {
-      transform: translateX(calc(var(--testimonial-item-width) * calc(0 - ${props => props.$length}) - var(--testimonial-item-margin-right) * calc(1 + ${props => props.$length})));
-    }
-  }
-
-  @keyframes slide2 {
-    from {
-      transform: translateX(-100px);
-    }
-    to {
-      transform: translateX(calc(var(--testimonial-item-width) * calc(0 - ${props => props.$length}) - var(--testimonial-item-margin-right) * calc(0 - ${props => props.$length}) - 100px));
-    }
-  }
-
-  .testimonial-items {
-    display: inline-flex;
-    animation: slide var(--animation-duration) linear infinite;
-
-    &.second {
-      animation: slide2 var(--animation-duration) linear infinite;
-    }
-
-    .testimonial-item {
-      display: inline-block;
-      box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
-      width: var(--testimonial-item-width);
-      height: var(--testimonial-item-height);
-      margin-right: 12px;
-      border-radius: 12px;
-      position: relative;
-
-      .testimonial-content {
-        height: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        white-space: pre-wrap;
-        text-align: center;
-        padding: 8px;
-        line-height: 1.5;
-        word-break: keep-all;
-      }
-
-      .testimonial-by {
-        position: absolute;
-        bottom: 24px;
-        left: 24px;
-        color: var(--primary-green);
-        font-weight: 500;
-        font-size: 14px;
-      }
-    }
-  }
-
-  &:before,
-  &:after {
-    position: absolute;
-    top: 0;
-    width: 30px;
-    height: 100%;
-    content: '';
-    z-index: 2;
-  }
-
-  &:before {
-    left: 0;
-    background: linear-gradient(to left, rgba(255, 255, 255, 0), white);
-  }
-
-  &:after {
-    right: 0;
-    background: linear-gradient(to right, rgba(255, 255, 255, 0), white);
   }
 `
 
@@ -152,6 +62,7 @@ const TestimonialSwiper = styled.div`
           font-weight: 500;
           font-size: 18px;
           word-break: keep-all;
+          white-space: pre-line;
         }
 
         .testimonial-by {
@@ -180,18 +91,35 @@ export default function IntroTestimonial() {
   const [testimonials, setTestimonials] = useState<Testimonial[]>([])
   const [loading, setLoading] = useState<boolean>(true)
 
+  // TODO : 모든 문서 가져오는 방식이 아닌 단일 문서 가져오는 방식으로 바꾸기
+  // useEffect(() => {
+  //   const getTestimonials = async () => {
+  //     const querySnapshot = await getDocs(collection(db, "testimonials"))
+  //     const testimonials: Testimonial[] = querySnapshot.docs.map((doc) => ({
+  //       ...doc.data()
+  //     })) as Testimonial[]
+  //     setTestimonials(testimonials)
+  //     setLoading(false)
+  //   }
+
+  //   getTestimonials()
+  // }, [])
+
   useEffect(() => {
     const getTestimonials = async () => {
-      const querySnapshot = await getDocs(collection(db, "testimonials"))
-      const testimonials: Testimonial[] = querySnapshot.docs.map((doc) => ({
-        ...doc.data()
-      })) as Testimonial[]
-      setTestimonials(testimonials)
-      setLoading(false)
-    }
+      const postsRef = ref(rdb, 'testimonials')
 
+      onValue(postsRef, (snapshot) => {
+        const data = snapshot.val()
+        const testimonials: Testimonial[] = Object.keys(data).map((key) => ({
+          ...data[key]
+        })) as Testimonial[]
+        setTestimonials(testimonials)
+        setLoading(false)
+      })
+    }
     getTestimonials()
-  }, [testimonials])
+  }, [])
 
   return (
     <TesitmonialPage>
@@ -204,47 +132,6 @@ export default function IntroTestimonial() {
         </div>
       </div>
       <div className='d-flex flex-column'>
-        <h2>시안 1</h2>
-        {
-          loading ? (
-            <Skeleton height={300} />
-          ) :
-          (
-            <TestimonialStyle $length={testimonials.length}>
-              <div className="testimonial-items">
-                {
-                  testimonials.map((testimonial, index) => (
-                    <div key={index} className='testimonial-item'>
-                      <div className="testimonial-content">
-                        {testimonial.content}
-                      </div>
-                      <div className="testimonial-by">
-                        - {testimonial.by}
-                      </div>
-                    </div>
-                  ))
-                }
-              </div>
-              <div className="testimonial-items">
-                {
-                  testimonials.map((testimonial, index) => (
-                    <div key={index} className='testimonial-item'>
-                      <div className="testimonial-content">
-                        {testimonial.content}
-                      </div>
-                      <div className="testimonial-by">
-                        {testimonial.by}
-                      </div>
-                    </div>
-                  ))
-                }
-              </div>
-            </TestimonialStyle>
-          )
-        }
-      </div>
-      <div className='d-flex flex-column'>
-        <h2>시안 2</h2>
         {
           loading ? (
             <Skeleton height={300} />
@@ -269,7 +156,7 @@ export default function IntroTestimonial() {
                       <div className='testimonial-item'>
                         
                         <div className="testimonial-content">
-                          {testimonial.content}
+                          { testimonial.content.replaceAll('/n', '\n') }
                         </div>
                         <div className="testimonial-by">
                           - {testimonial.by}
