@@ -62,7 +62,7 @@ body {
 .container {
   max-width: 600px;
   width: 100%;
-  padding: 16px 12px;
+  padding: 24px 12px;
   margin: 0 auto;
   min-height: calc(100vh - var(--height-header) - var(--height-footer));
 }

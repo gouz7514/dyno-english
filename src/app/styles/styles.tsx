@@ -29,6 +29,23 @@ export const ArticleStyle = styled.article`
           transform: scale(1.05);
         }
       }
+
+      .section-title-text {
+        font-size: 24px;
+        font-weight: bold;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+
+        .icon-click {
+          display: inline-block;
+          width: 28px;
+          height: 28px;
+          background-size: 28px 28px;
+          background-image: url('/icon/icon-click.webp');
+        }
+      }
     }
 
     .section-content {
