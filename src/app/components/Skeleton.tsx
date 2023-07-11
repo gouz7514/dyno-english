@@ -38,13 +38,13 @@ const SkeletonWrapper = styled.div<SkeletonProps>`
     height: ${height}px;
   `}
 
-  ${({ marginBottom }) => marginBottom && css`
-    margin-bottom: ${marginBottom}px;
+  ${({ marginbottom }) => marginbottom && css`
+    margin-bottom: ${marginbottom}px;
   `}
 `
 
-export default function Skeleton({ height = 300, marginBottom = 12 }: SkeletonProps) {
+export default function Skeleton({ height = 300, marginbottom = 12 }: SkeletonProps) {
   return (
-    <SkeletonWrapper height={height} marginBottom={marginBottom}></SkeletonWrapper>
+    <SkeletonWrapper height={height} marginbottom={marginbottom}></SkeletonWrapper>
   )
 }

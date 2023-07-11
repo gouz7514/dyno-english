@@ -27,5 +27,5 @@ export type CalendarProps = {
 export type SkeletonProps = {
   width?: number,
   height?: number,
-  marginBottom?: number
+  marginbottom?: number
 }
