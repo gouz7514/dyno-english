@@ -148,7 +148,7 @@ const TestimonialSwiper = styled.div`
         }
 
         .testimonial-content {
-          line-height: 1.5;
+          line-height: 1.3;
           font-weight: 500;
           font-size: 18px;
           word-break: keep-all;
