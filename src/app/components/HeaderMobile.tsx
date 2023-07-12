@@ -29,9 +29,9 @@ const HeaderMobileStyle = styled.div`
 
     .header-close {
       background-image: url('/icon/icon_menu.svg');
-      width: 32px;
-      height: 32px;
-      background-size: 32px 32px;
+      width: var(--header-icon-size);
+      height: var(--header-icon-size);
+      background-size: var(--header-icon-size) var(--header-icon-size);
       background-image: url('/icon/icon_close.svg');
       cursor: pointer;
       position: absolute;

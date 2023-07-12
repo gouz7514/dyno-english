@@ -1,5 +1,6 @@
 'use client'
 
+import { useEffect, useRef } from 'react'
 import styled from 'styled-components'
 
 import Link from 'next/link'
@@ -29,29 +30,25 @@ const MainStyle = styled.main`
       top: 28px;
       z-index: 3;
 
-      &:hover {
-        animation: pop 1s ease-in-out infinite;
+      @media screen and (max-width: 376px) {
+        transform: scale(0.9);
+        left: 38px;
+      }
+
+      &.pop {
+        animation: pop 1s ease-in-out;
         animation-timing-function: ease-in-out;
       }
 
-      @keyframes climb {
-        from {
-          transform: translateY(0);
-        }
-        to {
-          transform: translateY(-10px);
-        }
-      }
-
       @keyframes pop {
-        0% { transform: translate(0%, 0%) scale(1.1, 0.9); }
+        0% { transform: translate(0%, 0%) scale(1.05, 1); }
         50% { transform: translate(0%, -20%) scale(1, 1); }
         55% { transform: translate(0%, -20%) }
         60% { transform: translate(0%, -20%) rotate(-5deg); }
         65% { transform: translate(0%, -20%) rotate(5deg); }
         70% { transform: translate(0%, -20%) }
-        100% { transform: translate(0%, 0%) scale(1.1, 0.9); }
-    }
+        100% { transform: translate(0%, 0%) scale(1.05, 1); }
+      }
     }
 
     .img-container {
@@ -62,6 +59,10 @@ const MainStyle = styled.main`
       background-size: cover;
       transform: scale(1.8);
       z-index: 2;
+
+      @media screen and (max-width: 376px) {
+        transform: scale(1.6);
+      }
     }
   }
 
@@ -88,12 +89,46 @@ const MainStyle = styled.main`
 `
 
 export default function Home() {
+  const imgDynoRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (!imgDynoRef.current) return
+
+    const imgDyno = imgDynoRef.current
+    if (imgDyno) {
+      imgDyno.classList.add('pop')
+    }
+
+    return () => {
+      if (imgDyno) {
+        imgDyno.classList.remove('pop')
+      }
+    }
+  }, [])
+
+  const handleMouseMove = (flag: boolean) => {
+    if (!imgDynoRef.current) return
+
+    const imgDyno = imgDynoRef.current
+    if (flag) {
+      imgDyno.classList.add('pop')
+    } else {
+      imgDyno.classList.remove('pop')
+    }
+  }
+    
+
   return (
     <main>
       <div>
         <MainStyle className="main-container">
           <div className="main-image">
-            <div className="img-dyno"></div>
+            <div
+              ref={imgDynoRef}
+              className="img-dyno"
+              onMouseEnter={() => handleMouseMove(true)}
+              onMouseLeave={() => handleMouseMove(false)}
+            ></div>
             <div className="img-container"></div>
           </div>
           <div className="main-links">
@@ -104,7 +139,7 @@ export default function Home() {
             </Link>
             <Link href="/intro/testimonial">
               <div className='dyno-btn'>
-                소중한 후기
+                상담 신청
               </div>
             </Link>
           </div>
