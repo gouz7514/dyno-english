@@ -89,7 +89,6 @@ const MainStyle = styled.main`
 `
 
 export default function Home() {
-  console.log(process)
   const imgDynoRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
