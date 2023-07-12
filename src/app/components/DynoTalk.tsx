@@ -146,7 +146,7 @@ export default function DynoTalk() {
         handleMouseMove(true)
       }
     }, 200)
-  }, [pathname])
+  })
 
   return (
     <DynoTalkContainer className='dyno-talk-container'>
