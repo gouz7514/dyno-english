@@ -59,7 +59,9 @@ export default function IntroTeacher() {
           <Divider short />
           <div className="article-section">
             <div className="section-title toggle" onClick={() => onClickToggle('first')}>
-              <h3>1. 미국 초·중학교 졸업</h3>
+              <div className="section-title-text">
+                1. 미국 초·중학교 졸업 <div className="icon-click"></div>
+              </div>
             </div>
             {
               isToggled.first && (
@@ -114,9 +116,9 @@ export default function IntroTeacher() {
           </div>
           <div className="article-section">
             <div className="section-title toggle" onClick={() => onClickToggle('second')}>
-              <h3>
-                2. 영문학 전공 · 교직이수
-              </h3>
+              <div className="section-title-text">
+                2. 영문학 전공 · 교직이수 <div className="icon-click"></div>
+              </div>
             </div>
             {
               isToggled.second && (
@@ -208,9 +210,9 @@ export default function IntroTeacher() {
           </div>
           <div className="article-section">
             <div className="section-title toggle" onClick={() => onClickToggle('third')}>
-              <h3>
-                3. 다양하고 실질적인 경험
-              </h3>
+              <div className="section-title-text">
+                3. 다양하고 실질적인 경험 <div className="icon-click"></div>
+              </div>
             </div>
             {
               isToggled.third && (

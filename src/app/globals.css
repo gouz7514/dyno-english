@@ -1,3 +1,5 @@
+@import url('//cdn.jsdelivr.net/font-iropke-batang/1.2/font-iropke-batang.css');
+
 :root {
   --primary-green: #009222;
   --second-green: #30A680;
@@ -11,6 +13,8 @@
 
   --height-header: 80px;
   --height-footer: 40px;
+
+  --header-icon-size: 32px;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -57,18 +61,23 @@ body {
   overflow-x: hidden;
   position: relative;
   height: 100vh;
+  font-family: 'Iropke Batang', Arial, sans-serif;
 }
 
 .container {
   max-width: 600px;
   width: 100%;
-  padding: 16px 12px;
+  padding: 24px 12px;
   margin: 0 auto;
   min-height: calc(100vh - var(--height-header) - var(--height-footer));
 }
 
 .text-bold {
   font-weight: 800;
+}
+
+.text-bg-yellow {
+  background-color: var(--second-yellow);
 }
 
 .text-normal {
@@ -78,4 +87,8 @@ body {
 a {
   color: inherit;
   text-decoration: none;
+}
+
+.swiper-pagination-bullet {
+  background-color: var(--primary-green) !important;
 }

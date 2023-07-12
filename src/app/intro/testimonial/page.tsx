@@ -1,273 +1,196 @@
 'use client'
 
+import { useState, useEffect } from 'react'
+import { rdb } from '@/firebase/config'
+import { collection, getDocs } from "firebase/firestore"
+import { getDatabase, ref, onValue } from "firebase/database"
+
+import { TestimonialProps } from '@/types/types'
+
 import styled from 'styled-components'
 
+import Skeleton from '@/app/components/Skeleton'
+
+import { Swiper, SwiperSlide } from 'swiper/react'
+import SwiperCore, { Pagination, Autoplay } from "swiper"
+import 'swiper/css'
+import 'swiper/css/navigation'
+import 'swiper/css/pagination'
+import 'swiper/css/scrollbar'
+
+SwiperCore.use([Pagination, Autoplay])
+
 const TesitmonialPage = styled.div`
-  padding: 12px;
-  height: calc(100vh - var(--height-header) - var(--height-footer));
+  padding: 24px;
+  min-height: calc(100vh - var(--height-header) - var(--height-footer));
+  margin: 0 auto;
+  max-width: 1024px;
 
   .title {
-    margin-bottom: 24px;
-  }
+    display: flex;
+    margin-bottom: 12px;
+    align-items: center;
+    justify-content: center;
 
-  .title-text {
-    font-size: 16px;
-  }
-`
+    .title-text {
+      font-size: 24px;
+      font-weight: 600;
 
-const TestimonialStyle = styled.div`
-  --testimonial-item-width: 200px;
-  --testimonial-item-height: 200px;
-  --testimonial-item-margin-right: 12px;
-  --animation-duration: 40s;
-
-  position: relative;
-  white-space: nowrap;
-  overflow: hidden;
-  background: white;
-  padding: 12px 0;
-
-  @keyframes slide {
-    from {
-      transform: translateX(0);
-    }
-    to {
-      transform: translateX(calc(var(--testimonial-item-width) * -9 - var(--testimonial-item-margin-right) * 8));
-    }
-  }
-
-  @keyframes slide2 {
-    from {
-      transform: translateX(-100px);
-    }
-    to {
-      transform: translateX(calc(var(--testimonial-item-width) * -9 - var(--testimonial-item-margin-right) * 8 - 100px));
-    }
-  }
-
-  .testimonial-items {
-    display: inline-block;
-    animation: slide var(--animation-duration) linear infinite;
-
-    &.second {
-      animation: slide2 var(--animation-duration) linear infinite;
-    }
-
-    .testimonial-item {
-      display: inline-block;
-      box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
-      width: var(--testimonial-item-width);
-      height: var(--testimonial-item-height);
-      margin-right: 12px;
-      border-radius: 12px;
-
-      .testimonial-content {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        width: 100%;
-        height: 100%;
+      @media screen and (max-width: 600px) {
+        font-size: 18px;
       }
     }
   }
+`
 
-  &:before,
-  &:after {
-    position: absolute;
-    top: 0;
-    width: 120px;
-    height: 240px;
-    content: '';
-    z-index: 2;
-  }
+const TestimonialSwiper = styled.div`
+  .swiper {
+    position: relative;
+    padding-bottom: 36px;
 
-  &:before {
-    left: 0;
-    background: linear-gradient(to left, rgba(255, 255, 255, 0), white);
-  }
+    .swiper-slide {
+      padding: 4px;
 
-  &:after {
-    right: 0;
-    background: linear-gradient(to right, rgba(255, 255, 255, 0), white);
+      .testimonial-item {
+        height: 500px;
+        border-radius: 12px;
+        padding: 24px;
+        box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+
+        @media screen and (max-width: 600px) {
+          height: 400px;
+        }
+
+        .testimonial-content {
+          line-height: 1.5;
+          font-weight: 500;
+          font-size: 18px;
+          word-break: keep-all;
+          white-space: pre-line;
+
+          @media screen and (max-width: 600px) {
+            font-size: 14px
+          }
+        }
+
+        .testimonial-by {
+          bottom: 24px;
+          left: 24px;
+          font-size: 16px;
+          font-weight: 500;
+          margin-top: 40px;
+          color: var(--primary-green);
+        }
+      }
+    }
+
+    .swiper-pagination {
+      padding-top: 12px;
+    }
   }
 `
 
 export default function IntroTestimonial() {
+  const [testimonials, setTestimonials] = useState<TestimonialProps[]>([])
+  const [loading, setLoading] = useState<boolean>(true)
+  const [swiperCnt, setSwiperCnt] = useState<number>(1)
+
+  // TODO : 모든 문서 가져오는 방식이 아닌 단일 문서 가져오는 방식으로 바꾸기
+  // useEffect(() => {
+  //   const getTestimonials = async () => {
+  //     const querySnapshot = await getDocs(collection(db, "testimonials"))
+  //     const testimonials: Testimonial[] = querySnapshot.docs.map((doc) => ({
+  //       ...doc.data()
+  //     })) as Testimonial[]
+  //     setTestimonials(testimonials)
+  //     setLoading(false)
+  //   }
+
+  //   getTestimonials()
+  // }, [])
+
+  useEffect(() => {
+    const getTestimonials = async () => {
+      const postsRef = ref(rdb, 'testimonials')
+
+      onValue(postsRef, (snapshot) => {
+        const data = snapshot.val()
+        const testimonials: TestimonialProps[] = Object.keys(data).map((key) => ({
+          ...data[key]
+        })) as TestimonialProps[]
+        setTestimonials(testimonials)
+        setLoading(false)
+      })
+    }
+    getTestimonials()
+  }, [])
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth <= 600) {
+        setSwiperCnt(1)
+      } else {
+        setSwiperCnt(2)
+      }
+    }
+
+    window.addEventListener('resize', handleResize)
+    handleResize()
+
+    return () => {
+      window.removeEventListener('resize', handleResize)
+    }
+  }, [])
+
   return (
     <TesitmonialPage>
-      <div>
-        <div className="title">
-          <h1>후기</h1>
-        </div>
-        <div className='title-text'>
+      <div className='title'>
+        <div className="title-text">
           다이노 영어의 소중한 후기를 소개합니다!
         </div>
       </div>
-      <div className='d-flex flex-column'>
-        <TestimonialStyle>
-          <div className="testimonial-items">
-            <div className='testimonial-item'>
-              <div className="testimonial-content">
-                후기 1
-              </div>
-            </div>
-            <div className='testimonial-item'>
-              <div className="testimonial-content">
-                후기 2
-              </div>
-            </div><div className='testimonial-item'>
-              <div className="testimonial-content">
-                후기 3
-              </div>
-            </div><div className='testimonial-item'>
-              <div className="testimonial-content">
-                후기 4
-              </div>
-            </div><div className='testimonial-item'>
-              <div className="testimonial-content">
-                후기 5
-              </div>
-            </div><div className='testimonial-item'>
-              <div className="testimonial-content">
-                후기 6
-              </div>
-            </div><div className='testimonial-item'>
-              <div className="testimonial-content">
-                후기 7
-              </div>
-            </div><div className='testimonial-item'>
-              <div className="testimonial-content">
-                후기 8
-              </div>
-            </div><div className='testimonial-item'>
-              <div className="testimonial-content">
-                후기 9
-              </div>
-            </div>
-          </div>
-          <div className="testimonial-items">
-            <div className='testimonial-item'>
-              <div className="testimonial-content">
-                후기 1
-              </div>
-            </div>
-            <div className='testimonial-item'>
-              <div className="testimonial-content">
-                후기 2
-              </div>
-            </div><div className='testimonial-item'>
-              <div className="testimonial-content">
-                후기 3
-              </div>
-            </div><div className='testimonial-item'>
-              <div className="testimonial-content">
-                후기 4
-              </div>
-            </div><div className='testimonial-item'>
-              <div className="testimonial-content">
-                후기 5
-              </div>
-            </div><div className='testimonial-item'>
-              <div className="testimonial-content">
-                후기 6
-              </div>
-            </div><div className='testimonial-item'>
-              <div className="testimonial-content">
-                후기 7
-              </div>
-            </div><div className='testimonial-item'>
-              <div className="testimonial-content">
-                후기 8
-              </div>
-            </div><div className='testimonial-item'>
-              <div className="testimonial-content">
-                후기 9
-              </div>
-            </div>
-          </div>
-        </TestimonialStyle>
-        <TestimonialStyle>
-          <div className="testimonial-items second">
-            <div className='testimonial-item'>
-              <div className="testimonial-content">
-                후기 1
-              </div>
-            </div>
-            <div className='testimonial-item'>
-              <div className="testimonial-content">
-                후기 2
-              </div>
-            </div><div className='testimonial-item'>
-              <div className="testimonial-content">
-                후기 3
-              </div>
-            </div><div className='testimonial-item'>
-              <div className="testimonial-content">
-                후기 4
-              </div>
-            </div><div className='testimonial-item'>
-              <div className="testimonial-content">
-                후기 5
-              </div>
-            </div><div className='testimonial-item'>
-              <div className="testimonial-content">
-                후기 6
-              </div>
-            </div><div className='testimonial-item'>
-              <div className="testimonial-content">
-                후기 7
-              </div>
-            </div><div className='testimonial-item'>
-              <div className="testimonial-content">
-                후기 8
-              </div>
-            </div><div className='testimonial-item'>
-              <div className="testimonial-content">
-                후기 9
-              </div>
-            </div>
-          </div>
-          <div className="testimonial-items second">
-            <div className='testimonial-item'>
-              <div className="testimonial-content">
-                후기 1
-              </div>
-            </div>
-            <div className='testimonial-item'>
-              <div className="testimonial-content">
-                후기 2
-              </div>
-            </div><div className='testimonial-item'>
-              <div className="testimonial-content">
-                후기 3
-              </div>
-            </div><div className='testimonial-item'>
-              <div className="testimonial-content">
-                후기 4
-              </div>
-            </div><div className='testimonial-item'>
-              <div className="testimonial-content">
-                후기 5
-              </div>
-            </div><div className='testimonial-item'>
-              <div className="testimonial-content">
-                후기 6
-              </div>
-            </div><div className='testimonial-item'>
-              <div className="testimonial-content">
-                후기 7
-              </div>
-            </div><div className='testimonial-item'>
-              <div className="testimonial-content">
-                후기 8
-              </div>
-            </div><div className='testimonial-item'>
-              <div className="testimonial-content">
-                후기 9
-              </div>
-            </div>
-          </div>
-        </TestimonialStyle>
+      <div>
+        {
+          loading ? (
+            <Skeleton height={300} />
+          ) :
+          (
+            <TestimonialSwiper>
+              <Swiper
+                slidesPerView={swiperCnt}
+                spaceBetween={12}
+                pagination={{
+                  clickable: true
+                }}
+                loop={true}
+                autoplay={{
+                  delay: 5000,
+                  disableOnInteraction: false
+                }}
+              >
+                {
+                  testimonials.map((testimonial, index) => (
+                    <SwiperSlide key={index}>
+                      <div className='testimonial-item'>
+                        
+                        <div className="testimonial-content">
+                          { testimonial.content.replaceAll('/n', '\n') }
+                        </div>
+                        <div className="testimonial-by">
+                          - {testimonial.by}
+                        </div>
+                      </div>
+                    </SwiperSlide>
+                  ))
+                }
+              </Swiper>
+            </TestimonialSwiper>
+          )
+        }
       </div>
     </TesitmonialPage>
   )

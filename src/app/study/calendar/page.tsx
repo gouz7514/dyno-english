@@ -16,8 +16,24 @@ const CalendarContainer = styled.div`
   margin: 0 auto;
   margin-top: 24px;
 
-  .calendar-title {
-    margin-bottom: 12px;
+  .toastui-calendar-allday {
+    display: none !important;
+  }
+
+  .toastui-calendar-day-name__date {
+    font-size: 16px !important;
+  }
+
+  .toastui-calendar-day-name-container {
+    margin-left: 48px !important;
+  }
+
+  .toastui-calendar-timegrid-time-column {
+    width: 48px !important;
+  }
+
+  .toastui-calendar-columns {
+    left: 48px !important;
   }
 `
 

@@ -23,3 +23,14 @@ export type CalendarProps = {
     backgroundColor: string,
   }[]
 }
+
+export type SkeletonProps = {
+  width?: number,
+  height?: number,
+  marginbottom?: number
+}
+
+export type TestimonialProps = {
+  by: string,
+  content: string
+}
