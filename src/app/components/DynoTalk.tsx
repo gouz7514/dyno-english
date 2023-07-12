@@ -134,19 +134,19 @@ export default function DynoTalk() {
     }
   }
 
-  useEffect(() => {
-    if (currentPathNameRef.current !== pathname) {
-      setTalkVisible(false)
-      handleMouseMove(false)
-      currentPathNameRef.current = pathname
-    }
+  // useEffect(() => {
+  //   if (currentPathNameRef.current !== pathname) {
+  //     setTalkVisible(false)
+  //     handleMouseMove(false)
+  //     currentPathNameRef.current = pathname
+  //   }
 
-    setTimeout(() => {
-      if (currentPathNameRef.current === '/') {
-        handleMouseMove(true)
-      }
-    }, 200)
-  })
+  //   setTimeout(() => {
+  //     if (currentPathNameRef.current === '/') {
+  //       handleMouseMove(true)
+  //     }
+  //   }, 200)
+  // }, [])
 
   return (
     <DynoTalkContainer className='dyno-talk-container'>
