@@ -1,6 +1,6 @@
 import Ready from "@/app/components/Ready"
 
-export default function StudyPrice() {
+export default function CurriculumWriting() {
   return (
     <Ready />
   )

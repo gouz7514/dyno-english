@@ -1,7 +1,7 @@
+import Ready from "@/app/components/Ready"
+
 export default function StudyRecruit() {
   return (
-    <>
-      <h1>수강생 모집</h1>
-    </>
+    <Ready />
   )
 }
