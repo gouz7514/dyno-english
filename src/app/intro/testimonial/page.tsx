@@ -5,6 +5,8 @@ import { rdb } from '@/firebase/config'
 import { collection, getDocs } from "firebase/firestore"
 import { getDatabase, ref, onValue } from "firebase/database"
 
+import { TestimonialProps } from '@/types/types'
+
 import styled from 'styled-components'
 
 import Skeleton from '@/app/components/Skeleton'
@@ -19,32 +21,38 @@ import 'swiper/css/scrollbar'
 SwiperCore.use([Pagination, Autoplay])
 
 const TesitmonialPage = styled.div`
-  padding: 16px;
+  padding: 24px;
   min-height: calc(100vh - var(--height-header) - var(--height-footer));
+  margin: 0 auto;
+  max-width: 1024px;
 
   .title {
-    margin-bottom: 24px;
-  }
+    display: flex;
+    margin-bottom: 12px;
+    align-items: center;
+    justify-content: center;
 
-  .title-text {
-    font-size: 16px;
+    .title-text {
+      font-size: 24px;
+      font-weight: 600;
+
+      @media screen and (max-width: 600px) {
+        font-size: 18px;
+      }
+    }
   }
 `
 
 const TestimonialSwiper = styled.div`
-  display: flex;
-  padding: 0 12px;
-
   .swiper {
     position: relative;
-    margin-top: 12px;
-    padding-bottom: 24px;
+    padding-bottom: 36px;
 
     .swiper-slide {
-      padding: 12px 16px;
+      padding: 4px;
 
       .testimonial-item {
-        height: 300px;
+        height: 500px;
         border-radius: 12px;
         padding: 24px;
         box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
@@ -58,11 +66,15 @@ const TestimonialSwiper = styled.div`
         }
 
         .testimonial-content {
-          line-height: 1.3;
+          line-height: 1.5;
           font-weight: 500;
           font-size: 18px;
           word-break: keep-all;
           white-space: pre-line;
+
+          @media screen and (max-width: 600px) {
+            font-size: 14px
+          }
         }
 
         .testimonial-by {
@@ -76,6 +88,10 @@ const TestimonialSwiper = styled.div`
       }
     }
 
+    .swiper-pagination {
+      padding-top: 12px;
+    }
+
     .swiper-pagination-bullet {
       background-color: var(--primary-green);
     }
@@ -83,13 +99,9 @@ const TestimonialSwiper = styled.div`
 `
 
 export default function IntroTestimonial() {
-  type Testimonial = {
-    content: string,
-    by: string
-  }
-
-  const [testimonials, setTestimonials] = useState<Testimonial[]>([])
+  const [testimonials, setTestimonials] = useState<TestimonialProps[]>([])
   const [loading, setLoading] = useState<boolean>(true)
+  const [swiperCnt, setSwiperCnt] = useState<number>(1)
 
   // TODO : 모든 문서 가져오는 방식이 아닌 단일 문서 가져오는 방식으로 바꾸기
   // useEffect(() => {
@@ -111,9 +123,9 @@ export default function IntroTestimonial() {
 
       onValue(postsRef, (snapshot) => {
         const data = snapshot.val()
-        const testimonials: Testimonial[] = Object.keys(data).map((key) => ({
+        const testimonials: TestimonialProps[] = Object.keys(data).map((key) => ({
           ...data[key]
-        })) as Testimonial[]
+        })) as TestimonialProps[]
         setTestimonials(testimonials)
         setLoading(false)
       })
@@ -121,17 +133,31 @@ export default function IntroTestimonial() {
     getTestimonials()
   }, [])
 
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth <= 600) {
+        setSwiperCnt(1)
+      } else {
+        setSwiperCnt(2)
+      }
+    }
+
+    window.addEventListener('resize', handleResize)
+    handleResize()
+
+    return () => {
+      window.removeEventListener('resize', handleResize)
+    }
+  }, [])
+
   return (
     <TesitmonialPage>
-      <div>
-        <div className="title">
-          <h1>후기</h1>
-        </div>
-        <div className='title-text'>
+      <div className='title'>
+        <div className="title-text">
           다이노 영어의 소중한 후기를 소개합니다!
         </div>
       </div>
-      <div className='d-flex flex-column'>
+      <div>
         {
           loading ? (
             <Skeleton height={300} />
@@ -139,7 +165,7 @@ export default function IntroTestimonial() {
           (
             <TestimonialSwiper>
               <Swiper
-                slidesPerView={1}
+                slidesPerView={swiperCnt}
                 spaceBetween={12}
                 pagination={{
                   clickable: true

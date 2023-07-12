@@ -29,3 +29,8 @@ export type SkeletonProps = {
   height?: number,
   marginbottom?: number
 }
+
+export type TestimonialProps = {
+  by: string,
+  content: string
+}
