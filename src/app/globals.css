@@ -76,6 +76,10 @@ body {
   font-weight: 800;
 }
 
+.text-bg-yellow {
+  background-color: var(--second-yellow);
+}
+
 .text-normal {
   font-weight: normal;
 }
