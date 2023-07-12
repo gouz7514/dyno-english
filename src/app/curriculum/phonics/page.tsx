@@ -1,7 +1,4 @@
-'use client'
-
 import { ArticleStyle } from "@/app/styles/styles"
-import Divider from "@/app/components/Divider"
 import Image from 'next/image'
 
 export default function CurriculmPhonics() {
@@ -11,7 +8,14 @@ export default function CurriculmPhonics() {
         <div className="article-title">
           [수업 안내] 파닉스 - Level K
         </div>
-        <div className="article-content">          
+        <div className="article-content">
+          <p>
+            안녕하세요,
+          </p>
+          <p>
+            다이노 영어입니다.
+          </p>
+          <br />
           <p>
             <span className="text-bold">파닉스 Level K 수업</span>은
           </p>

@@ -91,10 +91,6 @@ const TestimonialSwiper = styled.div`
     .swiper-pagination {
       padding-top: 12px;
     }
-
-    .swiper-pagination-bullet {
-      background-color: var(--primary-green);
-    }
   }
 `
 

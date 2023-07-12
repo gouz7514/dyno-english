@@ -88,3 +88,7 @@ a {
   color: inherit;
   text-decoration: none;
 }
+
+.swiper-pagination-bullet {
+  background-color: var(--primary-green) !important;
+}

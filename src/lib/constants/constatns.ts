@@ -46,3 +46,81 @@ export const DropdownStudy = [
     link: '/study/recruit'
   }
 ]
+
+export const CurriculumReading = [
+  {
+    src: '/images/curriculum/image-dyno-curriculum-reading-1.webp',
+    alt: '커리큘럼 리딩 이미지 1',
+    section: 2
+  },
+  {
+    src: '/images/curriculum/image-dyno-curriculum-reading-2-1.webp',
+    alt: '커리큘럼 리딩 이미지 2-1',
+    section: 2
+  },
+  {
+    src: '/images/curriculum/image-dyno-curriculum-reading-2-2.webp',
+    alt: '커리큘럼 리딩 이미지 2-2',
+    section: 2
+  },
+  {
+    src: '/images/curriculum/image-dyno-curriculum-reading-2-3.webp',
+    alt: '커리큘럼 리딩 이미지 2-3',
+    section: 2
+  },
+  {
+    src: '/images/curriculum/image-dyno-curriculum-reading-2-4.webp',
+    alt: '커리큘럼 리딩 이미지 2-4',
+    section: 2
+  },
+  {
+    src: '/images/curriculum/image-dyno-curriculum-reading-2-5.webp',
+    alt: '커리큘럼 리딩 이미지 2-5',
+    section: 2
+  },
+  {
+    src: '/images/curriculum/image-dyno-curriculum-reading-2-6.webp',
+    alt: '커리큘럼 리딩 이미지 2-6',
+    section: 2
+  },
+  {
+    src: '/images/curriculum/image-dyno-curriculum-reading-2-7.webp',
+    alt: '커리큘럼 리딩 이미지 2-7',
+    section: 2
+  },
+  {
+    src: '/images/curriculum/image-dyno-curriculum-reading-2-8.webp',
+    alt: '커리큘럼 리딩 이미지 2-8',
+    section: 2
+  },
+  {
+    src: '/images/curriculum/image-dyno-curriculum-reading-3-1.webp',
+    alt: '커리큘럼 리딩 이미지 3-1',
+    section: 3
+  },
+  {
+    src: '/images/curriculum/image-dyno-curriculum-reading-3-2.webp',
+    alt: '커리큘럼 리딩 이미지 3-2',
+    section: 3
+  },
+  {
+    src: '/images/curriculum/image-dyno-curriculum-reading-3-3.webp',
+    alt: '커리큘럼 리딩 이미지 3-3',
+    section: 3
+  },
+  {
+    src: '/images/curriculum/image-dyno-curriculum-reading-3-4.webp',
+    alt: '커리큘럼 리딩 이미지 3-4',
+    section: 3
+  },
+  {
+    src: '/images/curriculum/image-dyno-curriculum-reading-3-5.webp',
+    alt: '커리큘럼 리딩 이미지 3-5',
+    section: 3
+  },
+  {
+    src: '/images/curriculum/image-dyno-curriculum-reading-3-6.webp',
+    alt: '커리큘럼 리딩 이미지 3-6',
+    section: 3
+  },
+]

@@ -22,7 +22,6 @@ const SwiperStyleRoot = styled.div`
   .swiper {
     height: 500px;
     position: relative;
-    position: relative;
     padding-top: 24px;
     margin-top: 24px;
 
