@@ -8,6 +8,9 @@
   --primary-yellow-hover: #fedd56;
   --second-yellow: #ffCB1C;
 
+  --color-disabled: #979797;
+  --color-disabled-text: #d8d8d8;
+
   --primary-background-color: #ffffff;
   --primary-background-color-hover: #f2f2f2;
 
@@ -70,6 +73,10 @@ body {
   padding: 24px 12px;
   margin: 0 auto;
   min-height: calc(100vh - var(--height-header) - var(--height-footer));
+}
+
+.spacing {
+  margin-top: 24px;
 }
 
 .text-bold {
