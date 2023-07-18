@@ -7,10 +7,17 @@ import Script from 'next/script'
 
 import Header from './components/Header'
 import Footer from './components/Footer'
+import { SessionProvider } from 'next-auth/react'
 
 const metadata = {
   title: '다이노 영어',
   description: '다이노 영어와 함께 영어를 배워보세요!',
+}
+
+declare global {
+  interface Window {
+    Kakao: any
+  }
 }
 
 export default function RootLayout({
@@ -18,6 +25,10 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
+  function kakaoInit() {
+    window.Kakao.init(process.env.NEXT_PUBLIC_KAKAO_JS_KEY)
+  }
+
   return (
     <html lang="en">
       <head>
@@ -34,13 +45,21 @@ export default function RootLayout({
           type="text/javascript"
           src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=3u3f8mt3gd"
         ></Script>
+        <Script
+          src="https://t1.kakaocdn.net/kakao_js_sdk/2.3.0/kakao.min.js"
+          integrity="sha384-70k0rrouSYPWJt7q9rSTKpiTfX6USlMYjZUtr1Du+9o4cGvhPAWxngdtVZDdErlh"
+          crossOrigin='anonymous'
+          onLoad={kakaoInit} 
+        ></Script>
       </head>
       <body>
-        <StyledComponentsRegistry>
-          <Header />
-          {children}
-          <Footer />
-        </StyledComponentsRegistry>
+        <SessionProvider>
+          <StyledComponentsRegistry>
+            <Header />
+            {children}
+            <Footer />
+          </StyledComponentsRegistry>
+        </SessionProvider>
       </body>
     </html>
   )

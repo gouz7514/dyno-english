@@ -5,6 +5,8 @@ import styled from 'styled-components'
 
 import Link from 'next/link'
 
+import { signIn, useSession } from 'next-auth/react'
+
 const MainStyle = styled.main`
   display: flex;
   flex-direction: column;
@@ -68,8 +70,14 @@ const MainStyle = styled.main`
 
   .main-links {
     display: flex;
+    flex-direction: column;
     gap: 24px;
     z-index: 3;
+
+    .btn-container {
+      display: flex;
+      gap: 24px;
+    }
 
     .dyno-btn {
       padding: 12px;
@@ -84,6 +92,27 @@ const MainStyle = styled.main`
       &:hover {
         transform: scale(1.02);
       }
+    }
+
+    .kakao-session {
+      height: 45px;
+      border-radius: 12px;
+      background-color: #fee500;
+      color: black;
+      margin: auto 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .kakao-btn {
+      height: 45px;
+      border-radius: 12px;
+      background-image: url('/images/kakao/image-kakao-btn-medium-narrow.png');
+      background-repeat: no-repeat;
+      background-position: center;
+      background-color: #fee500;
+      cursor: pointer;
     }
   }
 `
@@ -116,7 +145,12 @@ export default function Home() {
       imgDyno.classList.remove('pop')
     }
   }
-    
+
+  const kakaoLogin = () => {
+    signIn('kakao')
+  }
+
+  const { data: session } = useSession()
 
   return (
     <main>
@@ -132,16 +166,28 @@ export default function Home() {
             <div className="img-container"></div>
           </div>
           <div className="main-links">
-            <Link href="/intro/map">
-              <div className='dyno-btn'>
-                오시는 길
-              </div>
-            </Link>
-            <Link href="/intro/testimonial">
-              <div className='dyno-btn'>
-                상담 신청
-              </div>
-            </Link>
+            <div className="btn-container">
+              <Link href="/intro/map">
+                <div className='dyno-btn'>
+                  오시는 길
+                </div>
+              </Link>
+              <Link href="/intro/testimonial">
+                <div className='dyno-btn'>
+                  상담 신청
+                </div>
+              </Link>
+            </div>
+            {
+              session ? (
+                <div className='kakao-session'>
+                  { session.user?.name }님 환영합니다
+                </div>
+              ) :
+              (
+                <div className='kakao-btn' onClick={kakaoLogin}/>
+              )
+            }
           </div>
         </MainStyle>
       </div>
