@@ -16,6 +16,7 @@ export const authOptions: NextAuthOptions = {
   providers: [
     kakaoCustomProvider
   ],
+  secret: process.env.NEXTAUTH_SECRET,
   callbacks: {
     async signIn({ user, account }) {
       const accessToken = account?.access_token
