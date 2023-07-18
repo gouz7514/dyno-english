@@ -34,3 +34,16 @@ export type TestimonialProps = {
   by: string,
   content: string
 }
+
+export type ButtonProps = {
+  onClick: (() => void) | ((e: any) => Promise<void>),
+  children: React.ReactNode,
+  width?: number,
+  disabled?: boolean,
+}
+
+export type LinkButtonProps = {
+  href: string,
+  children: React.ReactNode,
+  width?: number,
+}
