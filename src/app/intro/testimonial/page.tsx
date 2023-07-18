@@ -9,6 +9,7 @@ import { TestimonialProps } from '@/types/types'
 import styled from 'styled-components'
 
 import Skeleton from '@/app/components/Skeleton'
+import LinkButton from '@/app/components/LinkButton'
 
 import { Swiper, SwiperSlide } from 'swiper/react'
 import SwiperCore, { Pagination, Autoplay } from "swiper"
@@ -98,20 +99,6 @@ export default function IntroTestimonial() {
   const [loading, setLoading] = useState<boolean>(true)
   const [swiperCnt, setSwiperCnt] = useState<number>(1)
 
-  // TODO : 모든 문서 가져오는 방식이 아닌 단일 문서 가져오는 방식으로 바꾸기
-  // useEffect(() => {
-  //   const getTestimonials = async () => {
-  //     const querySnapshot = await getDocs(collection(db, "testimonials"))
-  //     const testimonials: Testimonial[] = querySnapshot.docs.map((doc) => ({
-  //       ...doc.data()
-  //     })) as Testimonial[]
-  //     setTestimonials(testimonials)
-  //     setLoading(false)
-  //   }
-
-  //   getTestimonials()
-  // }, [])
-
   useEffect(() => {
     const getTestimonials = async () => {
       const testimonialsRef = ref(rdb, 'testimonials')
@@ -123,7 +110,9 @@ export default function IntroTestimonial() {
         })) as TestimonialProps[]
         setTestimonials(testimonials)
         setLoading(false)
-      })
+      }), {
+        onlyOnce: true
+      }
     }
     getTestimonials()
   }, [])
@@ -152,6 +141,12 @@ export default function IntroTestimonial() {
           다이노 영어의 소중한 후기를 소개합니다!
         </div>
       </div>
+      <LinkButton href='/testimonial/form' width={300}>
+        <div>
+          후기 작성하기
+        </div>
+      </LinkButton>
+      <div className="spacing"></div>
       <div>
         {
           loading ? (
