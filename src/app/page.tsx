@@ -146,11 +146,11 @@ export default function Home() {
     }
   }
 
+  const { data: session } = useSession()
+
   const kakaoLogin = () => {
     signIn('kakao')
   }
-
-  const { data: session } = useSession()
 
   return (
     <main>
@@ -174,7 +174,7 @@ export default function Home() {
               </Link>
               <Link href="/intro/testimonial">
                 <div className='dyno-btn'>
-                  상담 신청
+                  소중한 후기
                 </div>
               </Link>
             </div>
