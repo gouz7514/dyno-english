@@ -5,8 +5,8 @@ import { rdb } from "@/firebase/config"
 import { getDatabase, ref, child, get, set } from 'firebase/database'
 
 const kakaoCustomProvider = KakaoProvider({
-  clientId: process.env.NEXTAUTH_SECRET_KAKAO_CLIENT_ID as string,
-  clientSecret: process.env.NEXTAUTH_SECRET_KAKAO_CLIENT_SECRET as string
+  clientId: process.env.KAKAO_CLIENT_ID as string,
+  clientSecret: process.env.KAKAO_CLIENT_SECRET as string
 })
 
 export const authOptions: NextAuthOptions = {
@@ -16,7 +16,6 @@ export const authOptions: NextAuthOptions = {
   providers: [
     kakaoCustomProvider
   ],
-  secret: process.env.NEXTAUTH_SECRET,
   callbacks: {
     async signIn({ user, account }) {
       const accessToken = account?.access_token
