@@ -2,8 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { rdb } from '@/firebase/config'
-import { collection, getDocs } from "firebase/firestore"
-import { getDatabase, ref, onValue } from "firebase/database"
+import { ref, onValue } from "firebase/database"
 
 import { TestimonialProps } from '@/types/types'
 
@@ -115,9 +114,9 @@ export default function IntroTestimonial() {
 
   useEffect(() => {
     const getTestimonials = async () => {
-      const postsRef = ref(rdb, 'testimonials')
+      const testimonialsRef = ref(rdb, 'testimonials')
 
-      onValue(postsRef, (snapshot) => {
+      onValue(testimonialsRef, (snapshot) => {
         const data = snapshot.val()
         const testimonials: TestimonialProps[] = Object.keys(data).map((key) => ({
           ...data[key]
