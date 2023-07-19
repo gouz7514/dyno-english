@@ -11,6 +11,8 @@ const BtnStyle = styled.div<ButtonProps>`
   font-weight: bold;
   font-size: 16px;
   text-align: center;
+  margin: 0 auto;
+  cursor: pointer;
 
   &:hover {
     transform: scale(1.02);
@@ -25,11 +27,15 @@ const BtnStyle = styled.div<ButtonProps>`
     cursor: not-allowed;
     color: var(--color-disabled-text);
   `}
+
+  ${({ size }) => size === 'medium' && css`
+    width: 300px;
+  `}
 `
 
-export default function Button({ onClick, children, width = 120, disabled = false }: ButtonProps) {
+export default function Button({ onClick, children, width = 300, disabled = false, size = 'large' }: ButtonProps) {
   return (
-    <BtnStyle onClick={onClick} disabled={disabled}>
+    <BtnStyle onClick={onClick} disabled={disabled} size={size}>
       {children}
     </BtnStyle>
   )
