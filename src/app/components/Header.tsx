@@ -1,7 +1,8 @@
 import { useState, useEffect, useRef } from 'react'
 import styled from 'styled-components'
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
+import { useSession } from 'next-auth/react'
 
 import HeaderDropdown from './HeaderDropdown'
 import HeaderMobile from './HeaderMobile'
@@ -97,6 +98,20 @@ const HeaderStyle = styled.header`
           display: none;
         }
       }
+
+      .btn-profile {
+        cursor: pointer;
+        width: 25px;
+        height: 25px;
+        background-size: 25px 25px;
+        background-image: url('/icon/icon-profile.webp');
+        background-repeat: no-repeat;
+        margin-left: 24px;
+
+        @media screen and (max-width: 600px) {
+          margin-left: 12px;
+        }
+      }
     }
   }
 `
@@ -124,6 +139,9 @@ export default function Header() {
   const [isMenuVisible, setIsMenuVisible] = useState(false)
   const pathname = usePathname()
   const currentPathNameRef = useRef(pathname)
+  const { data: session, status } = useSession()
+
+  const router = useRouter()
 
   const [isDropdownVisible, setIsDropdownVisible] = useState({
     intro: false,
@@ -152,6 +170,17 @@ export default function Header() {
 
   const handleMenuClose = function() {
     setIsMenuVisible(false)
+  }
+
+  const onClickProfile = function() {
+    if (status !== 'loading') {
+      if (!session || !session?.user) {
+        alert('로그인 후 이용해주세요!')
+        router.push('/')
+      } else {
+        router.push('/profile')
+      }
+    }
   }
 
   useEffect(() => {
@@ -230,6 +259,7 @@ export default function Header() {
                 </div>
               </Link>
             </div>
+            <div className='btn-profile' onClick={onClickProfile} />
           </div>
         </div>
       </HeaderStyle>

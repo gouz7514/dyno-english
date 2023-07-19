@@ -1,15 +1,17 @@
 'use client'
 
+import { useRouter } from 'next/navigation'
+import { useSession } from 'next-auth/react'
 import { useState, useEffect } from 'react'
+
 import { rdb } from '@/firebase/config'
 import { ref, onValue } from "firebase/database"
-
-import { TestimonialProps } from '@/types/types'
 
 import styled from 'styled-components'
 
 import Skeleton from '@/app/components/Skeleton'
-import LinkButton from '@/app/components/LinkButton'
+import Button from '@/app/components/Button'
+import { TestimonialProps } from '@/types/types'
 
 import { Swiper, SwiperSlide } from 'swiper/react'
 import SwiperCore, { Pagination, Autoplay } from "swiper"
@@ -98,6 +100,22 @@ export default function IntroTestimonial() {
   const [testimonials, setTestimonials] = useState<TestimonialProps[]>([])
   const [loading, setLoading] = useState<boolean>(true)
   const [swiperCnt, setSwiperCnt] = useState<number>(1)
+  const { data: session, status } = useSession()
+  
+  const router = useRouter()
+
+  const onClickTestimonialFromBtn = () => {
+    if (status !== 'loading') {
+      if (!session || !session?.user) {
+        alert('로그인 후 이용해주세요!')
+        router.push('/')
+        return
+      } else {
+        router.push('/testimonial/form')
+        return
+      }
+    }
+  }
 
   useEffect(() => {
     const getTestimonials = async () => {
@@ -141,11 +159,11 @@ export default function IntroTestimonial() {
           다이노 영어의 소중한 후기를 소개합니다!
         </div>
       </div>
-      <LinkButton href='/testimonial/form' width={300}>
+      <Button onClick={onClickTestimonialFromBtn} size='medium'>
         <div>
           후기 작성하기
         </div>
-      </LinkButton>
+      </Button>
       <div className="spacing"></div>
       <div>
         {

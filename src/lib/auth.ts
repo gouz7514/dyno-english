@@ -22,8 +22,7 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     async signIn({ user, account }) {
       const accessToken = account?.access_token
-      const propertyKeys = encodeURIComponent('["kakao_account.profile"]')
-      const userInfoUrl = `https://kapi.kakao.com/v2/user/me?property_keys=${propertyKeys}`
+      const userInfoUrl = `https://kapi.kakao.com/v2/user/me`
       
       const userInfoRes = await fetch(userInfoUrl, {
         headers: {
@@ -45,7 +44,8 @@ export const authOptions: NextAuthOptions = {
                 id: user?.id,
                 name: user?.name,
                 image: user?.image,
-                staff: false
+                staff: false,
+                kid: ''
               })
             }
           }).catch((error) => {
@@ -57,6 +57,10 @@ export const authOptions: NextAuthOptions = {
         console.error(error)
       })
       return userInfoRes
+    },
+    async session({ session, token }) {
+      session.user.userId = token.sub as string
+      return session
     }
   }
 }
