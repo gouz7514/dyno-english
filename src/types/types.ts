@@ -35,15 +35,24 @@ export type TestimonialProps = {
   content: string
 }
 
+type ButtonSize = 'small' | 'medium' | 'large'
+
 export type ButtonProps = {
   onClick: (() => void) | ((e: any) => Promise<void>),
   children: React.ReactNode,
   width?: number,
   disabled?: boolean,
+  size?: ButtonSize,
 }
 
 export type LinkButtonProps = {
   href: string,
   children: React.ReactNode,
   width?: number,
+}
+
+export type UserProps = {
+  image: string,
+  name: string,
+  kid: string
 }
