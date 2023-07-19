@@ -50,3 +50,9 @@ export type LinkButtonProps = {
   children: React.ReactNode,
   width?: number,
 }
+
+export type UserProps = {
+  image: string,
+  name: string,
+  kid: string
+}

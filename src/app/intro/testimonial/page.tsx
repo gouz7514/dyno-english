@@ -109,6 +109,10 @@ export default function IntroTestimonial() {
       if (!session || !session?.user) {
         alert('로그인 후 이용해주세요!')
         router.push('/')
+        return
+      } else {
+        router.push('/testimonial/form')
+        return
       }
     }
   }
