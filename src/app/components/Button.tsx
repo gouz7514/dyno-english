@@ -5,11 +5,11 @@ import { ButtonProps } from '@/types/types'
 const BtnStyle = styled.div<ButtonProps>`
   padding: 12px;
   width: 100%;
-  background-color: var(--primary-green);
+  background-color: var(--second-green);
   color: white;
   border-radius: 8px;
-  font-weight: bold;
-  font-size: 16px;
+  font-weight: 600;
+  font-size: 14px;
   text-align: center;
   margin: 0 auto;
   cursor: pointer;
