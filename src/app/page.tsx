@@ -5,10 +5,6 @@ import styled from 'styled-components'
 
 import Link from 'next/link'
 
-import { signIn, useSession } from 'next-auth/react'
-
-import axios from 'axios'
-
 const MainStyle = styled.main`
   display: flex;
   flex-direction: column;
@@ -106,27 +102,6 @@ const MainStyle = styled.main`
         transform: translateY(-40px);
       }
     }
-
-    .kakao-session {
-      height: 45px;
-      border-radius: 12px;
-      background-color: #fee500;
-      color: black;
-      margin: auto 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .kakao-btn {
-      height: 45px;
-      border-radius: 12px;
-      background-image: url('/images/kakao/image-kakao-btn-medium-narrow.png');
-      background-repeat: no-repeat;
-      background-position: center;
-      background-color: #fee500;
-      cursor: pointer;
-    }
   }
 `
 
@@ -159,12 +134,6 @@ export default function Home() {
     }
   }
 
-  const { data: session } = useSession()
-
-  const kakaoLogin = () => {
-    signIn('kakao')
-  }
-
   return (
     <main>
       <div>
@@ -191,16 +160,6 @@ export default function Home() {
                 </div>
               </Link>
             </div>
-            {
-              session ? (
-                <div className='kakao-session'>
-                  { session.user?.name }님 환영합니다
-                </div>
-              ) :
-              (
-                <div className='kakao-btn' onClick={kakaoLogin}/>
-              )
-            }
           </div>
         </MainStyle>
       </div>

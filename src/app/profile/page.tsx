@@ -157,7 +157,7 @@ export default function ProfilePage() {
           router.push('/')
         } else {
           alert('로그인 후 이용해주세요!')
-          router.push('/')
+          router.push('/login')
           return
         }
       })

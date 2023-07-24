@@ -36,7 +36,7 @@ export const authOptions: NextAuthOptions = {
             phone: '',
             kids: {}
           }).then(res => {
-            console.log(res)
+            // console.log(res)
           }).catch(error => {
             console.error(error)
           })
