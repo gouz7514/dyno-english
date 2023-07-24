@@ -1,16 +1,15 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
-import { usePathname, useRouter } from 'next/navigation'
-import { useSession, getSession } from 'next-auth/react'
+import { useRouter } from 'next/navigation'
+import { useSession } from 'next-auth/react'
 import styled from 'styled-components'
 
 import Button from '@/app/components/Button'
 
 import { UserProps } from '@/types/types'
 
-import { rdb } from "@/firebase/config"
-import { getDatabase, ref, child, get, push, update } from 'firebase/database'
+import api from '@/lib/api'
 
 const ProfileStyle = styled.div`
   background-color: #eee;
@@ -76,20 +75,30 @@ export default function ProfilePage() {
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
 
   const getUserInfo = async (id: string) => {
-    const usersRef = ref(rdb, 'users')
-    const snapshot = await get(child(usersRef, id))
-    if (snapshot.exists()) {
-      const userInfo = snapshot.val()
-      setUsers({
-        name: userInfo.name,
-        phone: userInfo.phone,
-        kid: userInfo.kid
-      })
-    } else {
-      alert('로그인 후 이용해주세요!')
-      router.push('/')
-      return
-    }
+    api.get('/users', {
+      headers: {
+        'Content-Type': 'application/json',
+        'id': id
+      }
+    }).then((res) => {
+      const resData = res.data
+      const userData = resData.data
+      
+      if (resData.status === 200 && resData.message === 'SUCCESS') {
+        setUsers({
+          name: userData.name,
+          phone: userData.phone,
+          kid: {
+            name: userData.kids ? userData.kids.name : '',
+            birth: userData.kids ? userData.kids.birth : ''
+          }
+        })
+      } else {
+        alert('로그인 후 이용해주세요!')
+        router.push('/')
+        return
+      }
+    })
   }
 
   useEffect(() => {
@@ -129,27 +138,32 @@ export default function ProfilePage() {
   const onSubmitProfile = async () => {
     if (isSubmitting) return
     setIsSubmitting(true)
-    const dbRef = ref(getDatabase())
 
-    get(child(dbRef, `users/${session?.user.userId}`)).then((snapshot) => {
-      if (snapshot.exists()) {
-        update(child(dbRef, `users/${session?.user.userId}`), {
-          phone: users.phone,
-          kid: {
-            name: users.kid.name,
-            birth: users.kid.birth
-          }
-        }).then(() => {
+    try {
+      api.patch('/users', {
+        id: session?.user.userId,
+        name: users.name,
+        phone: users.phone,
+        kids: {
+          name: users.kid.name,
+          birth: users.kid.birth
+        }
+      }).then((res) => {
+        const resData = res.data
+
+        if (resData.status === 200 && resData.message === 'SUCCESS') {
           setIsSubmitting(false)
           alert('수정이 완료되었습니다.')
           router.push('/')
-        })
-      } else {
-        alert('로그인 후 이용해주세요!')
-        router.push('/')
-        return
-      }
-    })
+        } else {
+          alert('로그인 후 이용해주세요!')
+          router.push('/')
+          return
+        }
+      })
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   return (

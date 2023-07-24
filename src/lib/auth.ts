@@ -1,8 +1,7 @@
 import type { NextAuthOptions } from "next-auth"
 import KakaoProvider from "next-auth/providers/kakao"
 
-import { rdb } from "@/firebase/config"
-import { getDatabase, ref, child, get, set } from 'firebase/database'
+import api from '@/lib/api'
 
 const kakaoCustomProvider = KakaoProvider({
   clientId: process.env.KAKAO_CLIENT_ID as string,
@@ -28,28 +27,17 @@ export const authOptions: NextAuthOptions = {
         }
       }).then(res => {
         if (res.status === 200) {
-          // 로그인 성공시 firebase에 유저 id를 키 값으로 저장
-          const usersRef = ref(rdb, 'users')
-          const dbRef = ref(getDatabase())
-          const db = getDatabase()
 
-          get(child(dbRef, `users/${user?.id}`)).then((snapshot) => {
-            if (snapshot.exists()) {
-              console.log('exists')
-            } else {
-              set(ref(db, `users/${user?.id}`), {
-                id: user?.id,
-                name: user?.name,
-                image: user?.image,
-                staff: false,
-                phone: '',
-                kid: {
-                  name: '',
-                  birth: ''
-                }
-              })
-            }
-          }).catch((error) => {
+          // axios로 데이터베이스에 post 요청 보내기
+          api.post('/users', {
+            id: user?.id,
+            name: user?.name,
+            is_staff: false,
+            phone: '',
+            kids: {}
+          }).then(res => {
+            console.log(res)
+          }).catch(error => {
             console.error(error)
           })
         }

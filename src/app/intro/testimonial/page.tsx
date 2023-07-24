@@ -4,8 +4,7 @@ import { useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react'
 import { useState, useEffect } from 'react'
 
-import { rdb } from '@/firebase/config'
-import { ref, onValue } from "firebase/database"
+import api from '@/lib/api'
 
 import styled from 'styled-components'
 
@@ -119,18 +118,25 @@ export default function IntroTestimonial() {
 
   useEffect(() => {
     const getTestimonials = async () => {
-      const testimonialsRef = ref(rdb, 'testimonials')
+      api.get('/testimonials').then((res) => {
+        const resData = res.data
+        const testimonialsData = resData.data
 
-      onValue(testimonialsRef, (snapshot) => {
-        const data = snapshot.val()
-        const testimonials: TestimonialProps[] = Object.keys(data).map((key) => ({
-          ...data[key]
-        })) as TestimonialProps[]
-        setTestimonials(testimonials)
-        setLoading(false)
-      }), {
-        onlyOnce: true
-      }
+        if (resData.status === 200) {
+          if (resData.message === 'SUCCESS') {
+            const testimonials: TestimonialProps[] = testimonialsData.map((testimonial: TestimonialProps) => ({
+              ...testimonial
+            }))
+            setTestimonials(testimonials)
+          } else if (resData.message === 'EMPTY') {
+            setTestimonials([])
+          }
+          setLoading(false)
+        } else {
+          alert('후기를 불러오는데 실패했습니다!')
+          return
+        }
+      })
     }
     getTestimonials()
   }, [])
@@ -193,7 +199,7 @@ export default function IntroTestimonial() {
                           { testimonial.content.replaceAll('/n', '\n') }
                         </div>
                         <div className="testimonial-by">
-                          - {testimonial.by}
+                          - {testimonial.author}
                         </div>
                       </div>
                     </SwiperSlide>

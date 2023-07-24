@@ -7,6 +7,8 @@ import Link from 'next/link'
 
 import { signIn, useSession } from 'next-auth/react'
 
+import axios from 'axios'
+
 const MainStyle = styled.main`
   display: flex;
   flex-direction: column;
@@ -189,7 +191,7 @@ export default function Home() {
                 </div>
               </Link>
             </div>
-            {/* {
+            {
               session ? (
                 <div className='kakao-session'>
                   { session.user?.name }님 환영합니다
@@ -198,7 +200,7 @@ export default function Home() {
               (
                 <div className='kakao-btn' onClick={kakaoLogin}/>
               )
-            } */}
+            }
           </div>
         </MainStyle>
       </div>

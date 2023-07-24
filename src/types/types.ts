@@ -31,7 +31,7 @@ export type SkeletonProps = {
 }
 
 export type TestimonialProps = {
-  by: string,
+  author: string,
   content: string
 }
 

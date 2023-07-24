@@ -8,8 +8,7 @@ import styled from 'styled-components'
 import { TestimonialProps } from '@/types/types'
 
 import { useSession } from 'next-auth/react'
-import { rdb } from "@/firebase/config"
-import { getDatabase, ref, set, push } from 'firebase/database'
+import api from '@/lib/api'
 
 const FormStyle = styled.div`
   display: flex;
@@ -64,18 +63,19 @@ const FormStyle = styled.div`
 `
 
 export default function TestimonialForm() {
+  const { data: session, status } = useSession()
   const [testimonials, setTestimonials] = useState<TestimonialProps>({
-    by: '',
+    author: '',
     content: '',
   })
 
   const [errors, setErrors] = useState({
-    by: '',
+    author: '',
     content: '',
   })
 
   const [touched, setTouched] = useState({
-    by: false,
+    author: false,
     content: false,
   })
 
@@ -98,12 +98,12 @@ export default function TestimonialForm() {
 
   const validate = useCallback(() => {
     const errors = {
-      by: '',
+      author: '',
       content: ''
     }
 
-    if (!testimonials.by) {
-      errors.by = '이름을 입력해주세요.'
+    if (!testimonials.author) {
+      errors.author = '이름을 입력해주세요.'
     }
 
     if (!testimonials.content) {
@@ -117,8 +117,6 @@ export default function TestimonialForm() {
   useEffect(() => {
     validate()
   }, [validate])
-
-  const { data: session, status } = useSession()
   
   useEffect(() => {
     if (status !== 'loading') {
@@ -131,10 +129,10 @@ export default function TestimonialForm() {
 
   const handleSubmit = async (e: any) => {
     e.preventDefault()
-    setLoading(true)
+    // setLoading(true)
 
     setTouched({
-      by: true,
+      author: true,
       content: true,
     })
 
@@ -146,18 +144,30 @@ export default function TestimonialForm() {
     }
     
     const newTestimonial: TestimonialProps = {
-      by: testimonials.by,
+      author: testimonials.author,
       content: testimonials.content,
     }
 
-    const db = getDatabase()
-    const testimonialsRef = ref(rdb, 'testimonials')
-    const newPostsRef = push(testimonialsRef)
-    await set(newPostsRef, newTestimonial).then(() => {
+    try {
+      api.post('/testimonials', newTestimonial, {
+        headers: {
+          'Content-Type': 'application/json',
+          'author_id': session?.user?.userId
+        }
+      }).then((res) => {
+        const resData = res.data
+
+        if (resData.status === 201) {
+          setLoading(false)
+          alert('후기 등록 완료!')
+          window.location.href = '/intro/testimonial'
+        }
+      })
+    } catch (error) {
+      alert('후기 등록에 실패했습니다.')
       setLoading(false)
-      alert('후기 등록 완료!')
-      window.location.href = '/'
-    })
+      return
+    }
   }
 
 
@@ -172,14 +182,14 @@ export default function TestimonialForm() {
             <label htmlFor="name">이름</label>
             <input
               type="text"
-              name="by"
-              value={testimonials.by}
+              name="author"
+              value={testimonials.author}
               onChange={handleChange}
               onBlur={handleBlur}
             />
             <div className="input-error">
               {
-                touched.by && errors.by && <span>{errors.by}</span>
+                touched.author && errors.author && <span>{errors.author}</span>
               }
             </div>
           </div>
@@ -200,7 +210,7 @@ export default function TestimonialForm() {
             </div>
           </div>
         </div>
-        <Button onClick={handleSubmit} disabled={errors.by !== '' || errors.content !== ''}>{ loading ? '제출 중...' : '완료' }</Button>
+        <Button onClick={handleSubmit} disabled={errors.author !== '' || errors.content !== ''}>{ loading ? '제출 중...' : '완료' }</Button>
       </form>
     </FormStyle>
   )
