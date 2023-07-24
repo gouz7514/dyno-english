@@ -42,7 +42,11 @@ export const authOptions: NextAuthOptions = {
                 name: user?.name,
                 image: user?.image,
                 staff: false,
-                kid: ''
+                phone: '',
+                kid: {
+                  name: '',
+                  birth: ''
+                }
               })
             }
           }).catch((error) => {

@@ -22,6 +22,10 @@ const MainStyle = styled.main`
     position: relative;
     transform: translateX(-13px);
 
+    @media screen and (max-width: 376px) {
+      transform: translateX(-13px) translateY(0px);
+    }
+
     .img-dyno {
       position: absolute;
       width: 120px;
@@ -33,8 +37,9 @@ const MainStyle = styled.main`
       z-index: 3;
 
       @media screen and (max-width: 376px) {
-        transform: scale(0.9);
-        left: 38px;
+        transform: scale(0.87);
+        left: 55px;
+        top: 38px;
       }
 
       &.pop {
@@ -63,7 +68,7 @@ const MainStyle = styled.main`
       z-index: 2;
 
       @media screen and (max-width: 376px) {
-        transform: scale(1.6);
+        transform: scale(1.4);
       }
     }
   }
@@ -85,12 +90,18 @@ const MainStyle = styled.main`
       background-color: var(--second-green);
       color: white;
       border-radius: 8px;
-      font-weight: bold;
+      font-weight: 600;
       font-size: 16px;
       text-align: center;
 
       &:hover {
         transform: scale(1.02);
+      }
+
+      @media screen and (max-width: 376px) {
+        width: 105px;
+        font-size: 14px;
+        transform: translateY(-40px);
       }
     }
 
@@ -172,13 +183,13 @@ export default function Home() {
                   오시는 길
                 </div>
               </Link>
-              <Link href="/intro/testimonial">
+              <Link href="/study/recruit">
                 <div className='dyno-btn'>
-                  소중한 후기
+                  상담 신청
                 </div>
               </Link>
             </div>
-            {
+            {/* {
               session ? (
                 <div className='kakao-session'>
                   { session.user?.name }님 환영합니다
@@ -187,7 +198,7 @@ export default function Home() {
               (
                 <div className='kakao-btn' onClick={kakaoLogin}/>
               )
-            }
+            } */}
           </div>
         </MainStyle>
       </div>

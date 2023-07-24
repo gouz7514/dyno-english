@@ -52,7 +52,10 @@ export type LinkButtonProps = {
 }
 
 export type UserProps = {
-  image: string,
   name: string,
-  kid: string
+  phone: string,
+  kid: {
+    name: string,
+    birth: string
+  }
 }
