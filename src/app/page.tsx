@@ -5,6 +5,12 @@ import styled from 'styled-components'
 
 import Link from 'next/link'
 
+import { useDispatch, useSelector } from 'react-redux'
+import { RootState } from '@/store/index'
+import { setUserName } from '@/store/users/store'
+
+import api from '@/lib/api'
+
 const MainStyle = styled.main`
   display: flex;
   flex-direction: column;
@@ -106,6 +112,10 @@ const MainStyle = styled.main`
 `
 
 export default function Home() {
+  // test
+  const dispatch = useDispatch()
+  const userState = useSelector((state: RootState) => state.users)
+
   const imgDynoRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {

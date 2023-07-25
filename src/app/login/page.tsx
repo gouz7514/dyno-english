@@ -31,9 +31,9 @@ const kakaoLogin = () => {
   })
 }
 
-export default async function LoginPage() {
+export default function LoginPage() {
   const router = useRouter()
-  const { data: session, status } = await useSession()
+  const { data: session, status } = useSession()
 
   if (status !== 'loading') {
     if (session) {

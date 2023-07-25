@@ -3,10 +3,41 @@ import KakaoProvider from "next-auth/providers/kakao"
 
 import api from '@/lib/api'
 
+import { cookies } from 'next/headers'
+
 const kakaoCustomProvider = KakaoProvider({
   clientId: process.env.KAKAO_CLIENT_ID as string,
   clientSecret: process.env.KAKAO_CLIENT_SECRET as string
 })
+
+const postUsers = async (payload : any) => {
+  try {
+    const res = await api.post('/users', payload)
+
+    cookies().set('token', res.data.result.token, {
+      path: '/',
+      expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 365),
+    })
+
+    return res
+  } catch (error) {
+    console.error(error)
+  }
+}
+
+const getUserByToken = async (token: string | undefined) => {
+  try {
+    const res = await api.get(`/users/token`, {
+      headers: {
+        token,
+      }
+    })
+    
+    return res
+  } catch (error) {
+    console.error(error)
+  }
+}
 
 export const authOptions: NextAuthOptions = {
   session: {
@@ -25,21 +56,17 @@ export const authOptions: NextAuthOptions = {
           Authorization: `Bearer ${accessToken}`,
           ContentType: 'application/json;charset=UTF-8'
         }
-      }).then(res => {
+      }).then(async res => {
         if (res.status === 200) {
 
-          // axios로 데이터베이스에 post 요청 보내기
-          api.post('/users', {
-            id: user?.id,
+          const payload = {
             name: user?.name,
-            is_staff: false,
             phone: '',
-            kids: {}
-          }).then(res => {
-            // console.log(res)
-          }).catch(error => {
-            console.error(error)
-          })
+            is_staff: false,
+            kakao_id: user?.id
+          }
+
+          await postUsers(payload)
         }
         return res.json()
       }).catch(error => {
@@ -47,8 +74,17 @@ export const authOptions: NextAuthOptions = {
       })
       return userInfoRes
     },
-    async session({ session, token }) {
-      session.user.userId = token.sub as string
+    async session({ session }) {
+      if (cookies().get('token')) {
+        const accessToken = cookies().get('token')?.value
+        const userInfoRes = await getUserByToken(accessToken)
+
+        if (userInfoRes?.data.status === 200 && userInfoRes?.data.message === 'SUCCESS') {
+          session.user.username = userInfoRes?.data.data.name
+          session.user.user_id = userInfoRes?.data.data.id
+          session.user.is_staff = userInfoRes?.data.data.is_staff
+        }
+      }
       return session
     }
   }

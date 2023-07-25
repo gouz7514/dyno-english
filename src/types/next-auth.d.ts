@@ -1,4 +1,5 @@
 import NextAuth from "next-auth"
+import { RequestCookie } from "next/dist/compiled/@edge-runtime/cookies"
 
 declare module "next-auth" {
   /**
@@ -6,9 +7,9 @@ declare module "next-auth" {
    */
   interface Session {
     user: {
-      /** The user's postal address. */
-      name: string,
-      userId: string
+      username: string,
+      user_id: string,
+      is_staff: boolean,
     }
   }
 }

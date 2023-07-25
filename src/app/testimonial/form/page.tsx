@@ -129,7 +129,7 @@ export default function TestimonialForm() {
 
   const handleSubmit = async (e: any) => {
     e.preventDefault()
-    // setLoading(true)
+    setLoading(true)
 
     setTouched({
       author: true,
@@ -149,11 +149,9 @@ export default function TestimonialForm() {
     }
 
     try {
-      api.post('/testimonials', newTestimonial, {
-        headers: {
-          'Content-Type': 'application/json',
-          'author_id': session?.user?.userId
-        }
+      api.post('/testimonials', {
+        ...newTestimonial,
+        user_id: session?.user?.user_id
       }).then((res) => {
         const resData = res.data
 

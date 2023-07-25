@@ -9,6 +9,9 @@ import Header from './components/Header'
 import Footer from './components/Footer'
 import { SessionProvider } from 'next-auth/react'
 
+import ReactQueryProvider from './ReactQueryProvider'
+import { Providers } from '@/store/provider'
+
 const metadata = {
   title: '다이노 영어',
   description: '다이노 영어와 함께 영어를 배워보세요!',
@@ -18,6 +21,8 @@ declare global {
   interface Window {
     Kakao: any
   }
+
+  var privateToken: any
 }
 
 export default function RootLayout({
@@ -54,11 +59,15 @@ export default function RootLayout({
       </head>
       <body>
         <SessionProvider>
-          <StyledComponentsRegistry>
-            <Header />
-            {children}
-            <Footer />
-          </StyledComponentsRegistry>
+          <ReactQueryProvider>
+            <Providers>
+              <StyledComponentsRegistry>
+                <Header />
+                {children}
+                <Footer />
+              </StyledComponentsRegistry>
+            </Providers>
+          </ReactQueryProvider>
         </SessionProvider>
       </body>
     </html>
