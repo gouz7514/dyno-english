@@ -14,6 +14,9 @@
   --primary-background-color: #ffffff;
   --primary-background-color-hover: #f2f2f2;
 
+  --primary-pink: #ffe6f3;
+  --primary-vanilla: #fee4c2;
+
   --height-header: 80px;
   --height-footer: 40px;
 
@@ -77,6 +80,14 @@ h1 {
   padding: 60px 12px 24px;
   margin: 0 auto;
   min-height: calc(100vh - var(--height-header) - var(--height-footer));
+}
+
+.d-flex {
+  display: flex;
+}
+
+.d-flex.flex-column {
+  flex-direction: column;
 }
 
 .spacing {
