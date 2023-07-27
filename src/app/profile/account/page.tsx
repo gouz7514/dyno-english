@@ -1,8 +1,8 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
-import { usePathname, useRouter } from 'next/navigation'
-import { useSession, getSession } from 'next-auth/react'
+import { useState, useEffect, useCallback } from 'react'
+import { useRouter } from 'next/navigation'
+import { useSession } from 'next-auth/react'
 import styled from 'styled-components'
 
 import Button from '@/app/components/Button'
@@ -75,7 +75,7 @@ export default function ProfilePage() {
 
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
 
-  const getUserInfo = async (id: string) => {
+  const getUserInfo = useCallback(async (id: string) => {
     const usersRef = ref(rdb, 'users')
     const snapshot = await get(child(usersRef, id))
     if (snapshot.exists()) {
@@ -90,7 +90,7 @@ export default function ProfilePage() {
       router.push('/login')
       return
     }
-  }
+  }, [])
 
   useEffect(() => {
     if (status !== 'loading') {
@@ -106,7 +106,7 @@ export default function ProfilePage() {
         return
       }
     }
-  }, [session])
+  }, [session, router, status])
 
   const handleChangePhone = (e: any) => {
     setUsers({

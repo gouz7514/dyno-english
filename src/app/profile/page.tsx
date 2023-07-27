@@ -90,7 +90,7 @@ export default function ProfilePage() {
         return
       }
     }
-  }, [session])
+  }, [session, router, status])
 
   return (
     <ProfileStyle className='container'>
