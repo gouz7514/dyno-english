@@ -90,7 +90,7 @@ export default function ProfilePage() {
       router.push('/login')
       return
     }
-  }, [])
+  }, [router])
 
   useEffect(() => {
     if (status !== 'loading') {
@@ -106,7 +106,7 @@ export default function ProfilePage() {
         return
       }
     }
-  }, [session, router, status])
+  }, [session, router, status, getUserInfo])
 
   const handleChangePhone = (e: any) => {
     setUsers({
