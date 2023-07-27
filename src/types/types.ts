@@ -1,4 +1,4 @@
-export type CalendarProps = {
+export interface CalendarProps{
   view: string,
   week: {
     dayNames: string[];
@@ -24,13 +24,13 @@ export type CalendarProps = {
   }[]
 }
 
-export type SkeletonProps = {
+export interface SkeletonProps {
   width?: number,
   height?: number,
   marginbottom?: number
 }
 
-export type TestimonialProps = {
+export interface TestimonialProps {
   by: string,
   content: string,
   id: string
@@ -38,7 +38,7 @@ export type TestimonialProps = {
 
 type ButtonSize = 'small' | 'medium' | 'large'
 
-export type ButtonProps = {
+export interface ButtonProps {
   onClick: (() => void) | ((e: any) => Promise<void>),
   children: React.ReactNode,
   width?: number,
@@ -46,17 +46,41 @@ export type ButtonProps = {
   size?: ButtonSize,
 }
 
-export type LinkButtonProps = {
+export interface LinkButtonProps {
   href: string,
   children: React.ReactNode,
   width?: number,
 }
 
-export type UserProps = {
+export interface UserProps {
   name: string,
   phone: string,
   kid: {
     name: string,
     birth: string
   }
+}
+
+export interface Week {
+  id: string;
+  content: string;
+}
+
+export interface Month {
+  id: string;
+  weeks: {
+    week: Week[];
+  };
+}
+
+export interface Curriculum {
+  months: {
+    month: Month[];
+  };
+}
+
+export interface ClassInfo {
+  id: string | null;
+  name: string | null;
+  curriculum: Curriculum | null;
 }

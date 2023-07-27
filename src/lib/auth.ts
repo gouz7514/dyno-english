@@ -2,35 +2,47 @@ import type { NextAuthOptions } from "next-auth"
 import KakaoProvider from "next-auth/providers/kakao"
 
 import axios from "axios"
-import { auth as firebaseAuth } from "@/firebase/config"
-import { getDatabase, ref, child, get, set } from 'firebase/database'
-import { signInWithCustomToken, updateProfile } from "firebase/auth"
+import { auth as firebaseAuth, db } from "@/firebase/config"
+import { getDatabase, ref, child, get } from 'firebase/database'
+import { signInWithCustomToken } from "firebase/auth"
+import { doc, getDoc, setDoc, DocumentSnapshot } from "firebase/firestore"
 
 const kakaoCustomProvider = KakaoProvider({
   clientId: process.env.KAKAO_CLIENT_ID as string,
   clientSecret: process.env.KAKAO_CLIENT_SECRET as string
 })
 
-// get user info from firebase
+// get user info from firestore
 const getUserInfo = async (userId: string) => {
-  const dbRef = ref(getDatabase())
+  const docRef = doc(db, 'users', userId)
 
-  const snapshot = await get(child(dbRef, `users/${userId}`))
-  if (snapshot.exists()) {
-    return snapshot.val()
-  } else {
+  try {
+    const snapshot: DocumentSnapshot = await getDoc(docRef)
+    if (snapshot.exists()) {
+      return snapshot.data()
+    } else {
+      return null
+    }
+  } catch (error) {
+    console.error(error)
     return null
   }
 }
 
-// get class info from firebase
+// get class info from firestore
 const getClassInfo = async (classId: string) => {
-  const dbRef = ref(getDatabase())
+  const docRef = doc(db, 'classes', classId)
 
-  const snapshot = await get(child(dbRef, `classes/${classId}`))
-  if (snapshot.exists()) {
-    return snapshot.val()
-  } else {
+  try {
+    const snapshot: DocumentSnapshot = await getDoc(docRef)
+    
+    if (snapshot.exists()) {
+      return snapshot.data()
+    } else {
+      return null
+    }
+  } catch (error) {
+    console.error(error)
     return null
   }
 }
@@ -67,23 +79,12 @@ export const authOptions: NextAuthOptions = {
         }
       }).then(res => {
         if (res.status === 200) {
-          // 로그인 성공시 firebase에 유저 id를 키 값으로 저장
-          const dbRef = ref(getDatabase())
-          const db = getDatabase()
-
-          const currentUser = firebaseAuth.currentUser
-          
-          if (currentUser) {
-            updateProfile(currentUser, {
-              displayName: user?.name,
-            })
-          }
-
-          get(child(dbRef, `users/${user?.id}`)).then((snapshot) => {
+          const docRef = doc(db, 'users', user?.id)
+          getDoc(docRef).then(async (snapshot) => {
             if (snapshot.exists()) {
               // console.log('exists')
             } else {
-              set(ref(db, `users/${user?.id}`), {
+              await setDoc(doc(db, 'users', user?.id), {
                 id: user?.id,
                 name: user?.name,
                 image: user?.image,
@@ -92,6 +93,9 @@ export const authOptions: NextAuthOptions = {
                 kid: {
                   name: '',
                   birth: ''
+                },
+                class: {
+                  id: null
                 }
               })
             }
@@ -109,17 +113,30 @@ export const authOptions: NextAuthOptions = {
       const userId = token.sub as string
       const userInfo = await getUserInfo(userId)
 
-      session.user.name = userInfo.name
-      session.user.isStaff = userInfo.staff
-      session.user.userId = token.sub as string
-
-      const classId = userInfo.class.id
-      const classInfo = await getClassInfo(classId)
-      
-      session.classInfo = {
-        id: classInfo.id,
-        name: classInfo.name,
-        curriculum: classInfo.curriculum
+      if (userInfo) {
+        session.user.name = userInfo.name
+        session.user.isStaff = userInfo.staff
+        session.user.userId = token.sub as string
+  
+        const classId = userInfo.class.id
+        
+        if (!classId) {
+          session.classInfo = {
+            id: null,
+            name: null,
+            curriculum: null
+          }
+        } else {
+          const classInfo = await getClassInfo(classId)
+  
+          if (classInfo) {
+            session.classInfo = {
+              id: classInfo.id,
+              name: classInfo.name,
+              curriculum: classInfo.curriculum
+            }
+          }
+        }
       }
 
       return session

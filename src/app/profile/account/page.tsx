@@ -9,8 +9,8 @@ import Button from '@/app/components/Button'
 
 import { UserProps } from '@/types/types'
 
-import { rdb } from "@/firebase/config"
-import { getDatabase, ref, child, get, push, update } from 'firebase/database'
+import { db } from "@/firebase/config"
+import { doc, getDoc, updateDoc } from 'firebase/firestore'
 
 const ProfileStyle = styled.div`
   background-color: #eee;
@@ -106,10 +106,11 @@ export default function ProfilePage() {
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
 
   const getUserInfo = useCallback(async (id: string) => {
-    const usersRef = ref(rdb, 'users')
-    const snapshot = await get(child(usersRef, id))
-    if (snapshot.exists()) {
-      const userInfo = snapshot.val()
+    const docRef = doc(db, 'users', id)
+    const docSnap = await getDoc(docRef)
+
+    if (docSnap.exists()) {
+      const userInfo = docSnap.data()
       setUsers({
         name: userInfo.name,
         phone: userInfo.phone,
@@ -118,6 +119,7 @@ export default function ProfilePage() {
     } else {
       alert('로그인 후 이용해주세요!')
       router.push('/login')
+
       return
     }
   }, [router])
@@ -159,27 +161,24 @@ export default function ProfilePage() {
   const onSubmitProfile = async () => {
     if (isSubmitting) return
     setIsSubmitting(true)
-    const dbRef = ref(getDatabase())
 
-    get(child(dbRef, `users/${session?.user.userId}`)).then((snapshot) => {
-      if (snapshot.exists()) {
-        update(child(dbRef, `users/${session?.user.userId}`), {
-          phone: users.phone,
-          kid: {
-            name: users.kid.name,
-            birth: new Date(users.kid.birth).toISOString().slice(0, 10)
-          }
-        }).then(() => {
-          setIsSubmitting(false)
-          alert('수정이 완료되었습니다.')
-          router.push('/')
-        })
-      } else {
-        alert('로그인 후 이용해주세요!')
-        router.push('/login')
-        return
-      }
-    })
+    const userId = session?.user.userId as string
+
+    try {
+      await updateDoc(doc(db, 'users', userId), {
+        name: users.name,
+        phone: users.phone,
+        kid: {
+          name: users.kid.name,
+          birth: new Date(users.kid.birth).toISOString().slice(0, 10)
+        }
+      })
+      setIsSubmitting(false)
+      alert('수정이 완료되었습니다.')
+      router.push('/')
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   return (

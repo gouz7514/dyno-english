@@ -2,18 +2,11 @@ import { useRef } from "react"
 
 import styled from "styled-components"
 
-interface Content {
-  title: string;
-  content: string;
-}
-interface CurriculumItem {
-  title: string;
-  content: Content
-}
+import { Month } from '@/types/types'
 
 interface Props {
-  curriculum: CurriculumItem;
-  onClickToggle: (ref: React.RefObject<HTMLDivElement>) => void;
+  month: Month
+  onClickToggle: (ref: React.RefObject<HTMLDivElement>) => void
 }
 
 const CurriculumMonthStyle = styled.div`
@@ -62,7 +55,7 @@ const CurriculumMonthStyle = styled.div`
   }
 `
 
-export default function CurriculumMonth({ curriculum, onClickToggle }: Props) {
+export default function CurriculumMonth({ month, onClickToggle }: Props) {
   const curriculumRef = useRef<HTMLDivElement>(null)
 
   return (
@@ -70,21 +63,23 @@ export default function CurriculumMonth({ curriculum, onClickToggle }: Props) {
       <div className='class-curriculum'>
         <div className='class-curriculum-month' ref={curriculumRef}>
           <div className="class-curriculum-month-title">
-            {curriculum.title}
+            Month { parseInt(month.id) + 1 }
           </div>
           <div className="class-curriculum-month-toggle" onClick={() => onClickToggle(curriculumRef)} />
         </div>
         <table className='class-curriculum-table'>
           <tbody>
             {
-              Object.values(curriculum.content).map((content, idx) => {
-                return (
-                  <tr key={idx} className="class-curriculum-week-content">
-                    <td className='class-curriculum-week'>{content.title}</td>
-                    <td className='classa-curriculum-content'>{content.content}</td>
-                  </tr>
-                )
-              })
+              Object.entries(month.weeks.week).map(([key, value]) => (
+                <tr key={key}>
+                  <td className='class-curriculum-week'>
+                    Week { parseInt(key) + 1 }
+                  </td>
+                  <td>
+                    { value.content }
+                  </td>
+                </tr>
+              ))
             }
           </tbody>
         </table>

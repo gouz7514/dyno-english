@@ -115,9 +115,13 @@ export default function ProfilePage() {
               <Link href='/profile/account' className='profile-setting' />
             </div>
             <div className="profile-class">
-              <div className="class-title">
-                {session?.classInfo.name}
-              </div>
+              {
+                session?.classInfo.name !== null && (
+                  <div className="class-title">
+                    {session?.classInfo.name}
+                  </div>
+                )
+              }
               <div className="class-info">
                 <div className="class-detail"></div>
                 <div className="class-homework"></div>
@@ -125,16 +129,19 @@ export default function ProfilePage() {
               <div className="class-curriculum-container">
                 <div className='class-curriculum-header'>커리큘럼</div>
                 {
-                  session && (
-                    Object.values(session?.classInfo.curriculum).map((curriculum, idx: number) => {
-                      return (
-                        <CurriculumMonth
-                          key={idx}
-                          curriculum={curriculum}
-                          onClickToggle={onClickToggle}
-                        />
-                      )
-                    })
+                  session?.classInfo.curriculum && (
+                    <div>
+                      {
+                        session?.classInfo.curriculum?.months?.month.map((month) => (
+                          <div key={month.id}>
+                            <CurriculumMonth
+                              month={month}
+                              onClickToggle={onClickToggle}
+                            />
+                          </div>
+                        ))
+                      }
+                    </div>  
                   )
                 }
               </div>

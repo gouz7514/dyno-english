@@ -4,8 +4,9 @@ import { useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react'
 import { useState, useEffect } from 'react'
 
-import { rdb } from '@/firebase/config'
-import { ref, onValue } from "firebase/database"
+import { rdb, db } from '@/firebase/config'
+import { ref, onValue, set } from "firebase/database"
+import { doc, getDoc, getDocs, collection } from 'firebase/firestore'
 
 import styled from 'styled-components'
 
@@ -71,7 +72,7 @@ const TestimonialSwiper = styled.div`
           line-height: 1.5;
           font-weight: 500;
           font-size: 18px;
-          word-break: keep-all;
+          word-break: break-all;
           white-space: pre-line;
 
           @media screen and (max-width: 600px) {
@@ -121,15 +122,22 @@ export default function IntroTestimonial() {
     const getTestimonials = async () => {
       const testimonialsRef = ref(rdb, 'testimonials')
 
-      onValue(testimonialsRef, (snapshot) => {
-        const data = snapshot.val()
-        const testimonials: TestimonialProps[] = Object.keys(data).map((key) => ({
-          ...data[key]
-        })) as TestimonialProps[]
-        setTestimonials(testimonials)
+      // test
+      const docRef = doc(db, 'testimonials/1')
+      const docSnap = await getDocs(collection(db, 'testimonials'))
+
+      // save docSnap to testimonials
+      setTestimonials(docSnap.docs.map((doc) => ({
+        ...doc.data()
+      })) as TestimonialProps[])
+
+      try {
+        setTestimonials(docSnap.docs.map((doc) => ({
+          ...doc.data()
+        })) as TestimonialProps[])
         setLoading(false)
-      }), {
-        onlyOnce: true
+      } catch (error) {
+        console.log(error)
       }
     }
     getTestimonials()

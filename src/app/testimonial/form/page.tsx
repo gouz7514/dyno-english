@@ -8,8 +8,8 @@ import styled from 'styled-components'
 import { TestimonialProps } from '@/types/types'
 
 import { useSession } from 'next-auth/react'
-import { rdb } from "@/firebase/config"
-import { getDatabase, ref, set, push } from 'firebase/database'
+import { db } from "@/firebase/config"
+import { collection, addDoc } from 'firebase/firestore'
 
 const FormStyle = styled.div`
   display: flex;
@@ -153,15 +153,12 @@ export default function TestimonialForm() {
       id: session?.user?.userId as string
     }
 
-    const testimonialsRef = ref(rdb, 'testimonials')
-    const newPostsRef = push(testimonialsRef)
-    await set(newPostsRef, newTestimonial).then(() => {
+    await addDoc(collection(db, 'testimonials'), newTestimonial).then(() => {
       setLoading(false)
       alert('후기 등록 완료!')
       window.location.href = '/'
     })
   }
-
 
   return (
     <FormStyle className='container'>
