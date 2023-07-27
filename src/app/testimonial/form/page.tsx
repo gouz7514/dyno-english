@@ -63,10 +63,14 @@ const FormStyle = styled.div`
   }
 `
 
+// form 로직 분리하기
 export default function TestimonialForm() {
+  const { data: session, status } = useSession()
+
   const [testimonials, setTestimonials] = useState<TestimonialProps>({
     by: '',
     content: '',
+    id: ''
   })
 
   const [errors, setErrors] = useState({
@@ -117,14 +121,12 @@ export default function TestimonialForm() {
   useEffect(() => {
     validate()
   }, [validate])
-
-  const { data: session, status } = useSession()
   
   useEffect(() => {
     if (status !== 'loading') {
       if (!session || !session?.user) {
         alert('로그인 후 이용해주세요.')
-        window.location.href = '/'
+        window.location.href = '/login'
       }
     }
   })
@@ -148,9 +150,9 @@ export default function TestimonialForm() {
     const newTestimonial: TestimonialProps = {
       by: testimonials.by,
       content: testimonials.content,
+      id: session?.user?.userId as string
     }
 
-    const db = getDatabase()
     const testimonialsRef = ref(rdb, 'testimonials')
     const newPostsRef = push(testimonialsRef)
     await set(newPostsRef, newTestimonial).then(() => {

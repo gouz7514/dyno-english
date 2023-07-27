@@ -32,7 +32,8 @@ export type SkeletonProps = {
 
 export type TestimonialProps = {
   by: string,
-  content: string
+  content: string,
+  id: string
 }
 
 type ButtonSize = 'small' | 'medium' | 'large'
@@ -52,7 +53,10 @@ export type LinkButtonProps = {
 }
 
 export type UserProps = {
-  image: string,
   name: string,
-  kid: string
+  phone: string,
+  kid: {
+    name: string,
+    birth: string
+  }
 }

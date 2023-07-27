@@ -108,7 +108,7 @@ export default function IntroTestimonial() {
     if (status !== 'loading') {
       if (!session || !session?.user) {
         alert('로그인 후 이용해주세요!')
-        router.push('/')
+        router.push('/login')
         return
       } else {
         router.push('/testimonial/form')
