@@ -7,6 +7,7 @@ import Link from 'next/link'
 import styled from 'styled-components'
 
 import Skeleton from '../components/Skeleton'
+import CurriculumMonth from '../components/CurriculumMonth'
 
 const ProfileStyle = styled.div`
   padding: 24px 12px 0;
@@ -42,12 +43,17 @@ const ProfileStyle = styled.div`
       .class-info {
         display: flex;
         gap: 12px;
+        width: 100%;
+
+        @media screen and (max-width: 600px) {
+          flex-direction: column;
+        }
       }
 
       .class-detail,
       .class-homework {
         box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
-        width: 50%;
+        width: 100%;
         height: 300px;
         border-radius: 12px;
       }
@@ -59,6 +65,16 @@ const ProfileStyle = styled.div`
       .class-homework {
         background-color: var(--primary-vanilla);
       }
+
+      .class-curriculum-container {
+        margin-top: 24px;
+
+        .class-curriculum-header {
+          font-size: 1.2rem;
+          font-weight: 700;
+          margin-bottom: 12px;
+        }
+      }
     }
   }
 `
@@ -67,18 +83,6 @@ export default function ProfilePage() {
   const router = useRouter()
   const { data: session, status } = useSession()
   const [loading, setLoading] = useState<boolean>(true)
-
-  interface Content {
-    title: string;
-    content: string;
-  }
-  interface CurriculumItem {
-    title: string;
-    content: Content;
-  }
-  interface Curriculum {
-    [key: string]: CurriculumItem
-  }
 
   useEffect(() => {
     if (status !== 'loading') {
@@ -91,6 +95,11 @@ export default function ProfilePage() {
       }
     }
   }, [session, router, status])
+
+  const onClickToggle = function(curriculumRef: React.RefObject<HTMLDivElement>) {
+    if (!curriculumRef.current) return
+    curriculumRef.current.classList.toggle('show')
+  }
 
   return (
     <ProfileStyle className='container'>
@@ -113,24 +122,17 @@ export default function ProfilePage() {
                 <div className="class-detail"></div>
                 <div className="class-homework"></div>
               </div>
-              <div className="class-curriculum">
+              <div className="class-curriculum-container">
+                <div className='class-curriculum-header'>커리큘럼</div>
                 {
                   session && (
-                    Object.values(session?.classInfo.curriculum as Curriculum).map((key, idx: number) => {
+                    Object.values(session?.classInfo.curriculum).map((curriculum, idx: number) => {
                       return (
-                        <div key={idx}>
-                          <div>{key.title}</div>
-                          {
-                            Object.values(key.content).map((content, idx: number) => {
-                              return (
-                                <div key={idx}>
-                                  <div>{content.title}</div>
-                                  <div>{content.content}</div>
-                                </div>
-                              )
-                            })
-                          }
-                        </div>
+                        <CurriculumMonth
+                          key={idx}
+                          curriculum={curriculum}
+                          onClickToggle={onClickToggle}
+                        />
                       )
                     })
                   )

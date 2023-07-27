@@ -105,7 +105,7 @@ export const authOptions: NextAuthOptions = {
       })
       return userInfoRes
     },
-    async session({ session, token, user }) {
+    async session({ session, token }) {
       const userId = token.sub as string
       const userInfo = await getUserInfo(userId)
 

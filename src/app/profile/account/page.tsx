@@ -56,6 +56,36 @@ const ProfileStyle = styled.div`
           border: 1px solid var(--second-green);
         }
       }
+
+      input[type="date"] {
+        position: relative;
+        height: 40px;
+        border-radius: 8px;
+        padding: 0 8px;
+        outline: none;
+        border: 0;
+
+        &::-webkit-calendar-picker-indicator {
+          position: absolute;
+          left: 0;
+          top: 0;
+          width: 100%;
+          height: 100%;
+          background: transparent;
+          color: transparent;
+          cursor: pointer;
+        }
+
+        &::before {
+          content: '생년월일';
+          color: #aaa;
+        }
+
+        &:focus::before,
+        &:valid::before {
+          display: none;
+        }
+      }
     }
   }
 `
@@ -137,7 +167,7 @@ export default function ProfilePage() {
           phone: users.phone,
           kid: {
             name: users.kid.name,
-            birth: users.kid.birth
+            birth: new Date(users.kid.birth).toISOString().slice(0, 10)
           }
         }).then(() => {
           setIsSubmitting(false)
@@ -192,7 +222,7 @@ export default function ProfilePage() {
             <div className="profile-item birth">
               <div className='profile-item-title'>학생 생년월일</div>
               <input
-                type="text"
+                type="date"
                 name="birth"
                 id="birth"
                 value={users.kid.birth || ''}
