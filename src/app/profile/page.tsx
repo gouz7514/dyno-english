@@ -1,207 +1,142 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
-import { usePathname, useRouter } from 'next/navigation'
-import { useSession, getSession } from 'next-auth/react'
+import { useRouter } from 'next/navigation'
+import { useSession } from 'next-auth/react'
+import Link from 'next/link'
 import styled from 'styled-components'
 
-import Button from '@/app/components/Button'
-
-import { UserProps } from '@/types/types'
-
-import { rdb } from "@/firebase/config"
-import { getDatabase, ref, child, get, push, update } from 'firebase/database'
+import Skeleton from '../components/Skeleton'
 
 const ProfileStyle = styled.div`
-  background-color: #eee;
-  padding: 60px 24px 24px;
-
-  .profile-title {
-    margin-bottom: 24px;
-  }
+  padding: 24px 12px 0;
 
   .profile-container {
-    display: flex;
-    flex-direction: column;
-    gap: 24px;
-
-    .profile-item {
+    .profile-title {
       display: flex;
-      flex-direction: column;
-      gap: 12px;
+      margin-bottom: 12px;
 
-      .profile-item-title {
-        font-weight: bold;
-        font-size: 1.1em;
+      .profile-username {
+        font-size: 1.5rem;
+        font-weight: 700;
       }
 
-      .profile-image-container {
-        width: 200px;
-        height: 200px;
-  
-        img {
-          border-radius: 12px;
-          object-fit: cover;
-        }
+      .profile-setting {
+        margin-left: auto;
+        width: 28px;
+        height: 28px;
+        background-size: cover;
+        background-image: url('/icon/icon-setting.webp');
+        cursor: pointer;
+      }
+    }
+
+    .profile-class {
+      width: 100%;
+
+      .class-title {
+        font-size: 1.2rem;
+        margin-bottom: 12px;
       }
 
-      input[type="text"] {
-        height: 40px;
-        border-radius: 8px;
-        padding-left: 8px;
-        outline: none;
-        border: 0;
+      .class-info {
+        display: flex;
+        gap: 12px;
+      }
 
-        &:focus {
-          border: 1px solid var(--second-green);
-        }
+      .class-detail,
+      .class-homework {
+        box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+        width: 50%;
+        height: 300px;
+        border-radius: 12px;
+      }
+
+      .class-detail {
+        background-color: var(--primary-pink);
+      }
+
+      .class-homework {
+        background-color: var(--primary-vanilla);
       }
     }
   }
 `
 
 export default function ProfilePage() {
-  const { data: session, status } = useSession()
-  const [pageLoading, setPageLoading] = useState<boolean>(true)
   const router = useRouter()
-  const [users, setUsers] = useState<UserProps>({
-    name: '',
-    phone: '',
-    kid: {
-      name: '',
-      birth: ''
-    }
-  })
+  const { data: session, status } = useSession()
+  const [loading, setLoading] = useState<boolean>(true)
 
-  const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
-
-  const getUserInfo = async (id: string) => {
-    const usersRef = ref(rdb, 'users')
-    const snapshot = await get(child(usersRef, id))
-    if (snapshot.exists()) {
-      const userInfo = snapshot.val()
-      setUsers({
-        name: userInfo.name,
-        phone: userInfo.phone,
-        kid: userInfo.kid
-      })
-    } else {
-      alert('로그인 후 이용해주세요!')
-      router.push('/')
-      return
-    }
+  interface Content {
+    title: string;
+    content: string;
+  }
+  interface CurriculumItem {
+    title: string;
+    content: Content;
+  }
+  interface Curriculum {
+    [key: string]: CurriculumItem
   }
 
   useEffect(() => {
     if (status !== 'loading') {
-      const userId = session?.user?.userId
-      setPageLoading(false)
+      setLoading(false)
 
-      if (!userId) {
+      if (!session || !session?.user) {
         alert('로그인 후 이용해주세요!')
-        router.push('/')
-        return
-      } else {
-        getUserInfo(userId)
+        router.push('/login')
         return
       }
     }
-  }, [session])
-
-  const handleChangePhone = (e: any) => {
-    setUsers({
-      ...users,
-      phone: e.target.value
-    })
-  }
-
-  // 여기서 아이 정보는 쿠키에 저장해야할듯
-  const handleChangeKidInfo = (key: any, value: any) => {
-    setUsers((prevUsers) => ({
-      ...prevUsers,
-      kid: {
-        ...prevUsers.kid,
-        [key]: value
-      }
-    }))
-  }
-
-  const onSubmitProfile = async () => {
-    if (isSubmitting) return
-    setIsSubmitting(true)
-    const dbRef = ref(getDatabase())
-
-    get(child(dbRef, `users/${session?.user.userId}`)).then((snapshot) => {
-      if (snapshot.exists()) {
-        update(child(dbRef, `users/${session?.user.userId}`), {
-          phone: users.phone,
-          kid: {
-            name: users.kid.name,
-            birth: users.kid.birth
-          }
-        }).then(() => {
-          setIsSubmitting(false)
-          alert('수정이 완료되었습니다.')
-          router.push('/')
-        })
-      } else {
-        alert('로그인 후 이용해주세요!')
-        router.push('/')
-        return
-      }
-    })
-  }
+  }, [session, router, status])
 
   return (
     <ProfileStyle className='container'>
-      <div className="profile-title">
-        <h1>
-          회원 정보
-        </h1>
-      </div>
       {
-        pageLoading ? (
-          <div>로딩중...</div>
+        loading ? (
+          <Skeleton height={400} />
         ) : (
           <div className='profile-container'>
-            <div className='profile-item name'>
-              <div className='profile-item-title'>이름</div>
-              <div>{users.name}</div>
+            <div className="profile-title">
+              <div className="profile-username">
+                {session?.user.name} 학부모님
+              </div>
+              <Link href='/profile/account' className='profile-setting' />
             </div>
-            <div className="profile-item phone">
-              <div className='profile-item-title'>보호자 연락처</div>
-              <input
-                type="text"
-                name="phone"
-                id="phone"
-                value={users.phone || ''}
-                onChange={handleChangePhone}
-              />
+            <div className="profile-class">
+              <div className="class-title">
+                {session?.classInfo.name}
+              </div>
+              <div className="class-info">
+                <div className="class-detail"></div>
+                <div className="class-homework"></div>
+              </div>
+              <div className="class-curriculum">
+                {
+                  session && (
+                    Object.values(session?.classInfo.curriculum as Curriculum).map((key, idx: number) => {
+                      return (
+                        <div key={idx}>
+                          <div>{key.title}</div>
+                          {
+                            Object.values(key.content).map((content, idx: number) => {
+                              return (
+                                <div key={idx}>
+                                  <div>{content.title}</div>
+                                  <div>{content.content}</div>
+                                </div>
+                              )
+                            })
+                          }
+                        </div>
+                      )
+                    })
+                  )
+                }
+              </div>
             </div>
-            <div className="profile-item kid">
-              <div className='profile-item-title'>학생 이름</div>
-              <input
-                type="text"
-                name="kid"
-                id="kid"
-                placeholder="학생 이름을 입력해주세요"
-                value={users.kid.name || ''}
-                onChange={(e) => handleChangeKidInfo('name', e.target.value)}
-              />
-            </div>
-            <div className="profile-item birth">
-              <div className='profile-item-title'>학생 생년월일</div>
-              <input
-                type="text"
-                name="birth"
-                id="birth"
-                value={users.kid.birth || ''}
-                onChange={(e) => handleChangeKidInfo('birth', e.target.value)}
-              />
-            </div>
-            <Button onClick={onSubmitProfile}>
-              { isSubmitting ? '수정중...' : '수정하기' }
-            </Button>
           </div>
         )
       }

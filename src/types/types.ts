@@ -32,7 +32,8 @@ export type SkeletonProps = {
 
 export type TestimonialProps = {
   by: string,
-  content: string
+  content: string,
+  id: string
 }
 
 type ButtonSize = 'small' | 'medium' | 'large'
