@@ -1,5 +1,5 @@
 import NextAuth from "next-auth"
-import { ClassInfo } from './types'
+import { ClassInfo, ClassDetails } from './types'
 
 declare module "next-auth" {
   interface Session {
@@ -9,5 +9,6 @@ declare module "next-auth" {
       isStaff: boolean,
     },
     classInfo: ClassInfo,
+    classDetails: ClassDetails,
   }
 }

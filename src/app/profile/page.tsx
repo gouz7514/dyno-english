@@ -9,8 +9,25 @@ import styled from 'styled-components'
 import Skeleton from '../components/Skeleton'
 import CurriculumMonth from '../components/CurriculumMonth'
 
+import { Swiper, SwiperSlide } from 'swiper/react'
+import SwiperCore, { Pagination } from "swiper"
+import 'swiper/css'
+import 'swiper/css/navigation'
+import 'swiper/css/pagination'
+import 'swiper/css/scrollbar'
+
+SwiperCore.use([Pagination])
+
 const ProfileStyle = styled.div`
   padding: 24px 12px 0;
+
+  .swiper {
+    height: 650px !important;
+
+    @media screen and (min-width: 600px) {
+      height: 350px !important;
+    }
+  }
 
   .profile-container {
     .profile-title {
@@ -50,20 +67,21 @@ const ProfileStyle = styled.div`
         }
       }
 
-      .class-detail,
+      .class-notice,
       .class-homework {
         box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
         width: 100%;
         height: 300px;
         border-radius: 12px;
+        padding: 12px;
       }
 
-      .class-detail {
-        background-color: var(--primary-pink);
+      .class-notice {
+        background-color: rgba(48, 166, 128, 0.6);
       }
 
       .class-homework {
-        background-color: var(--primary-vanilla);
+        background-color: rgba(255, 203, 28, 0.65);
       }
 
       .class-curriculum-container {
@@ -96,6 +114,12 @@ export default function ProfilePage() {
     }
   }, [session, router, status])
 
+  const convertDate = function(date: string) {
+    const [year, month, day] = date.split('-')
+
+    return `${month}월 ${day}일`
+  }
+
   const onClickToggle = function(curriculumRef: React.RefObject<HTMLDivElement>) {
     if (!curriculumRef.current) return
     curriculumRef.current.classList.toggle('show')
@@ -122,10 +146,36 @@ export default function ProfilePage() {
                   </div>
                 )
               }
-              <div className="class-info">
-                <div className="class-detail"></div>
-                <div className="class-homework"></div>
-              </div>
+              <Swiper
+                slidesPerView={1}
+                pagination={{ clickable: true }}
+                initialSlide={session?.classDetails ? Object.keys(session?.classDetails).length - 1 : 0}
+              >
+                {
+                  session?.classDetails && (
+                    Object.entries(session?.classDetails).map(([key, value]) => (
+                      <SwiperSlide key={key} className='class-info'>
+                        <div className="class-notice">
+                          <div>
+                            { convertDate(key) } 수업내용
+                          </div>
+                          <div>
+                            { value.notice }
+                          </div>
+                        </div>
+                        <div className="class-homework">
+                          <div>
+                          { convertDate(key) } 숙제
+                          </div>
+                          <div>
+                            { value.homework }
+                          </div>
+                        </div>
+                      </SwiperSlide>
+                    ))
+                  )
+                }
+              </Swiper>
               <div className="class-curriculum-container">
                 <div className='class-curriculum-header'>커리큘럼</div>
                 {
@@ -133,12 +183,11 @@ export default function ProfilePage() {
                     <div>
                       {
                         session?.classInfo.curriculum?.months?.month.map((month) => (
-                          <div key={month.id}>
-                            <CurriculumMonth
-                              month={month}
-                              onClickToggle={onClickToggle}
-                            />
-                          </div>
+                          <CurriculumMonth
+                            key={month.id}
+                            month={month}
+                            onClickToggle={onClickToggle}
+                          />
                         ))
                       }
                     </div>  

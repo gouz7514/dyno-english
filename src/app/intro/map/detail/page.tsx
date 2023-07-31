@@ -1,9 +1,10 @@
 'use client'
 
+import { useRef } from 'react'
 import Image from 'next/image'
 
 import { Swiper, SwiperSlide } from 'swiper/react'
-import SwiperCore, {  Pagination } from "swiper"
+import SwiperCore, { Pagination, Navigation } from "swiper"
 import 'swiper/css'
 import 'swiper/css/navigation'
 import 'swiper/css/pagination'
@@ -11,7 +12,7 @@ import 'swiper/css/scrollbar'
 
 import styled from 'styled-components'
 
-SwiperCore.use([Pagination])
+SwiperCore.use([Pagination, Navigation])
 
 const SwiperStyleRoot = styled.div`
   display: flex;
@@ -19,16 +20,39 @@ const SwiperStyleRoot = styled.div`
   min-height: calc(100vh - var(--height-header) - var(--height-footer));
   position: relative;
 
+  .swiper-button-prev {
+    width: 20px;
+    height: 35px;
+    background-image: url('/icon/icon-arrow-left.png');
+    background-size: 20px 35px;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+
+  .swiper-button-next {
+    width: 20px;
+    height: 35px;
+    background-image: url('/icon/icon-arrow-right.png');
+    background-size: 20px 35px;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+
+  .swiper-button-next,
+  .swiper-button-prev {
+    &::after {
+      display: none;
+    }
+  }
+
   .swiper {
     height: 500px;
+    max-width: 600px;
     position: relative;
-    padding-top: 24px;
-    margin-top: 24px;
 
     .swiper-pagination {
       position: absolute;
-      bottom: 0 !important;
-      top: 0 !important;
+      bottom: 0px !important;
       width: 100% !important;
       height: 24px;
       margin: 0 auto !important;
@@ -36,6 +60,10 @@ const SwiperStyleRoot = styled.div`
       &-bullet {
         background-color: var(--primary-green);
       }
+    }
+
+    @media screen and (min-width: 600px) {
+      margin-top: 200px;
     }
   }
 
@@ -47,7 +75,6 @@ const SwiperStyleRoot = styled.div`
     flex-direction: column;
 
     @media screen and (max-width: 600px) {
-      // height: 75%;
       justify-content: flex-start;
     }
 
@@ -58,17 +85,21 @@ const SwiperStyleRoot = styled.div`
       height: 400px;
       gap: 8px;
       margin: 0 auto;
+      margin-top: 24px;
 
       @media screen and (max-width: 600px) {
         flex-direction: column;
         align-items: center;
+        justify-content: flex-end
       }
 
       img {
         position: relative !important;
         max-width: 400px !important;
         max-height: 400px !important;
+        border-radius: 12px;
         margin: 0 auto;
+        box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
 
         &:not(.img-flex) {
           @media screen and (max-width: 600px) {
@@ -92,30 +123,38 @@ const SwiperStyleRoot = styled.div`
     }
 
     .swiper-text {
-      position: absolute;
-      bottom: 0;
+      // position: absolute;
+      // bottom: 0;
       width: 100%;
-      margin-bottom: 12px;
+      margin-top: 12px;
       text-align: center;
-      font-size: 24px;
+      font-size: 20px;
       font-weight: 700;
 
       @media screen and (max-width: 600px) {
-        font-size: 16px;
+        font-size: 18px;
+        bottom: 40px;
       }
     }
   }
 `
 
 export default function IntroMapDetail() {
+  const swiperRef = useRef<SwiperCore>()
+
   return (
     <SwiperStyleRoot>
       <Swiper
-        modules={[Pagination]}
+        modules={[Pagination, Navigation]}
         spaceBetween={12}
         slidesPerView={1}
         pagination={{ clickable: true }}
+        onBeforeInit={(swiper: SwiperCore) => {
+          swiperRef.current = swiper
+        }}
       >
+        <div className='swiper-button-prev' onClick={() => swiperRef.current?.slidePrev()} />
+        <div className='swiper-button-next' onClick={() => swiperRef.current?.slideNext()} />
         <SwiperSlide>
           <div className="swiper-image">
             <Image
@@ -131,15 +170,8 @@ export default function IntroMapDetail() {
         <SwiperSlide>
           <div className="swiper-image">
             <Image
-              className='img-flex'
-              src="/images/intro/image-dyno-english-map-2-1.webp"
-              alt="다이노 영어 찾아오는 길 2-1"
-              fill
-            />
-            <Image
-              className='img-flex'
               src="/images/intro/image-dyno-english-map-2-2.webp"
-              alt="다이노 영어 찾아오는 길 2-2"
+              alt="다이노 영어 찾아오는 길 2"
               fill
             />
           </div>
@@ -192,7 +224,7 @@ export default function IntroMapDetail() {
             />
           </div>
           <div className="swiper-text">
-            6) 노란색 어닝이 있는 신발 가게가 보이면 멈추기
+            6) 노란색 어닝이 있는 가게가 보이면 멈추기
           </div>
         </SwiperSlide>
         <SwiperSlide>
@@ -216,7 +248,7 @@ export default function IntroMapDetail() {
             />
           </div>
           <div className="swiper-text">
-            8) 간판 아래 안쪽으로 들어가기
+            8) 안쪽으로 들어가기
           </div>
         </SwiperSlide>
         <SwiperSlide>
@@ -234,20 +266,13 @@ export default function IntroMapDetail() {
         <SwiperSlide>
           <div className="swiper-image">
             <Image
-              className='img-flex'
-              src="/images/intro/image-dyno-english-map-10-1.webp"
-              alt="다이노 영어 찾아오는 길 10-1"
-              fill
-            />
-            <Image
-              className='img-flex'
               src="/images/intro/image-dyno-english-map-10-2.webp"
-              alt="다이노 영어 찾아오는 길 10-2"
+              alt="다이노 영어 찾아오는 길 10"
               fill
             />
           </div>
           <div className="swiper-text">
-            10) 엘레베이터 또는 계단 이용해서 2층으로 올라가기
+            10) 2층으로 올라가기
           </div>
         </SwiperSlide>
         <SwiperSlide>
@@ -259,7 +284,7 @@ export default function IntroMapDetail() {
             />
           </div>
           <div className="swiper-text">
-            11) 우측으로 돌아 202호 초인종 누르기
+            11) 202호 초인종 누르기
           </div>
         </SwiperSlide>
       </Swiper>

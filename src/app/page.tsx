@@ -5,8 +5,6 @@ import styled from 'styled-components'
 
 import Link from 'next/link'
 
-import { signIn, useSession } from 'next-auth/react'
-
 const MainStyle = styled.main`
   display: flex;
   flex-direction: column;
@@ -14,7 +12,7 @@ const MainStyle = styled.main`
   justify-content: center;
   gap: 1rem;
   padding: 1rem;
-  min-height: calc(100vh - var(--height-header));
+  min-height: calc(100vh - var(--height-header) - var(--height-footer));
 
   .main-image {
     width: 420px;
@@ -78,6 +76,12 @@ const MainStyle = styled.main`
     flex-direction: column;
     gap: 24px;
     z-index: 3;
+    position: absolute;
+    bottom: -40px;
+
+    @media screen and (max-width: 376px) {
+      bottom: -20px;
+    }
 
     .btn-container {
       display: flex;
@@ -101,29 +105,7 @@ const MainStyle = styled.main`
       @media screen and (max-width: 376px) {
         width: 105px;
         font-size: 14px;
-        transform: translateY(-40px);
       }
-    }
-
-    .kakao-session {
-      height: 45px;
-      border-radius: 12px;
-      background-color: #fee500;
-      color: black;
-      margin: auto 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .kakao-btn {
-      height: 45px;
-      border-radius: 12px;
-      background-image: url('/images/kakao/image-kakao-btn-medium-narrow.png');
-      background-repeat: no-repeat;
-      background-position: center;
-      background-color: #fee500;
-      cursor: pointer;
     }
   }
 `
@@ -157,48 +139,50 @@ export default function Home() {
     }
   }
 
-  const { data: session } = useSession()
+  let isAnimationRunning = false
 
-  const kakaoLogin = () => {
-    signIn('kakao')
+  const onClickDyno = () => {
+    if (!imgDynoRef.current || isAnimationRunning) return
+    isAnimationRunning = true
+    
+    const imgDyno = imgDynoRef.current
+    imgDyno.classList.add('pop')
+
+    setTimeout(() => {
+      imgDyno.classList.remove('pop')
+      isAnimationRunning = false
+    }
+    , 1000)
   }
 
   return (
     <main>
       <div>
         <MainStyle className="main-container">
-          <div className="main-image">
-            <div
-              ref={imgDynoRef}
-              className="img-dyno"
-              onMouseEnter={() => handleMouseMove(true)}
-              onMouseLeave={() => handleMouseMove(false)}
-            ></div>
-            <div className="img-container"></div>
-          </div>
-          <div className="main-links">
-            <div className="btn-container">
-              <Link href="/intro/map">
-                <div className='dyno-btn'>
-                  오시는 길
-                </div>
-              </Link>
-              <Link href="/study/recruit">
-                <div className='dyno-btn'>
-                  상담 신청
-                </div>
-              </Link>
+          <div className='d-flex flex-column relative justify-content-center'>
+            <div className="main-image">
+              <div
+                ref={imgDynoRef}
+                className="img-dyno"
+                onClick={() => onClickDyno()}
+                onTouchStart={() => onClickDyno()}
+              ></div>
+              <div className="img-container"></div>
             </div>
-            {/* {
-              session ? (
-                <div className='kakao-session'>
-                  { session.user?.name }님 환영합니다
-                </div>
-              ) :
-              (
-                <div className='kakao-btn' onClick={kakaoLogin}/>
-              )
-            } */}
+            <div className="main-links">
+              <div className="btn-container">
+                <Link href="/intro/map">
+                  <div className='dyno-btn'>
+                    오시는 길
+                  </div>
+                </Link>
+                <Link href="/study/recruit">
+                  <div className='dyno-btn'>
+                    상담 신청
+                  </div>
+                </Link>
+              </div>
+            </div>
           </div>
         </MainStyle>
       </div>

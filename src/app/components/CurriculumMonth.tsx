@@ -10,12 +10,15 @@ interface Props {
 }
 
 const CurriculumMonthStyle = styled.div`
+  margin-bottom: 12px;
+
   .class-curriculum {
     .class-curriculum-month {
       background-color: #eee;
       padding: 6px 12px;
       border-radius: 12px;
       display: flex;
+      gap: 12px;
 
       .class-curriculum-month-title {
         font-size: 20px;
@@ -73,7 +76,7 @@ export default function CurriculumMonth({ month, onClickToggle }: Props) {
               Object.entries(month.weeks.week).map(([key, value]) => (
                 <tr key={key}>
                   <td className='class-curriculum-week'>
-                    Week { parseInt(key) + 1 }
+                    Day { parseInt(key) + 1 }
                   </td>
                   <td>
                     { value.content }

@@ -3,9 +3,10 @@ import KakaoProvider from "next-auth/providers/kakao"
 
 import axios from "axios"
 import { auth as firebaseAuth, db } from "@/firebase/config"
-import { getDatabase, ref, child, get } from 'firebase/database'
 import { signInWithCustomToken } from "firebase/auth"
 import { doc, getDoc, setDoc, DocumentSnapshot } from "firebase/firestore"
+
+import { ClassDetail, ClassHomeworks, ClassNotices, Datetime, Notice, Homework } from "@/types/types"
 
 const kakaoCustomProvider = KakaoProvider({
   clientId: process.env.KAKAO_CLIENT_ID as string,
@@ -37,7 +38,16 @@ const getClassInfo = async (classId: string) => {
     const snapshot: DocumentSnapshot = await getDoc(docRef)
     
     if (snapshot.exists()) {
-      return snapshot.data()
+      const classDetails = await getDoc(snapshot.data().details)
+      const classHomeworks = await getDoc(snapshot.data().homeworks)
+      const classNotices = await getDoc(snapshot.data().notices)
+
+      return {
+        info: snapshot.data(),
+        details: classDetails.data(),
+        homeworks: classHomeworks.data(),
+        notices: classNotices.data()
+      }
     } else {
       return null
     }
@@ -56,29 +66,17 @@ export const authOptions: NextAuthOptions = {
   ],
   callbacks: {
     async signIn({ user, account }) {
-      const accessToken = account?.access_token
-
       try {
         const res = await axios.post(`${process.env.NEXT_PRIVATE_FIREBASE_FUNCTIONS_AUTH_URL}/kakao`, {
-          token: accessToken,
+          account: account,
         })
 
-        const { firebaseToken } = res.data
+        const { status, data } = res
+        const { firebaseToken } = data
 
         await signInWithCustomToken(firebaseAuth, firebaseToken)
-      } catch (error) {
-        console.error(error)
-      }
 
-      const userInfoUrl = `https://kapi.kakao.com/v2/user/me`
-      
-      const userInfoRes = await fetch(userInfoUrl, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-          ContentType: 'application/json;charset=UTF-8'
-        }
-      }).then(res => {
-        if (res.status === 200) {
+        if (status === 200) {
           const docRef = doc(db, 'users', user?.id)
           getDoc(docRef).then(async (snapshot) => {
             if (snapshot.exists()) {
@@ -101,13 +99,15 @@ export const authOptions: NextAuthOptions = {
             }
           }).catch((error) => {
             console.error(error)
+            throw new Error('Error occured while getting user info')
           })
         }
-        return res.json()
-      }).catch(error => {
+      } catch (error) {
         console.error(error)
-      })
-      return userInfoRes
+        throw new Error('Error occured while signing in')
+      }
+
+      return user.id === account?.providerAccountId
     },
     async session({ session, token }) {
       const userId = token.sub as string
@@ -130,11 +130,45 @@ export const authOptions: NextAuthOptions = {
           const classInfo = await getClassInfo(classId)
   
           if (classInfo) {
+            const { id, name, curriculum } = classInfo.info
+            const homeworks = classInfo.homeworks as ClassHomeworks
+            const notices = classInfo.notices as ClassNotices
+
             session.classInfo = {
-              id: classInfo.id,
-              name: classInfo.name,
-              curriculum: classInfo.curriculum
+              id,
+              name,
+              curriculum
             }
+            
+            const combinedData: (Notice | Homework)[] = [
+              ...notices.notices.map((notice) => ({ ...notice, type: 'notice' })),
+              ...homeworks.homeworks.map((homework) => ({ ...homework, type: 'homework' })),
+            ]
+
+            const classDetails: { [date: string]: ClassDetail } = {}
+
+            combinedData.forEach((item) => {
+              const { date, type, content } = item
+              const dateString = new Date(date.seconds * 1000).toISOString().slice(0, 10);
+            
+              if (!classDetails[dateString]) {
+                classDetails[dateString] = { date: dateString, homework: '', notice: '' };
+              }
+
+              if (type === 'notice') {
+                classDetails[dateString].notice = content
+              } else if (type === 'homework') {
+                classDetails[dateString].homework = content
+              }
+            })
+
+            const sortedClassDetails: { [date: string]: ClassDetail } = {}
+
+            Object.keys(classDetails).sort().forEach((key) => {
+              sortedClassDetails[key] = classDetails[key]
+            })
+
+            session.classDetails = sortedClassDetails
           }
         }
       }

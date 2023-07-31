@@ -4,9 +4,8 @@ import { useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react'
 import { useState, useEffect } from 'react'
 
-import { rdb, db } from '@/firebase/config'
-import { ref, onValue, set } from "firebase/database"
-import { doc, getDoc, getDocs, collection } from 'firebase/firestore'
+import { db } from '@/firebase/config'
+import { getDocs, collection } from 'firebase/firestore'
 
 import styled from 'styled-components'
 
@@ -72,7 +71,7 @@ const TestimonialSwiper = styled.div`
           line-height: 1.5;
           font-weight: 500;
           font-size: 18px;
-          word-break: break-all;
+          word-break: keep-all;
           white-space: pre-line;
 
           @media screen and (max-width: 600px) {
@@ -120,10 +119,6 @@ export default function IntroTestimonial() {
 
   useEffect(() => {
     const getTestimonials = async () => {
-      const testimonialsRef = ref(rdb, 'testimonials')
-
-      // test
-      const docRef = doc(db, 'testimonials/1')
       const docSnap = await getDocs(collection(db, 'testimonials'))
 
       // save docSnap to testimonials
@@ -167,12 +162,6 @@ export default function IntroTestimonial() {
           다이노 영어의 소중한 후기를 소개합니다!
         </div>
       </div>
-      <Button onClick={onClickTestimonialFromBtn} size='medium'>
-        <div>
-          후기 작성하기
-        </div>
-      </Button>
-      <div className="spacing"></div>
       <div>
         {
           loading ? (
@@ -187,10 +176,6 @@ export default function IntroTestimonial() {
                   clickable: true
                 }}
                 loop={true}
-                autoplay={{
-                  delay: 5000,
-                  disableOnInteraction: false
-                }}
               >
                 {
                   testimonials.map((testimonial, index) => (
@@ -212,6 +197,11 @@ export default function IntroTestimonial() {
           )
         }
       </div>
+      <Button onClick={onClickTestimonialFromBtn}>
+        <div>
+          후기 작성하기
+        </div>
+      </Button>
     </TesitmonialPage>
   )
 }
