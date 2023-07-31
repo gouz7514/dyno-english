@@ -39,7 +39,7 @@ export interface TestimonialProps {
 type ButtonSize = 'small' | 'medium' | 'large'
 
 export interface ButtonProps {
-  onClick: (() => void) | ((e: any) => Promise<void>),
+  onClick: ((e: any) => void) | ((e: any) => Promise<void>),
   children: React.ReactNode,
   width?: number,
   disabled?: boolean,
