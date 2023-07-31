@@ -2,7 +2,7 @@ import styled, { css } from 'styled-components'
 
 import { ButtonProps } from '@/types/types'
 
-const BtnStyle = styled.div<ButtonProps>`
+const BtnStyle = styled.button<ButtonProps>`
   padding: 12px;
   width: 100%;
   background-color: var(--second-green);
@@ -13,6 +13,7 @@ const BtnStyle = styled.div<ButtonProps>`
   text-align: center;
   margin: 0 auto;
   cursor: pointer;
+  border: 0;
 
   &:hover {
     transform: scale(1.02);
