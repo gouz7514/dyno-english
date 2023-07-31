@@ -98,6 +98,22 @@ h1 {
   font-weight: normal;
 }
 
+.d-flex {
+  display: flex;
+}
+
+.d-fklex.flex-column {
+  flex-direction: column;
+}
+
+.relative {
+  position: relative;
+}
+
+.justify-content-center {
+  justify-content: center;
+}
+
 a {
   color: inherit;
   text-decoration: none;

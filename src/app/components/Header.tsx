@@ -175,7 +175,6 @@ export default function Header() {
   const onClickProfile = function() {
     if (status !== 'loading') {
       if (!session || !session?.user) {
-        alert('로그인 후 이용해주세요!')
         router.push('/login')
       } else {
         router.push('/profile')

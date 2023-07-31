@@ -2,35 +2,57 @@ import type { NextAuthOptions } from "next-auth"
 import KakaoProvider from "next-auth/providers/kakao"
 
 import axios from "axios"
-import { auth as firebaseAuth } from "@/firebase/config"
-import { getDatabase, ref, child, get, set } from 'firebase/database'
-import { signInWithCustomToken, updateProfile } from "firebase/auth"
+import { auth as firebaseAuth, db } from "@/firebase/config"
+import { signInWithCustomToken } from "firebase/auth"
+import { doc, getDoc, setDoc, DocumentSnapshot } from "firebase/firestore"
+
+import { ClassDetail, ClassHomeworks, ClassNotices, Datetime, Notice, Homework } from "@/types/types"
 
 const kakaoCustomProvider = KakaoProvider({
   clientId: process.env.KAKAO_CLIENT_ID as string,
   clientSecret: process.env.KAKAO_CLIENT_SECRET as string
 })
 
-// get user info from firebase
+// get user info from firestore
 const getUserInfo = async (userId: string) => {
-  const dbRef = ref(getDatabase())
+  const docRef = doc(db, 'users', userId)
 
-  const snapshot = await get(child(dbRef, `users/${userId}`))
-  if (snapshot.exists()) {
-    return snapshot.val()
-  } else {
+  try {
+    const snapshot: DocumentSnapshot = await getDoc(docRef)
+    if (snapshot.exists()) {
+      return snapshot.data()
+    } else {
+      return null
+    }
+  } catch (error) {
+    console.error(error)
     return null
   }
 }
 
-// get class info from firebase
+// get class info from firestore
 const getClassInfo = async (classId: string) => {
-  const dbRef = ref(getDatabase())
+  const docRef = doc(db, 'classes', classId)
 
-  const snapshot = await get(child(dbRef, `classes/${classId}`))
-  if (snapshot.exists()) {
-    return snapshot.val()
-  } else {
+  try {
+    const snapshot: DocumentSnapshot = await getDoc(docRef)
+    
+    if (snapshot.exists()) {
+      const classDetails = await getDoc(snapshot.data().details)
+      const classHomeworks = await getDoc(snapshot.data().homeworks)
+      const classNotices = await getDoc(snapshot.data().notices)
+
+      return {
+        info: snapshot.data(),
+        details: classDetails.data(),
+        homeworks: classHomeworks.data(),
+        notices: classNotices.data()
+      }
+    } else {
+      return null
+    }
+  } catch (error) {
+    console.error(error)
     return null
   }
 }
@@ -44,46 +66,23 @@ export const authOptions: NextAuthOptions = {
   ],
   callbacks: {
     async signIn({ user, account }) {
-      const accessToken = account?.access_token
-
       try {
         const res = await axios.post(`${process.env.NEXT_PRIVATE_FIREBASE_FUNCTIONS_AUTH_URL}/kakao`, {
-          token: accessToken,
+          account: account,
         })
 
-        const { firebaseToken } = res.data
+        const { status, data } = res
+        const { firebaseToken } = data
 
         await signInWithCustomToken(firebaseAuth, firebaseToken)
-      } catch (error) {
-        console.error(error)
-      }
 
-      const userInfoUrl = `https://kapi.kakao.com/v2/user/me`
-      
-      const userInfoRes = await fetch(userInfoUrl, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-          ContentType: 'application/json;charset=UTF-8'
-        }
-      }).then(res => {
-        if (res.status === 200) {
-          // 로그인 성공시 firebase에 유저 id를 키 값으로 저장
-          const dbRef = ref(getDatabase())
-          const db = getDatabase()
-
-          const currentUser = firebaseAuth.currentUser
-          
-          if (currentUser) {
-            updateProfile(currentUser, {
-              displayName: user?.name,
-            })
-          }
-
-          get(child(dbRef, `users/${user?.id}`)).then((snapshot) => {
+        if (status === 200) {
+          const docRef = doc(db, 'users', user?.id)
+          getDoc(docRef).then(async (snapshot) => {
             if (snapshot.exists()) {
               // console.log('exists')
             } else {
-              set(ref(db, `users/${user?.id}`), {
+              await setDoc(doc(db, 'users', user?.id), {
                 id: user?.id,
                 name: user?.name,
                 image: user?.image,
@@ -92,34 +91,91 @@ export const authOptions: NextAuthOptions = {
                 kid: {
                   name: '',
                   birth: ''
-                }
+                },
+                class: {
+                  id: ''
+                },
+                createdAt: new Date(),
+                testimonialAvailable: false,
               })
             }
           }).catch((error) => {
             console.error(error)
+            throw new Error('Error occured while getting user info')
           })
         }
-        return res.json()
-      }).catch(error => {
+      } catch (error) {
         console.error(error)
-      })
-      return userInfoRes
+        throw new Error('Error occured while signing in')
+      }
+
+      return user.id === account?.providerAccountId
     },
-    async session({ session, token, user }) {
+    async session({ session, token }) {
       const userId = token.sub as string
       const userInfo = await getUserInfo(userId)
+      const userKidName = userInfo?.kid.name
 
-      session.user.name = userInfo.name
-      session.user.isStaff = userInfo.staff
-      session.user.userId = token.sub as string
+      if (userInfo) {
+        session.user.name = userInfo.name
+        session.user.isStaff = userInfo.staff
+        session.user.userId = token.sub as string
+        session.user.kidName = userKidName ? userKidName : ''
+        session.user.testimonialAvailable = userInfo.testimonialAvailable
+  
+        const classId = userInfo.class.id
+        
+        if (!classId) {
+          session.classInfo = {
+            id: null,
+            name: null,
+            curriculum: null
+          }
+        } else {
+          const classInfo = await getClassInfo(classId)
+  
+          if (classInfo) {
+            const { id, name, curriculum } = classInfo.info
+            const homeworks = classInfo.homeworks as ClassHomeworks
+            const notices = classInfo.notices as ClassNotices
 
-      const classId = userInfo.class.id
-      const classInfo = await getClassInfo(classId)
-      
-      session.classInfo = {
-        id: classInfo.id,
-        name: classInfo.name,
-        curriculum: classInfo.curriculum
+            session.classInfo = {
+              id,
+              name,
+              curriculum
+            }
+            
+            const combinedData: (Notice | Homework)[] = [
+              ...notices.notices.map((notice) => ({ ...notice, type: 'notice' })),
+              ...homeworks.homeworks.map((homework) => ({ ...homework, type: 'homework' })),
+            ]
+
+            const classDetails: { [date: string]: ClassDetail } = {}
+
+            combinedData.forEach((item) => {
+              const { date, type, content } = item
+              const dateString = new Date(date.seconds * 1000).toISOString().slice(0, 10);
+            
+              if (!classDetails[dateString]) {
+                classDetails[dateString] = { date: dateString, homework: '', notice: '' };
+              }
+
+              if (type === 'notice') {
+                classDetails[dateString].notice = content
+              } else if (type === 'homework') {
+                classDetails[dateString].homework = content
+              }
+            })
+
+            const sortedClassDetails: { [date: string]: ClassDetail } = {}
+
+            Object.keys(classDetails).sort().forEach((key) => {
+              sortedClassDetails[key] = classDetails[key]
+            })
+
+            session.classDetails = sortedClassDetails
+          }
+        }
       }
 
       return session

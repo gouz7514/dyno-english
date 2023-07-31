@@ -4,8 +4,8 @@ import { useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react'
 import { useState, useEffect } from 'react'
 
-import { rdb } from '@/firebase/config'
-import { ref, onValue } from "firebase/database"
+import { db } from '@/firebase/config'
+import { getDocs, collection } from 'firebase/firestore'
 
 import styled from 'styled-components'
 
@@ -111,7 +111,11 @@ export default function IntroTestimonial() {
         router.push('/login')
         return
       } else {
-        router.push('/testimonial/form')
+        if (session?.user.testimonialAvailable) {
+          router.push('/testimonial/form')
+        } else {
+          router.push('/testimonial/notice')
+        }
         return
       }
     }
@@ -119,17 +123,20 @@ export default function IntroTestimonial() {
 
   useEffect(() => {
     const getTestimonials = async () => {
-      const testimonialsRef = ref(rdb, 'testimonials')
+      const docSnap = await getDocs(collection(db, 'testimonials'))
 
-      onValue(testimonialsRef, (snapshot) => {
-        const data = snapshot.val()
-        const testimonials: TestimonialProps[] = Object.keys(data).map((key) => ({
-          ...data[key]
-        })) as TestimonialProps[]
-        setTestimonials(testimonials)
+      // save docSnap to testimonials
+      setTestimonials(docSnap.docs.map((doc) => ({
+        ...doc.data()
+      })) as TestimonialProps[])
+
+      try {
+        setTestimonials(docSnap.docs.map((doc) => ({
+          ...doc.data()
+        })) as TestimonialProps[])
         setLoading(false)
-      }), {
-        onlyOnce: true
+      } catch (error) {
+        console.log(error)
       }
     }
     getTestimonials()
@@ -159,12 +166,6 @@ export default function IntroTestimonial() {
           다이노 영어의 소중한 후기를 소개합니다!
         </div>
       </div>
-      <Button onClick={onClickTestimonialFromBtn} size='medium'>
-        <div>
-          후기 작성하기
-        </div>
-      </Button>
-      <div className="spacing"></div>
       <div>
         {
           loading ? (
@@ -179,10 +180,6 @@ export default function IntroTestimonial() {
                   clickable: true
                 }}
                 loop={true}
-                autoplay={{
-                  delay: 5000,
-                  disableOnInteraction: false
-                }}
               >
                 {
                   testimonials.map((testimonial, index) => (
@@ -204,6 +201,11 @@ export default function IntroTestimonial() {
           )
         }
       </div>
+      <Button onClick={onClickTestimonialFromBtn}>
+        <div>
+          후기 작성하기
+        </div>
+      </Button>
     </TesitmonialPage>
   )
 }

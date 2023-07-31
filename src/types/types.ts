@@ -1,4 +1,4 @@
-export type CalendarProps = {
+export interface CalendarProps{
   view: string,
   week: {
     dayNames: string[];
@@ -24,13 +24,13 @@ export type CalendarProps = {
   }[]
 }
 
-export type SkeletonProps = {
+export interface SkeletonProps {
   width?: number,
   height?: number,
   marginbottom?: number
 }
 
-export type TestimonialProps = {
+export interface TestimonialProps {
   by: string,
   content: string,
   id: string
@@ -38,25 +38,92 @@ export type TestimonialProps = {
 
 type ButtonSize = 'small' | 'medium' | 'large'
 
-export type ButtonProps = {
-  onClick: (() => void) | ((e: any) => Promise<void>),
+export interface ButtonProps {
+  onClick: ((e: any) => void) | ((e: any) => Promise<void>),
   children: React.ReactNode,
   width?: number,
   disabled?: boolean,
   size?: ButtonSize,
 }
 
-export type LinkButtonProps = {
+export interface LinkButtonProps {
   href: string,
   children: React.ReactNode,
   width?: number,
 }
 
-export type UserProps = {
+export interface UserProps {
   name: string,
   phone: string,
   kid: {
     name: string,
     birth: string
   }
+}
+
+export interface Datetime {
+  seconds: number
+  nanoseconds: number
+}
+
+export interface Notice {
+  date: Datetime
+  type: string
+  content: string
+}
+
+export interface Homework {
+  date: Datetime
+  type: string
+  content: string
+}
+
+export interface Week {
+  id: string
+  content: string
+}
+
+export interface Month {
+  id: string
+  weeks: {
+    week: Week[]
+  }
+}
+
+export interface Curriculum {
+  months: {
+    month: Month[]
+  }
+}
+
+export interface ClassInfo {
+  id: string | null
+  name: string | null
+  curriculum: Curriculum | null
+}
+
+export interface ClassItem {
+  content: string;
+  date: {
+    seconds: number;
+    nanoseconds: number;
+  }
+}
+
+export interface ClassHomeworks {
+  homeworks: Array<ClassItem>
+}
+
+export interface ClassNotices {
+  notices: Array<ClassItem>
+}
+
+export interface ClassDetail {
+  date: string
+  homework: string
+  notice: string
+}
+
+export interface ClassDetails {
+  [date: string]: ClassDetail
 }

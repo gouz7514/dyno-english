@@ -7,9 +7,10 @@ import styled from 'styled-components'
 
 import { TestimonialProps } from '@/types/types'
 
+import { useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react'
-import { rdb } from "@/firebase/config"
-import { getDatabase, ref, set, push } from 'firebase/database'
+import { db } from "@/firebase/config"
+import { collection, addDoc } from 'firebase/firestore'
 
 const FormStyle = styled.div`
   display: flex;
@@ -65,6 +66,7 @@ const FormStyle = styled.div`
 
 // form 로직 분리하기
 export default function TestimonialForm() {
+  const router = useRouter()
   const { data: session, status } = useSession()
 
   const [testimonials, setTestimonials] = useState<TestimonialProps>({
@@ -127,6 +129,10 @@ export default function TestimonialForm() {
       if (!session || !session?.user) {
         alert('로그인 후 이용해주세요.')
         window.location.href = '/login'
+      } else {
+        if (!session?.user.testimonialAvailable) {
+          router.push('/testimonial/notice')
+        }
       }
     }
   })
@@ -153,15 +159,12 @@ export default function TestimonialForm() {
       id: session?.user?.userId as string
     }
 
-    const testimonialsRef = ref(rdb, 'testimonials')
-    const newPostsRef = push(testimonialsRef)
-    await set(newPostsRef, newTestimonial).then(() => {
+    await addDoc(collection(db, 'testimonials'), newTestimonial).then(() => {
       setLoading(false)
       alert('후기 등록 완료!')
       window.location.href = '/'
     })
   }
-
 
   return (
     <FormStyle className='container'>
