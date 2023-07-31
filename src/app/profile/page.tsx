@@ -95,6 +95,30 @@ const ProfileStyle = styled.div`
       }
     }
   }
+
+  .empty-container {
+    background-color: #eee;
+    height: 400px;
+    border-radius: 12px;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    .empty-container-img {
+      width: 100px;
+      height: 100px;
+      background-size: 100px 100px;
+      background-image: url('/images/image-dyno.webp');
+      margin-bottom: 12px;
+    }
+
+    .empty-text {
+      text-align: center;
+      line-height: 1.5;
+    }
+  }
 `
 
 export default function ProfilePage() {
@@ -115,7 +139,7 @@ export default function ProfilePage() {
   }, [session, router, status])
 
   const convertDate = function(date: string) {
-    const [year, month, day] = date.split('-')
+    const [_year, month, day] = date.split('-')
 
     return `${month}월 ${day}일`
   }
@@ -134,67 +158,83 @@ export default function ProfilePage() {
           <div className='profile-container'>
             <div className="profile-title">
               <div className="profile-username">
-                {session?.user.name} 학부모님
+                { session?.user.kidName ? `${session?.user.kidName} 학부모님` : `${session?.user.name} 님` }
               </div>
               <Link href='/profile/account' className='profile-setting' />
             </div>
-            <div className="profile-class">
-              {
-                session?.classInfo.name !== null && (
-                  <div className="class-title">
-                    {session?.classInfo.name}
+            {
+              session?.classInfo.name !== null ? (
+                <div className="profile-class">
+                  {
+                    <>
+                      <div className="class-title">
+                        {session?.classInfo.name}
+                      </div>
+                      <Swiper
+                        slidesPerView={1}
+                        pagination={{ clickable: true }}
+                        initialSlide={session?.classDetails ? Object.keys(session?.classDetails).length - 1 : 0}
+                      >
+                        {
+                          session?.classDetails && (
+                            Object.entries(session?.classDetails).map(([key, value]) => (
+                              <SwiperSlide key={key} className='class-info'>
+                                <div className="class-notice">
+                                  <div>
+                                    { convertDate(key) } 수업내용
+                                  </div>
+                                  <div>
+                                    { value.notice }
+                                  </div>
+                                </div>
+                                <div className="class-homework">
+                                  <div>
+                                  { convertDate(key) } 숙제
+                                  </div>
+                                  <div>
+                                    { value.homework }
+                                  </div>
+                                </div>
+                              </SwiperSlide>
+                            ))
+                          )
+                        }
+                      </Swiper>
+                    </>
+                  }
+                  <div className="class-curriculum-container">
+                    <div className='class-curriculum-header'>커리큘럼</div>
+                    {
+                      session?.classInfo.curriculum && (
+                        <div>
+                          {
+                            session?.classInfo.curriculum?.months?.month.map((month) => (
+                              <CurriculumMonth
+                                key={month.id}
+                                month={month}
+                                onClickToggle={onClickToggle}
+                              />
+                            ))
+                          }
+                        </div>  
+                      )
+                    }
                   </div>
-                )
-              }
-              <Swiper
-                slidesPerView={1}
-                pagination={{ clickable: true }}
-                initialSlide={session?.classDetails ? Object.keys(session?.classDetails).length - 1 : 0}
-              >
-                {
-                  session?.classDetails && (
-                    Object.entries(session?.classDetails).map(([key, value]) => (
-                      <SwiperSlide key={key} className='class-info'>
-                        <div className="class-notice">
-                          <div>
-                            { convertDate(key) } 수업내용
-                          </div>
-                          <div>
-                            { value.notice }
-                          </div>
-                        </div>
-                        <div className="class-homework">
-                          <div>
-                          { convertDate(key) } 숙제
-                          </div>
-                          <div>
-                            { value.homework }
-                          </div>
-                        </div>
-                      </SwiperSlide>
-                    ))
-                  )
-                }
-              </Swiper>
-              <div className="class-curriculum-container">
-                <div className='class-curriculum-header'>커리큘럼</div>
-                {
-                  session?.classInfo.curriculum && (
+                </div>
+              ) : (
+                <div className='empty-container'>
+                  <div className="empty-container-img"></div>
+                  <div className="empty-text">
                     <div>
-                      {
-                        session?.classInfo.curriculum?.months?.month.map((month) => (
-                          <CurriculumMonth
-                            key={month.id}
-                            month={month}
-                            onClickToggle={onClickToggle}
-                          />
-                        ))
-                      }
-                    </div>  
-                  )
-                }
-              </div>
-            </div>
+                      등록된 수업 정보가 없습니다.
+                    </div>
+                    <div>
+                      다이앤 선생님이 수업을 등록하시면 수업 정보를 확인하실 수 있습니다.
+                    </div>
+                  </div>
+                </div>
+              )
+            }
           </div>
         )
       }

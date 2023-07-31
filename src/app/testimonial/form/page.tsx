@@ -7,6 +7,7 @@ import styled from 'styled-components'
 
 import { TestimonialProps } from '@/types/types'
 
+import { useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react'
 import { db } from "@/firebase/config"
 import { collection, addDoc } from 'firebase/firestore'
@@ -65,6 +66,7 @@ const FormStyle = styled.div`
 
 // form 로직 분리하기
 export default function TestimonialForm() {
+  const router = useRouter()
   const { data: session, status } = useSession()
 
   const [testimonials, setTestimonials] = useState<TestimonialProps>({
@@ -127,6 +129,10 @@ export default function TestimonialForm() {
       if (!session || !session?.user) {
         alert('로그인 후 이용해주세요.')
         window.location.href = '/login'
+      } else {
+        if (!session?.user.testimonialAvailable) {
+          router.push('/testimonial/notice')
+        }
       }
     }
   })

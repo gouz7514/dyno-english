@@ -93,8 +93,10 @@ export const authOptions: NextAuthOptions = {
                   birth: ''
                 },
                 class: {
-                  id: null
-                }
+                  id: ''
+                },
+                createdAt: new Date(),
+                testimonialAvailable: false,
               })
             }
           }).catch((error) => {
@@ -112,11 +114,14 @@ export const authOptions: NextAuthOptions = {
     async session({ session, token }) {
       const userId = token.sub as string
       const userInfo = await getUserInfo(userId)
+      const userKidName = userInfo?.kid.name
 
       if (userInfo) {
         session.user.name = userInfo.name
         session.user.isStaff = userInfo.staff
         session.user.userId = token.sub as string
+        session.user.kidName = userKidName ? userKidName : ''
+        session.user.testimonialAvailable = userInfo.testimonialAvailable
   
         const classId = userInfo.class.id
         

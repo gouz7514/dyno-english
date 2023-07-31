@@ -111,7 +111,11 @@ export default function IntroTestimonial() {
         router.push('/login')
         return
       } else {
-        router.push('/testimonial/form')
+        if (session?.user.testimonialAvailable) {
+          router.push('/testimonial/form')
+        } else {
+          router.push('/testimonial/notice')
+        }
         return
       }
     }

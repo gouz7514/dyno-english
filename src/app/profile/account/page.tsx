@@ -28,7 +28,7 @@ const ProfileStyle = styled.div`
     .profile-item {
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 8px;
 
       .profile-item-title {
         font-weight: bold;
@@ -45,7 +45,7 @@ const ProfileStyle = styled.div`
         }
       }
 
-      input[type="text"] {
+      input{
         height: 40px;
         border-radius: 8px;
         padding-left: 8px;
@@ -55,6 +55,12 @@ const ProfileStyle = styled.div`
         &:focus {
           border: 1px solid var(--second-green);
         }
+      }
+
+      .input-error {
+        color: red;
+        font-size: 12px;
+        height: 12px;
       }
 
       input[type="date"] {
@@ -103,6 +109,54 @@ export default function ProfilePage() {
     }
   })
 
+  const [errors, setErrors] = useState({
+    phone: '',
+    kidName: '',
+    kidBirth: ''
+  })
+
+  const [touched, setTouched] = useState({
+    phone: false,
+    kidName: '',
+    kidBirth: ''
+  })
+
+  const validate = useCallback(() => {
+    const errors = {
+      phone: '',
+      kidName: '',
+      kidBirth: ''
+    }
+
+    if (!users.phone) {
+      errors.phone = '필수 입력사항입니다.'
+    }
+
+    if (!users.kid.name) {
+      errors.kidName = '필수 입력사항입니다.'
+    }
+
+    if (!users.kid.birth) {
+      errors.kidBirth = '필수 입력사항입니다.'
+    }
+
+    setErrors(errors)
+    return errors
+  }, [users])
+
+  const handleBlur = (e: any) => {
+    setTouched({
+      ...touched,
+      [e.target.name]: true
+    })
+
+    console.log(errors)
+  }
+
+  useEffect(() => {
+    validate()
+  }, [validate])
+
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false)
 
   const getUserInfo = useCallback(async (id: string) => {
@@ -147,7 +201,6 @@ export default function ProfilePage() {
     })
   }
 
-  // 여기서 아이 정보는 쿠키에 저장해야할듯
   const handleChangeKidInfo = (key: any, value: any) => {
     setUsers((prevUsers) => ({
       ...prevUsers,
@@ -173,6 +226,11 @@ export default function ProfilePage() {
           birth: new Date(users.kid.birth).toISOString().slice(0, 10)
         }
       })
+
+      const sessionUser = session?.user
+      if (!sessionUser) return
+      sessionUser.kidName = users.kid.name
+
       setIsSubmitting(false)
       alert('수정이 완료되었습니다.')
       router.push('/')
@@ -203,32 +261,54 @@ export default function ProfilePage() {
                 type="text"
                 name="phone"
                 id="phone"
+                placeholder="010-1234-5678"
                 value={users.phone || ''}
                 onChange={handleChangePhone}
+                onBlur={handleBlur}
               />
+              <div className="input-error">
+                {
+                  touched.phone && errors.phone && <span>{ errors.phone }</span>
+                }
+              </div>
             </div>
             <div className="profile-item kid">
               <div className='profile-item-title'>학생 이름</div>
               <input
                 type="text"
-                name="kid"
+                name="kidName"
                 id="kid"
                 placeholder="학생 이름을 입력해주세요"
                 value={users.kid.name || ''}
                 onChange={(e) => handleChangeKidInfo('name', e.target.value)}
+                onBlur={handleBlur}
               />
+              <div className="input-error">
+                {
+                  touched.kidName && errors.kidName && <span>{ errors.kidName }</span>
+                }
+              </div>
             </div>
             <div className="profile-item birth">
               <div className='profile-item-title'>학생 생년월일</div>
               <input
                 type="date"
-                name="birth"
+                name="kidBirth"
                 id="birth"
                 value={users.kid.birth || ''}
                 onChange={(e) => handleChangeKidInfo('birth', e.target.value)}
+                onBlur={handleBlur}
               />
+              <div className="input-error">
+                {
+                  touched.kidBirth && errors.kidBirth && <span>{ errors.kidBirth }</span>
+                }
+              </div>
             </div>
-            <Button onClick={onSubmitProfile}>
+            <Button
+              onClick={onSubmitProfile}
+              disabled={errors.phone !== '' || errors.kidName !== '' || errors.kidBirth !== ''}
+            >
               { isSubmitting ? '수정중...' : '수정하기' }
             </Button>
           </div>

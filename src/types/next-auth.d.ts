@@ -7,6 +7,8 @@ declare module "next-auth" {
       name: string,
       userId: string,
       isStaff: boolean,
+      kidName: string,
+      testimonialAvailable: boolean,
     },
     classInfo: ClassInfo,
     classDetails: ClassDetails,
