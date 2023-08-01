@@ -5,7 +5,6 @@ import { ButtonProps } from '@/types/types'
 const BtnStyle = styled.button<ButtonProps>`
   padding: 12px;
   width: 100%;
-  background-color: var(--second-green);
   color: white;
   border-radius: 8px;
   font-weight: 600;
@@ -32,11 +31,22 @@ const BtnStyle = styled.button<ButtonProps>`
   ${({ size }) => size === 'medium' && css`
     width: 300px;
   `}
+
+  ${({ color }) => css`
+    ${color === 'primary' && css`
+      background-color: var(--second-green);
+    `}
+
+    ${color === 'default' && css`
+      background-color: var(--button-default);
+      color: black;
+    `}
+  `}
 `
 
-export default function Button({ onClick, children, width = 300, disabled = false, size = 'large' }: ButtonProps) {
+export default function Button({ onClick, children, disabled = false, size = 'large', color = 'primary' }: ButtonProps) {
   return (
-    <BtnStyle onClick={onClick} disabled={disabled} size={size}>
+    <BtnStyle onClick={onClick} disabled={disabled} size={size} color={color}>
       {children}
     </BtnStyle>
   )

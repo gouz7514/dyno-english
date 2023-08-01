@@ -37,6 +37,7 @@ export interface TestimonialProps {
 }
 
 type ButtonSize = 'small' | 'medium' | 'large'
+type buttontheme = 'primary' | 'secondary' | 'default'
 
 export interface ButtonProps {
   onClick: ((e: any) => void) | ((e: any) => Promise<void>),
@@ -44,6 +45,7 @@ export interface ButtonProps {
   width?: number,
   disabled?: boolean,
   size?: ButtonSize,
+  color?: buttontheme
 }
 
 export interface LinkButtonProps {
