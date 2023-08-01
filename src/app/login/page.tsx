@@ -29,6 +29,7 @@ const LoginStyle = styled.div`
     align-items: center;
     justify-content: center;
     gap: 4px;
+    color: rgba(0, 0, 0, 0.85);
     
     .kakao-btn-image {
       display: inline-block;
