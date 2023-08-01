@@ -57,6 +57,10 @@ const ProfileStyle = styled.div`
         margin-bottom: 12px;
       }
 
+      .swiper-slide {
+        padding: 0 12px;
+      }
+
       .class-info {
         display: flex;
         gap: 12px;
