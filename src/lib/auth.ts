@@ -38,13 +38,11 @@ const getClassInfo = async (classId: string) => {
     const snapshot: DocumentSnapshot = await getDoc(docRef)
     
     if (snapshot.exists()) {
-      const classDetails = await getDoc(snapshot.data().details)
       const classHomeworks = await getDoc(snapshot.data().homeworks)
       const classNotices = await getDoc(snapshot.data().notices)
 
       return {
         info: snapshot.data(),
-        details: classDetails.data(),
         homeworks: classHomeworks.data(),
         notices: classNotices.data()
       }
