@@ -30,7 +30,7 @@ const CalendarContainer = styled.div`
     button {
       &.active,
       &:hover {
-        background-color: var(--second-green);
+        background-color: var(--primary-green);
         color: #fff;
       }
     }

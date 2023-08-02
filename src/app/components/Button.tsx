@@ -34,7 +34,7 @@ const BtnStyle = styled.button<ButtonProps>`
 
   ${({ color }) => css`
     ${color === 'primary' && css`
-      background-color: var(--second-green);
+      background-color: var(--primary-green);
     `}
 
     ${color === 'default' && css`
