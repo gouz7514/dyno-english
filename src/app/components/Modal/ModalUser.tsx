@@ -3,7 +3,8 @@ import { useEffect, useState, useRef } from "react"
 import { DocumentData } from "firebase/firestore"
 
 import Button from '@/app/components/Button'
-import Toggle from '@/app/components/Toggle'
+// import Toggle from '@/app/components/Toggle'
+import Toggle from '@/app/components/Toggle/Toggle'
 
 import { db } from "@/firebase/config"
 import { doc, getDoc, updateDoc } from 'firebase/firestore'
@@ -51,7 +52,7 @@ const ModalStyle = styled.div`
       .modal-item {
         display: flex;
         flex-direction: column;
-        margin-bottom: 12px;
+        margin-bottom: 16px;
 
         h3 {
           margin-bottom: 8px;
@@ -199,10 +200,13 @@ export default function Modal({ isOpen, onClose, currentUser, currentClass }: Mo
               </h3>
               <div className="modal-item-content">
                 <Toggle
-                  defaultChecked={currentUser.testimonialAvailable}
-                  onChange={handleToggleChange}
-                />
-                {/* { currentUser.testimonialAvailable ? '가능' : '불가능' } */}
+                  onToggle={(on) => handleToggleChange(on)}
+                  testimonialAvailable={currentUser.testimonialAvailable}
+                  >
+                    <Toggle.On />
+                    <Toggle.Off />
+                    <Toggle.Button />
+                  </Toggle>
               </div>
             </div>
           </div>
