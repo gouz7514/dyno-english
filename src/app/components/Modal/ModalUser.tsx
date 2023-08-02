@@ -109,7 +109,7 @@ export default function Modal({ isOpen, onClose, currentUser, currentClass }: Mo
       window.removeEventListener('mousedown', handleOutsideClick)
     }
 
-  }, [onClose])
+  }, [onClose, isOpen])
 
   const onSubmit = async () => {
     try {
