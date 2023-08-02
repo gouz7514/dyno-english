@@ -33,7 +33,8 @@ export interface SkeletonProps {
 export interface TestimonialProps {
   by: string,
   content: string,
-  id: string
+  id: string,
+  createdAt: Date
 }
 
 type ButtonSize = 'small' | 'medium' | 'large'

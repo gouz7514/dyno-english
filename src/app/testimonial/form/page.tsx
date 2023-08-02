@@ -72,7 +72,8 @@ export default function TestimonialForm() {
   const [testimonials, setTestimonials] = useState<TestimonialProps>({
     by: '',
     content: '',
-    id: ''
+    id: '',
+    createdAt: new Date()
   })
 
   const [errors, setErrors] = useState({
@@ -156,9 +157,10 @@ export default function TestimonialForm() {
     const newTestimonial: TestimonialProps = {
       by: testimonials.by,
       content: testimonials.content,
-      id: session?.user?.userId as string
+      id: session?.user?.userId as string,
+      createdAt: new Date()
     }
-
+    
     await addDoc(collection(db, 'testimonials'), newTestimonial).then(() => {
       setLoading(false)
       alert('후기 등록 완료!')
