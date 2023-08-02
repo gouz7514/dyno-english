@@ -23,9 +23,9 @@ const BtnStyle = styled.button<ButtonProps>`
   `}
 
   ${({ disabled }) => disabled && css`
-    background-color: var(--color-disabled);
+    background-color: var(--color-disabled) !important;
     cursor: not-allowed;
-    color: var(--color-disabled-text);
+    color: var(--color-disabled-text) !important;
   `}
 
   ${({ size }) => size === 'medium' && css`
