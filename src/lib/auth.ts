@@ -32,17 +32,17 @@ const getUserInfo = async (userId: string) => {
 
 // get class info from firestore
 const getClassInfo = async (classId: string) => {
-  const docRef = doc(db, 'classes', classId)
+  const docRef = doc(db, 'class', classId)
 
   try {
-    const snapshot: DocumentSnapshot = await getDoc(docRef)
+    const classInfo: DocumentSnapshot = await getDoc(docRef)
     
-    if (snapshot.exists()) {
-      const classHomeworks = await getDoc(snapshot.data().homeworks)
-      const classNotices = await getDoc(snapshot.data().notices)
+    if (classInfo.exists()) {
+      const classHomeworks = await getDoc(classInfo.data().homework)
+      const classNotices = await getDoc(classInfo.data().notice)
 
       return {
-        info: snapshot.data(),
+        info: classInfo.data(),
         homeworks: classHomeworks.data(),
         notices: classNotices.data()
       }

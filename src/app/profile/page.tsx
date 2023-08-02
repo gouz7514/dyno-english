@@ -212,9 +212,10 @@ export default function ProfilePage() {
                       session?.classInfo.curriculum && (
                         <div>
                           {
-                            session?.classInfo.curriculum?.months?.month.map((month) => (
+                            session?.classInfo.curriculum?.months?.month.map((month, idx) => (
                               <CurriculumMonth
-                                key={month.id}
+                                key={idx}
+                                idx={idx}
                                 month={month}
                                 onClickToggle={onClickToggle}
                               />

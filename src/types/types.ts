@@ -82,20 +82,18 @@ export interface Homework {
 }
 
 export interface Week {
-  id: string
   content: string
 }
 
 export interface Month {
-  id: string
-  weeks: {
-    week: Week[]
-  }
+  days: {
+    content: string
+  }[]
 }
 
 export interface Curriculum {
   months: {
-    month: Month[]
+    month: Month[],
   }
 }
 
