@@ -3,11 +3,10 @@ import { useEffect, useState, useRef } from "react"
 import { DocumentData } from "firebase/firestore"
 
 import Button from '@/app/components/Button'
-// import Toggle from '@/app/components/Toggle'
 import Toggle from '@/app/components/Toggle/Toggle'
 
 import { db } from "@/firebase/config"
-import { doc, getDoc, updateDoc } from 'firebase/firestore'
+import { doc, updateDoc } from 'firebase/firestore'
 
 const ModalStyle = styled.div`
   .modal {
@@ -200,13 +199,9 @@ export default function Modal({ isOpen, onClose, currentUser, currentClass }: Mo
               </h3>
               <div className="modal-item-content">
                 <Toggle
-                  onToggle={(on) => handleToggleChange(on)}
-                  testimonialAvailable={currentUser.testimonialAvailable}
-                  >
-                    <Toggle.On />
-                    <Toggle.Off />
-                    <Toggle.Button />
-                  </Toggle>
+                  defaultChecked={currentUser.testimonialAvailable}
+                  onChange={handleToggleChange}
+                />
               </div>
             </div>
           </div>
