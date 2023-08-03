@@ -28,8 +28,15 @@ const BtnStyle = styled.button<ButtonProps>`
     color: var(--color-disabled-text) !important;
   `}
 
-  ${({ size }) => size === 'medium' && css`
-    width: 300px;
+  ${({ size }) => css`
+    ${size === 'medium' && css`
+      width: 300px;
+    `}
+
+    ${size === 'small' && css`
+      width: auto;
+      padding: 6px 8px;
+    `}
   `}
 
   ${({ color }) => css`
