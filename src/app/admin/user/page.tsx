@@ -73,7 +73,11 @@ export default function AdminUser() {
   const getClass = async () => {
     const classRef = collection(db, 'class')
     const classSnapshot = await getDocs(classRef)
-    const classList = classSnapshot.docs.map((doc) => doc.data())
+    const classList = classSnapshot.docs.map((doc) => {
+      const classData = doc.data()
+      classData.id = doc.id
+      return classData
+    })
 
     setDynoClass(classList)
   }
