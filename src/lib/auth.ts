@@ -30,7 +30,6 @@ const getUserInfo = async (userId: string) => {
   }
 }
 
-// get class info from firestore
 const getClassInfo = async (classId: string) => {
   const docRef = doc(db, 'class', classId)
 
@@ -38,13 +37,13 @@ const getClassInfo = async (classId: string) => {
     const classInfo: DocumentSnapshot = await getDoc(docRef)
     
     if (classInfo.exists()) {
-      const classHomeworks = await getDoc(classInfo.data().homework)
-      const classNotices = await getDoc(classInfo.data().notice)
+      const classHomeworks = classInfo.data().homework ? await getDoc(classInfo.data().homework) : null
+      const classNotices = classInfo.data().notice ? await getDoc(classInfo.data().notice) : null
 
       return {
         info: classInfo.data(),
-        homeworks: classHomeworks.data(),
-        notices: classNotices.data()
+        homeworks: classHomeworks?.data(),
+        notices: classNotices?.data()
       }
     } else {
       return null
@@ -134,18 +133,19 @@ export const authOptions: NextAuthOptions = {
   
           if (classInfo) {
             const { id, name, curriculum } = classInfo.info
-            const homeworks = classInfo.homeworks as ClassHomeworks
-            const notices = classInfo.notices as ClassNotices
-
+            
             session.classInfo = {
               id,
               name,
               curriculum
             }
             
+            const homeworks = classInfo.homeworks as ClassHomeworks
+            const notices = classInfo.notices as ClassNotices
+            
             const combinedData: (Notice | Homework)[] = [
-              ...notices.notices.map((notice) => ({ ...notice, type: 'notice' })),
-              ...homeworks.homeworks.map((homework) => ({ ...homework, type: 'homework' })),
+              ...(notices ? notices.notices.map((notice) => ({ ...notice, type: 'notice' })) : []),
+              ...(homeworks ? homeworks.homeworks.map((homework) => ({ ...homework, type: 'homework' })) : []),
             ]
 
             const classDetails: { [date: string]: ClassDetail } = {}
