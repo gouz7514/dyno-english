@@ -21,7 +21,6 @@ export function generateRecurringEvents(events: Event[]): Event[] {
       const repeatEnd = moment(event.repeatEnd)
 
       while (currentStart.isSameOrBefore(repeatEnd)) {
-        const dayOfWeek = currentStart.format('dddd')
         const repeatedStart = currentStart
           .hour(originalStart.hour())
           .minute(originalStart.minute())

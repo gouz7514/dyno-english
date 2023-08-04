@@ -7,6 +7,7 @@ import { Month } from '@/types/types'
 interface Props {
   month: Month
   onClickToggle: (ref: React.RefObject<HTMLDivElement>) => void
+  idx: number
 }
 
 const CurriculumMonthStyle = styled.div`
@@ -58,7 +59,7 @@ const CurriculumMonthStyle = styled.div`
   }
 `
 
-export default function CurriculumMonth({ month, onClickToggle }: Props) {
+export default function CurriculumMonth({ month, onClickToggle, idx }: Props) {
   const curriculumRef = useRef<HTMLDivElement>(null)
 
   return (
@@ -66,14 +67,14 @@ export default function CurriculumMonth({ month, onClickToggle }: Props) {
       <div className='class-curriculum'>
         <div className='class-curriculum-month' ref={curriculumRef}>
           <div className="class-curriculum-month-title">
-            Month { parseInt(month.id) + 1 }
+            Month { idx + 1 }
           </div>
           <div className="class-curriculum-month-toggle" onClick={() => onClickToggle(curriculumRef)} />
         </div>
         <table className='class-curriculum-table'>
           <tbody>
             {
-              Object.entries(month.weeks.week).map(([key, value]) => (
+              Object.entries(month.days).map(([key, value]) => (
                 <tr key={key}>
                   <td className='class-curriculum-week'>
                     Day { parseInt(key) + 1 }

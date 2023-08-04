@@ -1,12 +1,13 @@
 @import url('//cdn.jsdelivr.net/font-iropke-batang/1.2/font-iropke-batang.css');
 
 :root {
-  --primary-green: #009222;
-  --second-green: #30A680;
+  --primary-green: #30A680;
 
   --primary-yellow: #ffC10C;
   --primary-yellow-hover: #fedd56;
   --second-yellow: #ffCB1C;
+
+  --button-default: #eee;
 
   --color-disabled: #979797;
   --color-disabled-text: #d8d8d8;
@@ -67,6 +68,7 @@ body {
   overflow-x: hidden;
   position: relative;
   height: 100vh;
+  -webkit-font-smoothing: antialiased;
   /* font-family: AppleSDGothic, -apple-system, BlinkMacSystemFont, sans-serif; */
 }
 

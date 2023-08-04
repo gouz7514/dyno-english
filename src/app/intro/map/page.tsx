@@ -25,7 +25,7 @@ const MapStyle = styled.div`
   .dyno-btn {
     padding: 12px;
     width: 240px;
-    background-color: var(--second-green);
+    background-color: var(--primary-green);
     color: white;
     border-radius: 8px;
     font-weight: bold;

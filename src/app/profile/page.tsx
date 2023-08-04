@@ -6,8 +6,9 @@ import { useSession } from 'next-auth/react'
 import Link from 'next/link'
 import styled from 'styled-components'
 
-import Skeleton from '../components/Skeleton'
-import CurriculumMonth from '../components/CurriculumMonth'
+import Skeleton from '@/app/components/Skeleton'
+import CurriculumMonth from '@/app/components/CurriculumMonth'
+import EmptyState from '@/app/components/Molecule/EmptyState'
 
 import { Swiper, SwiperSlide } from 'swiper/react'
 import SwiperCore, { Pagination } from "swiper"
@@ -99,30 +100,6 @@ const ProfileStyle = styled.div`
       }
     }
   }
-
-  .empty-container {
-    background-color: #eee;
-    height: 400px;
-    border-radius: 12px;
-    padding: 24px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-
-    .empty-container-img {
-      width: 100px;
-      height: 100px;
-      background-size: 100px 100px;
-      background-image: url('/images/image-dyno.webp');
-      margin-bottom: 12px;
-    }
-
-    .empty-text {
-      text-align: center;
-      line-height: 1.5;
-    }
-  }
 `
 
 export default function ProfilePage() {
@@ -174,36 +151,45 @@ export default function ProfilePage() {
                       <div className="class-title">
                         {session?.classInfo.name}
                       </div>
-                      <Swiper
-                        slidesPerView={1}
-                        pagination={{ clickable: true }}
-                        initialSlide={session?.classDetails ? Object.keys(session?.classDetails).length - 1 : 0}
-                      >
-                        {
-                          session?.classDetails && (
-                            Object.entries(session?.classDetails).map(([key, value]) => (
-                              <SwiperSlide key={key} className='class-info'>
-                                <div className="class-notice">
-                                  <div>
-                                    { convertDate(key) } 수업내용
-                                  </div>
-                                  <div>
-                                    { value.notice }
-                                  </div>
-                                </div>
-                                <div className="class-homework">
-                                  <div>
-                                  { convertDate(key) } 숙제
-                                  </div>
-                                  <div>
-                                    { value.homework }
-                                  </div>
-                                </div>
-                              </SwiperSlide>
-                            ))
-                          )
-                        }
-                      </Swiper>
+                      {
+                        session?.classDetails && Object.keys(session?.classDetails).length === 0 ? (
+                          <EmptyState
+                            mainText='등록된 수업 정보가 없습니다.'
+                            size='medium'
+                          />
+                        ) : (
+                          <Swiper
+                            slidesPerView={1}
+                            pagination={{ clickable: true }}
+                            initialSlide={session?.classDetails ? Object.keys(session?.classDetails).length - 1 : 0}
+                          >
+                            {
+                              session?.classDetails && (
+                                Object.entries(session?.classDetails).map(([key, value]) => (
+                                  <SwiperSlide key={key} className='class-info'>
+                                    <div className="class-notice">
+                                      <div>
+                                        { convertDate(key) } 수업내용
+                                      </div>
+                                      <div>
+                                        { value.notice }
+                                      </div>
+                                    </div>
+                                    <div className="class-homework">
+                                      <div>
+                                      { convertDate(key) } 숙제
+                                      </div>
+                                      <div>
+                                        { value.homework }
+                                      </div>
+                                    </div>
+                                  </SwiperSlide>
+                                ))
+                              )
+                            }
+                          </Swiper>
+                        )
+                      }
                     </>
                   }
                   <div className="class-curriculum-container">
@@ -212,9 +198,10 @@ export default function ProfilePage() {
                       session?.classInfo.curriculum && (
                         <div>
                           {
-                            session?.classInfo.curriculum?.months?.month.map((month) => (
+                            session?.classInfo.curriculum?.months?.month.map((month, idx) => (
                               <CurriculumMonth
-                                key={month.id}
+                                key={idx}
+                                idx={idx}
                                 month={month}
                                 onClickToggle={onClickToggle}
                               />
@@ -226,17 +213,10 @@ export default function ProfilePage() {
                   </div>
                 </div>
               ) : (
-                <div className='empty-container'>
-                  <div className="empty-container-img"></div>
-                  <div className="empty-text">
-                    <div>
-                      등록된 수업 정보가 없습니다.
-                    </div>
-                    <div>
-                      다이앤 선생님이 수업을 등록하시면 수업 정보를 확인하실 수 있습니다.
-                    </div>
-                  </div>
-                </div>
+                <EmptyState
+                  mainText='등록된 수업 정보가 없습니다.'
+                  subText='다이앤 선생님이 수업을 등록하시면 수업 정보를 확인하실 수 있습니다.'
+                />
               )
             }
           </div>

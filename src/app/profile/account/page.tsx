@@ -53,7 +53,7 @@ const ProfileStyle = styled.div`
         border: 0;
 
         &:focus {
-          border: 1px solid var(--second-green);
+          border: 1px solid var(--primary-green);
         }
       }
 

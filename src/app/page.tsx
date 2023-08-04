@@ -91,7 +91,7 @@ const MainStyle = styled.main`
     .dyno-btn {
       padding: 12px;
       width: 120px;
-      background-color: var(--second-green);
+      background-color: var(--primary-green);
       color: white;
       border-radius: 8px;
       font-weight: 600;

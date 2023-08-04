@@ -67,3 +67,55 @@ export const ArticleStyle = styled.article`
     font-size: 1.3em;
   }
 `
+
+export const FormStyle = styled.div`
+  display: flex;
+  flex-direction: column;
+  background-color: #eee;
+  padding: 24px;
+
+  .form-title {
+    margin-bottom: 24px;
+  }
+
+  .input-container {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 24px;
+
+    label {
+      margin-bottom: 8px;
+    }
+
+    input[type=text] {
+      height: 40px;
+      border-radius: 8px;
+      padding-left: 8px;
+      outline: none;
+      border: 0;
+
+      &:focus {
+        border: 1px solid var(--primary-green);
+      }
+    }
+
+    .input-error {
+      margin-top: 8px;
+      color: red;
+      font-size: 12px;
+      height: 12px;
+    }
+
+    textarea {
+      height: 200px;
+      border-radius: 8px;
+      padding: 8px;
+      outline: none;
+      border: 0;
+
+      &:focus {
+        border: 1px solid var(--primary-green);
+      }
+    }
+  }
+`

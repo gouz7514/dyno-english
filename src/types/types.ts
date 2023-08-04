@@ -33,10 +33,12 @@ export interface SkeletonProps {
 export interface TestimonialProps {
   by: string,
   content: string,
-  id: string
+  id: string,
+  createdAt: Date
 }
 
 type ButtonSize = 'small' | 'medium' | 'large'
+type buttontheme = 'primary' | 'secondary' | 'default'
 
 export interface ButtonProps {
   onClick: ((e: any) => void) | ((e: any) => Promise<void>),
@@ -44,6 +46,7 @@ export interface ButtonProps {
   width?: number,
   disabled?: boolean,
   size?: ButtonSize,
+  color?: buttontheme
 }
 
 export interface LinkButtonProps {
@@ -79,20 +82,18 @@ export interface Homework {
 }
 
 export interface Week {
-  id: string
   content: string
 }
 
 export interface Month {
-  id: string
-  weeks: {
-    week: Week[]
-  }
+  days: {
+    content: string
+  }[]
 }
 
 export interface Curriculum {
   months: {
-    month: Month[]
+    month: Month[],
   }
 }
 

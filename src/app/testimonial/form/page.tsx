@@ -2,8 +2,7 @@
 
 import { useEffect, useState, useCallback } from 'react'
 import Button from '@/app/components/Button'
-
-import styled from 'styled-components'
+import { FormStyle } from '@/app/styles/styles'
 
 import { TestimonialProps } from '@/types/types'
 
@@ -11,58 +10,6 @@ import { useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react'
 import { db } from "@/firebase/config"
 import { collection, addDoc } from 'firebase/firestore'
-
-const FormStyle = styled.div`
-  display: flex;
-  flex-direction: column;
-  background-color: #eee;
-  padding: 24px;
-
-  .form-title {
-    margin-bottom: 24px;
-  }
-
-  .input-container {
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 24px;
-
-    label {
-      margin-bottom: 8px;
-    }
-
-    input[type=text] {
-      height: 40px;
-      border-radius: 8px;
-      padding-left: 8px;
-      outline: none;
-      border: 0;
-
-      &:focus {
-        border: 1px solid var(--primary-green);
-      }
-    }
-
-    .input-error {
-      margin-top: 8px;
-      color: red;
-      font-size: 12px;
-      height: 12px;
-    }
-
-    textarea {
-      height: 200px;
-      border-radius: 8px;
-      padding: 8px;
-      outline: none;
-      border: 0;
-
-      &:focus {
-        border: 1px solid var(--primary-green);
-      }
-    }
-  }
-`
 
 // form 로직 분리하기
 export default function TestimonialForm() {
@@ -72,7 +19,8 @@ export default function TestimonialForm() {
   const [testimonials, setTestimonials] = useState<TestimonialProps>({
     by: '',
     content: '',
-    id: ''
+    id: '',
+    createdAt: new Date()
   })
 
   const [errors, setErrors] = useState({
@@ -156,9 +104,10 @@ export default function TestimonialForm() {
     const newTestimonial: TestimonialProps = {
       by: testimonials.by,
       content: testimonials.content,
-      id: session?.user?.userId as string
+      id: session?.user?.userId as string,
+      createdAt: new Date()
     }
-
+    
     await addDoc(collection(db, 'testimonials'), newTestimonial).then(() => {
       setLoading(false)
       alert('후기 등록 완료!')
