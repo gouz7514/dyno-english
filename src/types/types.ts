@@ -56,12 +56,11 @@ export interface LinkButtonProps {
 }
 
 export interface UserProps {
-  name: string,
   phone: string,
-  kid: {
+  kids: {
     name: string,
     birth: string
-  }
+  }[] | [],
 }
 
 export interface Datetime {

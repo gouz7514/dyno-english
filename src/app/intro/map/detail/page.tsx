@@ -19,6 +19,7 @@ const SwiperStyleRoot = styled.div`
   height: calc(100vh - var(--height-header) - var(--height-footer));
   min-height: calc(100vh - var(--height-header) - var(--height-footer));
   position: relative;
+  align-items: center;
 
   .swiper-button-prev {
     width: 20px;
@@ -60,10 +61,6 @@ const SwiperStyleRoot = styled.div`
       &-bullet {
         background-color: var(--primary-green);
       }
-    }
-
-    @media screen and (min-width: 600px) {
-      margin-top: 200px;
     }
   }
 

@@ -2,7 +2,7 @@
 
 import { useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 
 import { db } from '@/firebase/config'
 import { getDocs, collection } from 'firebase/firestore'
@@ -46,9 +46,41 @@ const TesitmonialPage = styled.div`
 `
 
 const TestimonialSwiper = styled.div`
+  position: relative;
+
+  .swiper-button-prev {
+    width: 20px;
+    height: 35px;
+    background-image: url('/icon/icon-arrow-left.png');
+    background-size: 20px 35px;
+    background-position: center;
+    background-repeat: no-repeat;
+    left: -18px;
+  }
+
+  .swiper-button-next {
+    width: 20px;
+    height: 35px;
+    background-image: url('/icon/icon-arrow-right.png');
+    background-size: 20px 35px;
+    background-position: center;
+    background-repeat: no-repeat;
+    right: -18px;
+  }
+
+  .swiper-button-next,
+  .swiper-button-prev {
+    position: absolute;
+
+    &::after {
+      display: none;
+    }
+  }
+
   .swiper {
     position: relative;
     padding-bottom: 36px;
+    margin: 0 4px;
 
     .swiper-slide {
       padding: 4px;
@@ -101,6 +133,7 @@ export default function IntroTestimonial() {
   const [loading, setLoading] = useState<boolean>(true)
   const [swiperCnt, setSwiperCnt] = useState<number>(1)
   const { data: session, status } = useSession()
+  const swiperRef = useRef<SwiperCore>()
   
   const router = useRouter()
 
@@ -173,6 +206,8 @@ export default function IntroTestimonial() {
           ) :
           (
             <TestimonialSwiper>
+              <div className='swiper-button-prev' onClick={() => swiperRef.current?.slidePrev()} />
+              <div className='swiper-button-next' onClick={() => swiperRef.current?.slideNext()} />
               <Swiper
                 slidesPerView={swiperCnt}
                 spaceBetween={12}
@@ -180,6 +215,13 @@ export default function IntroTestimonial() {
                   clickable: true
                 }}
                 loop={true}
+                // autoplay={{
+                //   delay: 3000,
+                //   disableOnInteraction: false
+                // }}
+                onBeforeInit={(swiper: SwiperCore) => {
+                  swiperRef.current = swiper
+                }}
               >
                 {
                   testimonials.map((testimonial, index) => (

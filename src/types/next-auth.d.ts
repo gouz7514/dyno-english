@@ -1,5 +1,5 @@
 import NextAuth from "next-auth"
-import { ClassInfo, ClassDetails } from './types'
+import { ClassInfo, ClassDetails, Datetime } from './types'
 
 declare module "next-auth" {
   interface Session {
@@ -7,7 +7,10 @@ declare module "next-auth" {
       name: string,
       userId: string,
       isStaff: boolean,
-      kidName: string,
+      kids: {
+        name: string,
+        birth: string
+      }[],
       testimonialAvailable: boolean,
     },
     classInfo: ClassInfo,

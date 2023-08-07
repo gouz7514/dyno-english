@@ -139,7 +139,7 @@ export default function ProfilePage() {
           <div className='profile-container'>
             <div className="profile-title">
               <div className="profile-username">
-                { session?.user.kidName ? `${session?.user.kidName} 학부모님` : `${session?.user.name} 님` }
+                { session?.user.kids.length ? `${session?.user.kids.map(kid => kid.name).join(', ')} 학부모님` : `${session?.user.name} 님` }
               </div>
               <Link href='/profile/account' className='profile-setting' />
             </div>
