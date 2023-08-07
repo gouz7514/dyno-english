@@ -34,7 +34,6 @@ const ModalStyle = styled.div`
 
   .modal-container {
     max-width: 500px;
-    height: 500px;
     min-width: 300px;
     width: 100%;
     background-color: #fff;
@@ -52,6 +51,19 @@ const ModalStyle = styled.div`
         display: flex;
         flex-direction: column;
         margin-bottom: 16px;
+        
+        select {
+          width: 100%;
+          height: 40px;
+          border-radius: 8px;
+          border: 1px solid #ddd;
+          padding: 0 8px;
+          appearance: none;
+          background-image: url('/icon/icon-arrow-down.webp');
+          background-repeat: no-repeat;
+          background-position: right 8px center;
+          background-size: 12px 12px;
+        }
 
         h3 {
           margin-bottom: 8px;
@@ -60,6 +72,7 @@ const ModalStyle = styled.div`
         .modal-item-flex {
           display: flex;
           justify-content: space-between;
+          gap: 12px;
 
           .modal-item-flex-item {
             flex: 1;
@@ -83,18 +96,25 @@ type ModalProps = {
   isOpen: boolean
   onClose: (message?: string) => void
   currentUser: DocumentData
-  currentClass: string
+  currentClassId: string
+  allClass: DocumentData[]
 }
 
-export default function Modal({ isOpen, onClose, currentUser, currentClass }: ModalProps) {
+export default function Modal({ isOpen, onClose, currentUser, currentClassId, allClass }: ModalProps) {
   const modalRef = useRef<HTMLDivElement>(null)
   const [toggleValue, setToggleValue] = useState<boolean>(currentUser.testimonialAvailable)
+  const [selectedClass, setSelectedClass] = useState('')
+
+  const handleChangeSelect = (e: any) => {
+    setSelectedClass(e.target.value)
+  }
 
   const handleToggleChange = (isChecked: boolean) => {
     setToggleValue(isChecked)
   }
 
   useEffect(() => {
+    setSelectedClass(currentClassId)
     const handleOutsideClick = (e: MouseEvent) => {
       if (modalRef.current && !modalRef.current.contains(e.target as Node)) {
         onClose()
@@ -114,7 +134,10 @@ export default function Modal({ isOpen, onClose, currentUser, currentClass }: Mo
   const onSubmit = async () => {
     try {
       await updateDoc(doc(db, 'users', currentUser.id), {
-        testimonialAvailable: toggleValue
+        testimonialAvailable: toggleValue,
+        class: {
+          id: selectedClass
+        }
       })
       
       alert('수정되었습니다')
@@ -151,46 +174,65 @@ export default function Modal({ isOpen, onClose, currentUser, currentClass }: Mo
                 수업명
               </h3>
               <div className="modal-item-content">
-                { currentClass }
+                <select value={selectedClass} onChange={handleChangeSelect}>
+                  {
+                    allClass.map((cls) => (
+                      <option value={cls.id} key={cls.id}>
+                        { cls.name }
+                      </option>
+                    ))
+                  }
+                </select>
               </div>
             </div>
             <div className="modal-item">
               <h3>
                 아이 정보
               </h3>
-              <div className="modal-item-flex">
-                <div className="modal-item-flex-item">
-                  <h4>
-                    이름
-                  </h4>
-                  {
-                    currentUser.kid && currentUser.kid.name ? (
-                      <div className="modal-item-content">
-                        { currentUser.kid.name }
+              <div className={ `modal-item-flex ${currentUser.kids && currentUser.kids.length > 0 ? 'flex-column' : ''}` }>
+                {
+                  currentUser.kids && currentUser.kids.length ? (
+                  currentUser.kids.map((kid: any, idx: number) => (
+                    <div className='modal-kid-item d-flex' key={idx}>
+                      <div className="modal-item-flex-item" key={`name-${idx}`}>
+                        <h4>
+                          이름
+                        </h4>
+                        <div className="modal-item-content">
+                          { kid.name }
+                        </div>
                       </div>
-                    ) : (
-                      <div className='modal-item-content'>
-                        정보가 없습니다
+                      <div className="modal-item-flex-item" key={`birth-${idx}`}>
+                        <h4>
+                          생년월일
+                        </h4>
+                        <div className="modal-item-content">
+                          { kid.birth }
+                        </div>
                       </div>
-                    )
-                  }
-                </div>
-                <div className="modal-item-flex-item">
-                  <h4>
-                    생년월일
-                  </h4>
-                  {
-                    currentUser.kid && currentUser.kid.birth ? (
-                      <div className="modal-item-content">
-                        { currentUser.kid.birth }
+                    </div>
+                  ))
+                  ) : (
+                    <>
+                      <div className="modal-item-flex-item">
+                        <h4>
+                          이름
+                        </h4>
+                        <div className="modal-item-content">
+                          정보가 없습니다
+                        </div>
                       </div>
-                    ) : (
-                      <div className='modal-item-content'>
-                        정보가 없습니다
+                      <div className="modal-item-flex-item">
+                        <h4>
+                          생년월일
+                        </h4>
+                        <div className="modal-item-content">
+                          정보가 없습니다
+                        </div>
                       </div>
-                    )
-                  }
-                </div>
+                    </>
+                  )
+                }
               </div>
             </div>
             <div className="modal-item">

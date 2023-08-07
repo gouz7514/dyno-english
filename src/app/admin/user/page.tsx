@@ -183,13 +183,13 @@ export default function AdminUser() {
                           }
                         </td>
                         <td>
-                          {user.kid.name}
+                          { user.kids.length ? user.kids[0].name : '' }
                         </td>
                         <td>
-                          {user.kid.birth}
+                          { user.kids.length ? user.kids[0].birth : '' }
                         </td>
                         <td>
-                          {user.testimonialAvailable ? '가능' : '불가능'}
+                          { user.testimonialAvailable ? '가능' : '불가능' }
                         </td>
                       </tr>
                     )
@@ -205,7 +205,8 @@ export default function AdminUser() {
         isOpen={isModalOpen}
         onClose={handleModalClose}
         currentUser={currentUser}
-        currentClass={currentUser.class ? getClassName(currentUser.class.id) : ''}
+        currentClassId={currentUser.class ? currentUser.class.id : ''}
+        allClass={dynoClass}
       />
     </AdminUserStyle>
   )

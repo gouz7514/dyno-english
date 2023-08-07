@@ -104,7 +104,7 @@ h1 {
   display: flex;
 }
 
-.d-fklex.flex-column {
+.flex-column {
   flex-direction: column;
 }
 
