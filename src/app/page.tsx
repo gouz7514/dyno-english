@@ -159,7 +159,7 @@ export default function Home() {
     <main>
       <div>
         <MainStyle className="main-container">
-          <div className='d-flex flex-column relative justify-content-center'>
+          <div className='d-flex flex-column relative justify-content-center align-items-center'>
             <div className="main-image">
               <div
                 ref={imgDynoRef}
