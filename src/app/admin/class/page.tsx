@@ -9,6 +9,7 @@ import { getDocs, collection, DocumentData } from 'firebase/firestore'
 
 import Skeleton from '@/app/components/Skeleton'
 import LinkButton from '@/app/components/LinkButton'
+import ClassItem from '@/app/components/Molecule/ClassItem'
 
 const AdminClassStyle = styled.div`
   max-width: 1024px;
@@ -22,28 +23,15 @@ const AdminClassStyle = styled.div`
     display: flex;
     flex-wrap: wrap;
     gap: 12px;
-  }
-
-  .content-item {
-    border-radius: 12px;
-    width: 200px;
-    height: 200px;
-    box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: var(--primary-green);
-    color: white;
-    font-weight: 900;
-    font-size: 24px;
-    cursor: pointer;
-    margin-top: 40px;
-
-    &:hover {
-      transform: scale(1.05);
-    }
+    margin-top: 24px;
   }
 `
+
+/*
+  TODO List
+  1. 수업 클릭 시 해당 수업 정보 보이기 (커리큘럼, 과제, 수업 내용)
+  2. 수업 내용 및 과제 추가 form
+*/
 
 export default function AdminClass() {
   const [classList, setClassList] = useState<DocumentData[]>([])
@@ -52,7 +40,14 @@ export default function AdminClass() {
   const getClass = async () => {
     const classRef = collection(db, 'class')
     const classSnapshot = await getDocs(classRef)
-    const classList = classSnapshot.docs.map(doc => doc.data())
+    const classList = classSnapshot.docs.map(doc => {
+      const docData = {
+        id: doc.id,
+        name: doc.data().name
+      }
+
+      return docData
+    })
 
     setClassList(classList)
     setLoading(false)
@@ -78,11 +73,11 @@ export default function AdminClass() {
             <div className='content-container'>
               {
                 classList.map((classItem, index) => (
-                  <div key={index} className='content-item'>
-                    <div className="content-name">
-                      { classItem.name }
-                    </div>
-                  </div>
+                  <ClassItem
+                    key={index}
+                    href={`/admin/class/${classItem.id}`}
+                    classItem={classItem}
+                  />
                 ))
               }
             </div>
