@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 
 import { useRouter } from 'next/navigation'
 import { db } from '@/firebase/config'
-import { addDoc, collection, DocumentData } from 'firebase/firestore'
+import { addDoc, collection, setDoc, doc, updateDoc } from 'firebase/firestore'
 
 import Button from '@/app/components/Button'
 import ButtonDelete from '@/app/components/Molecule/ButtonDelete'
@@ -17,8 +17,8 @@ const AdminClassFormStyle = styled.div`
   }
 
   .dynamic-input-container {
-    height: 500px;
-    max-height: 500px;
+    height: 400px;
+    max-height: 400px;
     overflow-y: scroll;
     overflow-x: hidden;
     margin-bottom: 40px;
@@ -28,7 +28,7 @@ const AdminClassFormStyle = styled.div`
     }
 
     .dynamic-month-container {
-      margin-bottom: 20px;
+      margin: 12px 0 24px 0;
 
       .dynamic-month-indicator {
         display: flex;
@@ -148,12 +148,34 @@ const AdminClassForm = React.memo(() => {
 
     setLoading(true)
 
-    await addDoc(collection(db, 'class'), {
+    // 수업을 추가하고 나면 id 생성
+    // 생성된 id를 기반으로 class_homework, class_notice 문서 생성
+    const addClass = await addDoc(collection(db, 'class'), {
       name: className,
       curriculum: formattedCurriculum
+    })
+
+    const classId = addClass.id
+
+    const setClassHomework = setDoc(doc(db, 'class_homework', classId), {
+      homeworks: []
+    })
+
+    const setClassNotice = setDoc(doc(db, 'class_notice', classId), {
+      notices: []
+    })
+
+    await Promise.all([setClassHomework, setClassNotice])
+
+    const classHomework = doc(db, 'class_homework', classId)
+    const classNotice = doc(db, 'class_notice', classId)
+
+    await updateDoc(doc(db, 'class', classId), {
+      homework: classHomework,
+      notice: classNotice
     }).then(() => {
       setLoading(false)
-      alert('수업 정보가 추가되었습니다') 
+      alert('수업 정보가 추가되었습니다')
       router.push('/admin/class')
     })
   }
@@ -173,6 +195,12 @@ const AdminClassForm = React.memo(() => {
         </div>
         <div className="dynamic-input-container">
           <div className="input-indicator">커리큘럼</div>
+          <Button
+            size='small'
+            onClick={addMonth}
+          >
+            수업 월 추가하기
+          </Button>
           {
             curriculums.map((curriculum, monthIdx) => (
               <div key={monthIdx} className='dynamic-month-container'>
@@ -218,12 +246,6 @@ const AdminClassForm = React.memo(() => {
               </div>
             ))
           }
-          <Button
-            size='small'
-            onClick={addMonth}
-          >
-            수업 월 추가하기
-          </Button>
         </div>
         <Button
           onClick={handleSubmit}
