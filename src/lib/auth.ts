@@ -6,7 +6,7 @@ import { auth as firebaseAuth, db } from "@/firebase/config"
 import { signInWithCustomToken } from "firebase/auth"
 import { doc, getDoc, setDoc, DocumentSnapshot } from "firebase/firestore"
 
-import { ClassDetail, ClassHomeworks, ClassNotices, Datetime, Notice, Homework } from "@/types/types"
+import { ClassDetail, ClassHomeworks, ClassNotices, Notice, Homework } from "@/types/types"
 
 const kakaoCustomProvider = KakaoProvider({
   clientId: process.env.KAKAO_CLIENT_ID as string,
@@ -151,16 +151,15 @@ export const authOptions: NextAuthOptions = {
 
             combinedData.forEach((item) => {
               const { date, type, content } = item
-              const dateString = new Date(date.seconds * 1000).toISOString().slice(0, 10);
             
-              if (!classDetails[dateString]) {
-                classDetails[dateString] = { date: dateString, homework: '', notice: '' };
+              if (!classDetails[date]) {
+                classDetails[date] = { date: date, homework: '', notice: '' };
               }
 
               if (type === 'notice') {
-                classDetails[dateString].notice = content
+                classDetails[date].notice = content
               } else if (type === 'homework') {
-                classDetails[dateString].homework = content
+                classDetails[date].homework = content
               }
             })
 

@@ -63,19 +63,14 @@ export interface UserProps {
   }[] | [],
 }
 
-export interface Datetime {
-  seconds: number
-  nanoseconds: number
-}
-
 export interface Notice {
-  date: Datetime
+  date: string
   type: string
   content: string
 }
 
 export interface Homework {
-  date: Datetime
+  date: string
   type: string
   content: string
 }
@@ -104,10 +99,7 @@ export interface ClassInfo {
 
 export interface ClassItem {
   content: string;
-  date: {
-    seconds: number;
-    nanoseconds: number;
-  }
+  date: string
 }
 
 export interface ClassHomeworks {
