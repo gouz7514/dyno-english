@@ -103,7 +103,7 @@ type ModalProps = {
 export default function Modal({ isOpen, onClose, currentUser, currentClassId, allClass }: ModalProps) {
   const modalRef = useRef<HTMLDivElement>(null)
   const [toggleValue, setToggleValue] = useState<boolean>(currentUser.testimonialAvailable)
-  const [selectedClass, setSelectedClass] = useState('')
+  const [selectedClass, setSelectedClass] = useState(currentClassId)
 
   const handleChangeSelect = (e: any) => {
     setSelectedClass(e.target.value)
@@ -129,7 +129,7 @@ export default function Modal({ isOpen, onClose, currentUser, currentClassId, al
       window.removeEventListener('mousedown', handleOutsideClick)
     }
 
-  }, [onClose, isOpen])
+  }, [onClose, isOpen, currentClassId])
 
   const onSubmit = async () => {
     try {
