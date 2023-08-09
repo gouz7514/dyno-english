@@ -6,7 +6,7 @@ import { useSession } from 'next-auth/react'
 import styled from 'styled-components'
 
 import Button from '@/app/components/Button'
-import ImageButton from '@/app/components/Molecule/ImageButton'
+import ImageButton from '@/app/components/Atom/Button/ImageButton'
 
 import { UserProps } from '@/types/types'
 
