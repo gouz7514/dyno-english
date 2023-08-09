@@ -1,5 +1,6 @@
 'use client'
 
+import { useParams } from 'next/navigation'
 import styled from 'styled-components'
 import { useEffect, useState } from "react"
 
@@ -11,6 +12,7 @@ import ImageButton from '@/app/components/Atom/Button/ImageButton'
 import Button from '@/app/components/Button'
 import Modal from '@/app/components/Organism/Modal'
 import Input from '@/app/components/Atom/Input/Input'
+import IsStaff from '@/app/components/Template/IsStaff'
 
 import { convertDate } from '@/lib/utils/date'
 
@@ -136,7 +138,7 @@ interface AdminClassDetailProps {
   curriculum: Object
 }
 
-export default function ClassDetail({ params }: { params: { id: string } }) {
+function ClassDetailContent({ params }: { params: { id: string } }) {
   // 과제 편집 모드
   const [homeworkEditMode, setHomeworkEditMode] = useState<boolean[]>([])
   // 공지사항 편집 모드
@@ -662,5 +664,18 @@ export default function ClassDetail({ params }: { params: { id: string } }) {
         </div>
       </section>
     </ClassDetailStyle>
+  )
+}
+
+export default function AdminClassDetailPage() {
+  const params = useParams()
+  const pageParams = {
+    id: params.id
+  }
+
+  return (
+    <IsStaff>
+      <ClassDetailContent params={pageParams} />
+    </IsStaff>
   )
 }

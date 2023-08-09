@@ -2,11 +2,8 @@
 
 import styled from 'styled-components'
 
-import { useSession } from 'next-auth/react'
-import { useRouter } from'next/navigation'
-
-import Skeleton from '../components/Skeleton'
-import ListItem from '../components/ListItem'
+import ListItem from '@/app/components/Atom/ListItem'
+import IsStaff from '@/app/components/Template/IsStaff'
 
 const AdminContainer = styled.div`
   .admin-title {
@@ -16,52 +13,24 @@ const AdminContainer = styled.div`
   }
 `
 
-function IsStaff() {
-  const { data: session, status } = useSession()
-  const router = useRouter()
-
-  if (status !== 'loading') {
-    if (!session) {
-      alert('로그인이 필요합니다')
-      router.push('/login')
-      return
-    }
-    if (!session.user.isStaff) {
-      return (
-        <div>
-          접근 권한이 없습니다.
-        </div>
-      )
-    }
-  }
-
+function AdminContent() {
   return (
-    <div className='container'>
-      {
-        status === 'loading' ? (
-          <div>
-            <Skeleton />
-          </div>
-        ) : (
-          <AdminContainer>
-            <div className="admin-title">
-              관리자 페이지
-            </div>
-            <div className="admin-item-container">
-              <ListItem title="회원 관리" href="/admin/user" />
-              <ListItem title="수업 관리" href="/admin/class" />
-            </div>
-          </AdminContainer>
-        )
-      }
-    </div>
+    <AdminContainer className='container'>
+      <div className="admin-title">
+        관리자 페이지
+      </div>
+      <div className="admin-item-container">
+        <ListItem title="회원 관리" href="/admin/user" />
+        <ListItem title="수업 관리" href="/admin/class" />
+      </div>
+    </AdminContainer>
   )
 }
 
 export default function AdminPage() {
   return (
-    <div>
-      <IsStaff />
-    </div>
+    <IsStaff>
+      <AdminContent />
+    </IsStaff>
   )
 }

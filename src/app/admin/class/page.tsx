@@ -10,6 +10,7 @@ import { getDocs, collection, DocumentData } from 'firebase/firestore'
 import Skeleton from '@/app/components/Skeleton'
 import LinkButton from '@/app/components/LinkButton'
 import ClassItem from '@/app/components/Molecule/ClassItem'
+import IsStaff from '@/app/components/Template/IsStaff'
 
 const AdminClassStyle = styled.div`
   max-width: 1024px;
@@ -33,7 +34,7 @@ const AdminClassStyle = styled.div`
   2. 수업 내용 및 과제 추가 form
 */
 
-export default function AdminClass() {
+function AdminClassContent() {
   const [classList, setClassList] = useState<DocumentData[]>([])
   const [loading, setLoading] = useState(true)
 
@@ -85,5 +86,13 @@ export default function AdminClass() {
         )
       }
     </AdminClassStyle>
+  )
+}
+
+export default function AdminClassPage() {
+  return (
+    <IsStaff>
+      <AdminClassContent />
+    </IsStaff>
   )
 }

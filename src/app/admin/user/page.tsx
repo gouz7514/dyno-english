@@ -9,6 +9,7 @@ import { getDocs, collection, DocumentData } from 'firebase/firestore'
 
 import Skeleton from '@/app/components/Skeleton'
 import ModalUser from '@/app/components/Modal/ModalUser'
+import IsStaff from '@/app/components/Template/IsStaff'
 
 const AdminUserStyle = styled.div`
   max-width: 1024px;
@@ -53,7 +54,7 @@ const AdminUserStyle = styled.div`
   }
 `
 
-export default function AdminUser() {
+function AdminUserContent() {
   const [users, setUsers] = useState<DocumentData[]>([])
   const [dynoClass, setDynoClass] = useState<DocumentData[]>([])
   const [loading, setLoading] = useState(true)
@@ -107,11 +108,6 @@ export default function AdminUser() {
     if (message === 'UPDATED') {
       setIsUpdated(true)
     }
-  }
-
-  const getClassName = function(classId: string) {
-    const className = dynoClass.filter((cls) => cls.id === classId)
-    return className[0].name
   }
 
   return (
@@ -209,5 +205,13 @@ export default function AdminUser() {
         allClass={dynoClass}
       />
     </AdminUserStyle>
+  )
+}
+
+export default function AdminUser() {
+  return (
+    <IsStaff>
+      <AdminUserContent />
+    </IsStaff>
   )
 }

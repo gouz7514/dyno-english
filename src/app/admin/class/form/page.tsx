@@ -2,8 +2,9 @@
 
 import AdminClassForm from '@/app/components/Organism/AdminClassForm'
 import { FormStyle } from '@/app/styles/styles'
+import IsStaff from '@/app/components/Template/IsStaff'
 
-export default function AdminClassFormPage() {
+function AdminClassFormContent() {
   return (
     <FormStyle className='container'>
       <div className="form-title">
@@ -13,5 +14,13 @@ export default function AdminClassFormPage() {
       </div>
       <AdminClassForm />
     </FormStyle>
+  )
+}
+
+export default function AdminClassFormPage() {
+  return (
+    <IsStaff>
+      <AdminClassFormContent />
+    </IsStaff>
   )
 }
