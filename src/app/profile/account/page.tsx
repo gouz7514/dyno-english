@@ -404,7 +404,10 @@ export default function ProfilePage() {
                       <div className='profile-item-title'>학생 이름</div>
                       {
                         user.kids.length > 1 && (
-                          <ImageButton onClick={(e) => removeKid(idx, e)} />
+                          <ImageButton
+                            onClick={(e) => removeKid(idx, e)}
+                            role='delete'
+                          />
                         )
                       }
                     </div>

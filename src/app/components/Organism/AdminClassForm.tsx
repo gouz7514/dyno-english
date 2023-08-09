@@ -210,7 +210,10 @@ const AdminClassForm = React.memo(() => {
                   />
                   {
                     curriculums.length > 1 && (
-                      <ImageButton onClick={(e) => removeMonth(monthIdx, e)} />
+                      <ImageButton
+                        onClick={(e) => removeMonth(monthIdx, e)}
+                        role='delete'
+                      />
                     )
                   }
                 </div>
@@ -229,7 +232,10 @@ const AdminClassForm = React.memo(() => {
                           />
                           {
                             curriculum.days.length > 1 && (
-                              <ImageButton onClick={(e) => removeWeek(monthIdx, dayIdx, e)} />
+                              <ImageButton
+                                onClick={(e) => removeWeek(monthIdx, dayIdx, e)}
+                                role='delete'
+                              />
                             )
                           }
                         </div>

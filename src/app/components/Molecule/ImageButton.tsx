@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 
-const StyleImageButton = styled.button<IImageButtonProps>`
+const StyleImageButton = styled.button<ImageButtonProps>`
   border: none;
   background-image: ${({ role }) => role === 'edit' ? 'url(/icon/icon-edit.webp)' : 'url(/icon/icon-delete.webp)'};
   width: 24px;
@@ -15,12 +15,14 @@ const StyleImageButton = styled.button<IImageButtonProps>`
   }
 `
 
-interface IImageButtonProps {
+type ImageButtonRole = 'edit' | 'delete'
+
+interface ImageButtonProps {
   onClick: (e: any) => void
-  role?: 'edit' | 'delete'
+  role: ImageButtonRole
 }
 
-export default function ImageButton({ onClick, role = 'delete' }: IImageButtonProps) {
+export default function ImageButton({ onClick, role = 'delete' }: ImageButtonProps) {
   return (
     <StyleImageButton onClick={onClick} role={role}>
     </StyleImageButton>
