@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react'
 import Link from 'next/link'
@@ -9,6 +9,8 @@ import styled from 'styled-components'
 import Skeleton from '@/app/components/Skeleton'
 import CurriculumMonth from '@/app/components/CurriculumMonth'
 import EmptyState from '@/app/components/Molecule/EmptyState'
+
+import { convertDate } from '@/lib/utils/date'
 
 import { Swiper, SwiperSlide } from 'swiper/react'
 import SwiperCore, { Pagination } from "swiper"
@@ -118,12 +120,6 @@ export default function ProfilePage() {
       }
     }
   }, [session, router, status])
-
-  const convertDate = function(date: string) {
-    const [_year, month, day] = date.split('-')
-
-    return `${month}월 ${day}일`
-  }
 
   const onClickToggle = function(curriculumRef: React.RefObject<HTMLDivElement>) {
     if (!curriculumRef.current) return
