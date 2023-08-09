@@ -5,7 +5,7 @@ import { db } from '@/firebase/config'
 import { addDoc, collection, setDoc, doc, updateDoc } from 'firebase/firestore'
 
 import Button from '@/app/components/Button'
-import ButtonDelete from '@/app/components/Molecule/ButtonDelete'
+import ImageButton from '@/app/components/Molecule/ImageButton'
 import Badge from '@/app/components/Molecule/Badge'
 
 import styled from 'styled-components'
@@ -210,7 +210,7 @@ const AdminClassForm = React.memo(() => {
                   />
                   {
                     curriculums.length > 1 && (
-                      <ButtonDelete onClick={(e) => removeMonth(monthIdx, e)} />
+                      <ImageButton onClick={(e) => removeMonth(monthIdx, e)} />
                     )
                   }
                 </div>
@@ -229,7 +229,7 @@ const AdminClassForm = React.memo(() => {
                           />
                           {
                             curriculum.days.length > 1 && (
-                              <ButtonDelete onClick={(e) => removeWeek(monthIdx, dayIdx, e)} />
+                              <ImageButton onClick={(e) => removeWeek(monthIdx, dayIdx, e)} />
                             )
                           }
                         </div>

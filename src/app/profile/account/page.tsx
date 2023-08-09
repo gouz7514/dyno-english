@@ -6,7 +6,7 @@ import { useSession } from 'next-auth/react'
 import styled from 'styled-components'
 
 import Button from '@/app/components/Button'
-import ButtonDelete from '@/app/components/Molecule/ButtonDelete'
+import ImageButton from '@/app/components/Molecule/ImageButton'
 
 import { UserProps } from '@/types/types'
 
@@ -404,7 +404,7 @@ export default function ProfilePage() {
                       <div className='profile-item-title'>학생 이름</div>
                       {
                         user.kids.length > 1 && (
-                          <ButtonDelete onClick={(e) => removeKid(idx, e)} />
+                          <ImageButton onClick={(e) => removeKid(idx, e)} />
                         )
                       }
                     </div>
