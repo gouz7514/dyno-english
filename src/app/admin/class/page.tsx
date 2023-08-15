@@ -9,7 +9,7 @@ import { getDocs, collection, DocumentData } from 'firebase/firestore'
 
 import Skeleton from '@/app/components/Skeleton'
 import LinkButton from '@/app/components/LinkButton'
-import CardItem from '@/app/components/Molecule/CardItem'
+import CardItem from '@/app/components/Atom/CardItem'
 import IsStaff from '@/app/components/Template/IsStaff'
 
 const AdminClassStyle = styled.div`
