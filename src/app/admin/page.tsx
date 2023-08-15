@@ -22,6 +22,7 @@ function AdminContent() {
       <div className="admin-item-container">
         <ListItem title="회원 관리" href="/admin/user" />
         <ListItem title="수업 관리" href="/admin/class" />
+        <ListItem title="커리큘럼 관리" href="/admin/curriculum" />
       </div>
     </AdminContainer>
   )

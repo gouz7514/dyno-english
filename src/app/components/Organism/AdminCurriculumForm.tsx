@@ -1,8 +1,8 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
-import { useRouter } from 'next/navigation'
+import { useRouter, useParams } from 'next/navigation'
 import { db } from '@/firebase/config'
-import { addDoc, collection, setDoc, doc, updateDoc } from 'firebase/firestore'
+import { addDoc, collection, getDoc, deleteDoc, doc, updateDoc } from 'firebase/firestore'
 
 import Button from '@/app/components/Button'
 import ImageButton from '@/app/components/Atom/Button/ImageButton'
@@ -70,9 +70,24 @@ const AdminCurriculumFormStyle = styled.div`
       }
     }
   }
+
+  .button-container {
+    display: flex;
+    gap: 12px;
+  }
 `
 
-export default function AdminCurriculumForm() {
+type AdminCurriculumFormProps = {
+  isEdit?: boolean
+}
+/*
+  isEdit이 true인 경우 수정 액션
+  커리큘럼 이름 가져오기
+  커리큘럼 정보 가져오기
+  제출 동작 바꾸기
+*/
+export default function AdminCurriculumForm({ isEdit }: AdminCurriculumFormProps) {
+  const params = useParams()
   const router = useRouter()
   const [curriculumName, setCurriculumName] = useState('')
   const [loading, setLoading] = useState<boolean>(false)
@@ -80,6 +95,39 @@ export default function AdminCurriculumForm() {
   const [curriculums, setCurriculums] = useState<{ name: string; days: string[] }[]>([
     { name: 'Month 1', days: [''] },
   ])
+
+  useEffect(() => {
+    if (isEdit) {
+      getCurriculumInfo()
+    }
+  }, [])
+
+  const getCurriculumInfo = async () => {
+    const curriculumRef = doc(db, 'class_curriculum', params.id)
+    const curriculumSnap = await getDoc(curriculumRef)
+
+    if (!curriculumSnap.exists()) {
+      alert('커리큘럼 정보를 불러올 수 없습니다')
+      router.replace('/admin/curriculum')
+      return
+    } else {
+      const curriculumData = curriculumSnap.data()
+      setCurriculumName(curriculumData.name)
+
+      const initialCurriculums = curriculumData.curriculum.months.month.map((month: any, index: number) => {
+        const curriculumMonth = {
+          name : `Month ${index + 1}`,
+          days : month.days.map((day: any) => {
+            return day.content
+          })
+        }
+
+        return curriculumMonth
+      })
+
+      setCurriculums(initialCurriculums)
+    }
+  }
 
   const onChangeCurriculumName = (e: any) => {
     const { name, value } = e.target
@@ -145,7 +193,27 @@ export default function AdminCurriculumForm() {
 
     setLoading(true)
 
-    // 커리큘럼 추가
+    if (isEdit) {
+      await updateCurriculum(formattedCurriculum)
+    } else {
+      await addNewCurriculum(formattedCurriculum)
+    }
+  }
+
+  // 커리큘럼 수정
+  const updateCurriculum = async (formattedCurriculum: any) => {
+    await updateDoc(doc(db, 'class_curriculum', params.id), {
+      name: curriculumName,
+      curriculum: formattedCurriculum
+    }).then(() => {
+      setLoading(false)
+      alert('커리큘럼이 수정되었습니다')
+      router.push('/admin/curriculum')
+    })
+  }
+
+  // 커리큘럼 추가
+  const addNewCurriculum = async (formattedCurriculum: any) => {
     await addDoc(collection(db, 'class_curriculum'), {
       name: curriculumName,
       curriculum: formattedCurriculum
@@ -154,6 +222,19 @@ export default function AdminCurriculumForm() {
       alert('커리큘럼이 추가되었습니다')
       router.push('/admin/curriculum')
     })
+  }
+
+  // 커리큘럼 삭제
+  const handleDelete = async (e: any) => {
+    e.preventDefault()
+
+    if (confirm('정말로 커리큘럼을 삭제하시겠습니까?')) {
+      setLoading(true)
+      await deleteDoc(doc(db, 'class_curriculum', params.id))
+      setLoading(false)
+      alert('커리큘럼이 삭제되었습니다')
+      router.push('/admin/curriculum')
+    }
   }
 
   return (
@@ -230,12 +311,25 @@ export default function AdminCurriculumForm() {
             ))
           }
         </div>
-        <Button
-          onClick={handleSubmit}
-          disabled={curriculumName === '' || loading}
-        >
-          저장하기
-        </Button>
+        <div className="button-container">
+          <Button
+            onClick={handleSubmit}
+            disabled={curriculumName === '' || loading}
+          >
+            { isEdit ? '수정하기' : '추가하기' }
+          </Button>
+          {
+            isEdit && (
+              <Button
+                color='danger'
+                onClick={handleDelete}
+                disabled={loading}
+              >
+                삭제하기
+              </Button>
+            )
+          }
+        </div>
       </AdminCurriculumFormStyle>
     </form>
   )
