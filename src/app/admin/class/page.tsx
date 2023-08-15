@@ -9,7 +9,7 @@ import { getDocs, collection, DocumentData } from 'firebase/firestore'
 
 import Skeleton from '@/app/components/Skeleton'
 import LinkButton from '@/app/components/LinkButton'
-import ClassItem from '@/app/components/Molecule/ClassItem'
+import CardItem from '@/app/components/Molecule/CardItem'
 import IsStaff from '@/app/components/Template/IsStaff'
 
 const AdminClassStyle = styled.div`
@@ -74,10 +74,10 @@ function AdminClassContent() {
             <div className='content-container'>
               {
                 classList.map((classItem, index) => (
-                  <ClassItem
+                  <CardItem
                     key={index}
                     href={`/admin/class/${classItem.id}`}
-                    classItem={classItem}
+                    cardItem={classItem}
                   />
                 ))
               }

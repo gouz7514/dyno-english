@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { DocumentData } from 'firebase/firestore'
 import Link from 'next/link'
 
-const ClassItemStyle = styled.div`
+const CardItemStyle = styled.div`
   display: flex;
   flex-wrap: wrap;
   gap: 12px;
@@ -25,19 +25,19 @@ const ClassItemStyle = styled.div`
   }
 `
 
-interface IClassItemProps {
+interface CardItemProps {
   href: string
-  classItem: DocumentData
+  cardItem: DocumentData
 }
 
-export default function ClassItem({ href, classItem }: IClassItemProps) {
+export default function ClassItem({ href, cardItem }: CardItemProps) {
   return (
     <Link href={href}>
-      <ClassItemStyle>
+      <CardItemStyle>
         <div className="content-name">
-          { classItem.name }
+          { cardItem.name }
         </div>
-      </ClassItemStyle>
+      </CardItemStyle>
     </Link>
   )
 }
