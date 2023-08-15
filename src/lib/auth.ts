@@ -39,11 +39,13 @@ const getClassInfo = async (classId: string) => {
     if (classInfo.exists()) {
       const classHomeworks = classInfo.data().homework ? await getDoc(classInfo.data().homework) : null
       const classNotices = classInfo.data().notice ? await getDoc(classInfo.data().notice) : null
+      const classCurriculums = classInfo.data().curriculum ? await getDoc(classInfo.data().curriculum) : null
 
       return {
         info: classInfo.data(),
         homeworks: classHomeworks?.data(),
-        notices: classNotices?.data()
+        notices: classNotices?.data(),
+        curriculums: classCurriculums?.data()
       }
     } else {
       return null
@@ -131,12 +133,13 @@ export const authOptions: NextAuthOptions = {
           const classInfo = await getClassInfo(classId)
   
           if (classInfo) {
-            const { id, name, curriculum } = classInfo.info
+            const { id, name } = classInfo.info
+            const curriculums = classInfo.curriculums as any
             
             session.classInfo = {
               id,
               name,
-              curriculum
+              curriculum : curriculums
             }
             
             const homeworks = classInfo.homeworks as ClassHomeworks

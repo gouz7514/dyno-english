@@ -194,13 +194,19 @@ export default function ProfilePage() {
                       session?.classInfo.curriculum && (
                         <div>
                           {
-                            session?.classInfo.curriculum?.months?.month.map((month, idx) => (
-                              <CurriculumMonth
-                                key={idx}
-                                idx={idx}
-                                month={month}
-                                onClickToggle={onClickToggle}
-                              />
+                            Object.entries(session?.classInfo.curriculum).map(([key, value]) => (
+                              (
+                                key === 'curriculum' && (
+                                  value.months?.month.map((month: any, index: any) => (
+                                    <CurriculumMonth
+                                      key={index}
+                                      idx={index}
+                                      month={month}
+                                      onClickToggle={onClickToggle}
+                                    />
+                                  ))
+                                )
+                              )
                             ))
                           }
                         </div>  

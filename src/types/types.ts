@@ -86,8 +86,11 @@ export interface Month {
 }
 
 export interface Curriculum {
-  months: {
-    month: Month[],
+  name: string,
+  curriculum: {
+    curriculum: {
+      months: Month[]
+    }
   }
 }
 
