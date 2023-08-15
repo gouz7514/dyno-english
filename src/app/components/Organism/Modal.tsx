@@ -58,7 +58,7 @@ export default function Modal({ isOpen, onClose, children } : ModalProps) {
       window.removeEventListener('mousedown', handleOutsideClick)
     }
 
-  }, [isOpen])
+  })
 
   return (
     <ModalStyle>

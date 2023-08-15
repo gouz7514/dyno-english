@@ -100,7 +100,7 @@ export default function AdminCurriculumForm({ isEdit }: AdminCurriculumFormProps
     if (isEdit) {
       getCurriculumInfo()
     }
-  }, [])
+  })
 
   const getCurriculumInfo = async () => {
     const curriculumRef = doc(db, 'class_curriculum', params.id)
