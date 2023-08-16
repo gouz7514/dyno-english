@@ -7,7 +7,7 @@ import Link from 'next/link'
 import styled from 'styled-components'
 
 import Skeleton from '@/app/components/Skeleton'
-import CurriculumMonth from '@/app/components/CurriculumMonth'
+import CurriculumList from '@/app/components/Organism/CurriculumList'
 import EmptyState from '@/app/components/Molecule/EmptyState'
 
 import { convertDate } from '@/lib/utils/date'
@@ -198,11 +198,10 @@ export default function ProfilePage() {
                               (
                                 key === 'curriculum' && (
                                   value.months?.month.map((month: any, index: any) => (
-                                    <CurriculumMonth
+                                    <CurriculumList
                                       key={index}
                                       idx={index}
                                       month={month}
-                                      onClickToggle={onClickToggle}
                                     />
                                   ))
                                 )

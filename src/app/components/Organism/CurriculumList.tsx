@@ -6,7 +6,6 @@ import { Month } from '@/types/types'
 
 interface Props {
   month: Month
-  onClickToggle: (ref: React.RefObject<HTMLDivElement>) => void
   idx: number
 }
 
@@ -59,8 +58,16 @@ const CurriculumMonthStyle = styled.div`
   }
 `
 
-export default function CurriculumMonth({ month, onClickToggle, idx }: Props) {
+export default function CurriculumMonth({ month, idx }: Props) {
   const curriculumRef = useRef<HTMLDivElement>(null)
+
+  const onClickToggle = (ref: React.RefObject<HTMLDivElement>) => {
+    const element = ref.current
+
+    if (element) {
+      element.classList.toggle('show')
+    }
+  }
 
   return (
     <CurriculumMonthStyle>
