@@ -28,7 +28,7 @@ const ProfileStyle = styled.div`
     height: 650px !important;
 
     @media screen and (min-width: 600px) {
-      height: 350px !important;
+      height: 400px !important;
     }
   }
 
@@ -78,9 +78,25 @@ const ProfileStyle = styled.div`
       .class-homework {
         box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
         width: 100%;
-        height: 300px;
+        height: 400px;
         border-radius: 12px;
         padding: 12px;
+      }
+
+      .content-title {
+        font-size: 1.2rem;
+        font-weight: 700;
+      }
+
+      .content-inner {
+        white-space: pre-line;
+        word-break: keep-all;
+        height: calc(100% - 44px);
+        overflow-y: scroll;
+
+        &::-webkit-scrollbar {
+          display: none;
+        }
       }
 
       .class-notice {
@@ -164,18 +180,18 @@ export default function ProfilePage() {
                                 Object.entries(session?.classDetails).map(([key, value]) => (
                                   <SwiperSlide key={key} className='class-info'>
                                     <div className="class-notice">
-                                      <div>
+                                      <div className='content-title'>
                                         { convertDate(key) } 수업내용
                                       </div>
-                                      <div>
+                                      <div className='content-inner'>
                                         { value.notice }
                                       </div>
                                     </div>
                                     <div className="class-homework">
-                                      <div>
+                                      <div className='content-title'>
                                       { convertDate(key) } 숙제
                                       </div>
-                                      <div>
+                                      <div className='content-inner'>
                                         { value.homework }
                                       </div>
                                     </div>

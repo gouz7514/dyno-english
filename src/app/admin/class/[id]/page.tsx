@@ -125,6 +125,19 @@ const SwiperStyle = styled.div`
       .swiper-content {
         font-size: 1rem;
         font-weight: 400;
+        height: calc(100% - 24px);
+
+        .homework-content,
+        .notice-content {
+          white-space: pre-line;
+          word-break: keep-all;
+          height: 100%;
+          overflow-y: scroll;
+
+          &::-webkit-scrollbar {
+            display: none;
+          }
+        }
 
         form {
           margin-top: 12px;
@@ -576,7 +589,7 @@ function ClassDetailContent({ params }: { params: { id: string } }) {
                                       </form>
                                     </div>
                                   ) : (
-                                    <div>
+                                    <div className='homework-content'>
                                       { item.content }
                                     </div>
                                   )
@@ -679,7 +692,7 @@ function ClassDetailContent({ params }: { params: { id: string } }) {
                                         </form>
                                       </div>
                                     ) : (
-                                      <div>
+                                      <div className='notice-content'>
                                         { item.content }
                                       </div>
                                     )
