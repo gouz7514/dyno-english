@@ -5,7 +5,7 @@ import styled from 'styled-components'
 import { useEffect, useState } from "react"
 
 import { db } from "@/firebase/config"
-import { doc, getDoc, updateDoc } from 'firebase/firestore'
+import { doc, getDoc, updateDoc, getDocs, collection, DocumentData } from 'firebase/firestore'
 
 import EmptyState from '@/app/components/Molecule/EmptyState'
 import ImageButton from '@/app/components/Atom/Button/ImageButton'
@@ -13,8 +13,11 @@ import Button from '@/app/components/Button'
 import Modal from '@/app/components/Organism/Modal'
 import Input from '@/app/components/Atom/Input/Input'
 import IsStaff from '@/app/components/Template/IsStaff'
+import CurriculumList from '@/app/components/Organism/CurriculumList'
+import DynoSelect from '@/app/components/Atom/Input/DynoSelect'
 
 import { convertDate } from '@/lib/utils/date'
+import { Month } from '@/types/types'
 
 import { Swiper, SwiperSlide } from 'swiper/react'
 import SwiperCore, { Pagination, Navigation } from "swiper"
@@ -42,6 +45,15 @@ const ClassDetailStyle = styled.div`
       display: flex;
       align-items: center;
       gap: 12px;
+      margin-bottom: 12px;
+
+      &.space-between {
+        justify-content: space-between;
+
+        button {
+          margin-right: 0;
+        }
+      }
 
       .section-title {
         font-size: 1.5rem;
@@ -131,11 +143,17 @@ const SwiperStyle = styled.div`
   }
 `
 
+type curriculumObject = {
+  name: string,
+  curriculum: object,
+  id?: string
+}
+
 interface AdminClassDetailProps {
   className?: string
   homework: Object
   notice: Object
-  curriculum: Object
+  curriculum: curriculumObject
 }
 
 function ClassDetailContent({ params }: { params: { id: string } }) {
@@ -146,13 +164,13 @@ function ClassDetailContent({ params }: { params: { id: string } }) {
 
   // 과제 추가
   const [newHomework, setNewHomework] = useState({
-    date: '',
+    date: new Date().toISOString().slice(0, 10),
     content: ''
   })
 
   // 공지사항 추가
   const [newNotice, setNewNotice] = useState({
-    date: '',
+    date: new Date().toISOString().slice(0, 10),
     content: ''
   })
 
@@ -163,6 +181,22 @@ function ClassDetailContent({ params }: { params: { id: string } }) {
 
   const [editHomework, setEditHomework] = useState('')
   const [editNotice, setEditNotice] = useState('')
+
+  const [swiperCnt, setSwiperCnt] = useState<number>(1)
+  const [classInfo, setClassInfo] = useState<AdminClassDetailProps>({
+    className: '',
+    homework: {},
+    notice: {},
+    curriculum: {
+      name: '',
+      curriculum: {}
+    }
+  })
+
+  // 전체 커리큘럼
+  const [allCurriculum, setAllCurriculum] = useState<DocumentData[]>([])
+  // 현재 선택된 커리큘럼
+  const [currentCurriculum, setCurrentCurriculum] = useState<curriculumObject>()
 
   // 과제 수정
   const onClickEditHomework = (idx: number) => {
@@ -181,44 +215,71 @@ function ClassDetailContent({ params }: { params: { id: string } }) {
   // 과제 삭제
   const onClickDeleteHomework = async (e: any, idx: number) => {
     e.preventDefault()
-    alert('삭제하기')
-    
-    const currentHomework = Object.values(classInfo.homework as Object)
-    currentHomework[0].splice(idx, 1)
 
-    const classHomework = doc(db, 'class_homework', params.id)
-
-    await updateDoc(classHomework, {
-      homeworks: currentHomework[0]
-    })
-
-    getClassInfo()
+    if (confirm('과제를 삭제하시겠습니까?')) {
+      const currentHomework = Object.values(classInfo.homework as Object)
+      currentHomework[0].splice(idx, 1)
+  
+      const classHomework = doc(db, 'class_homework', params.id)
+  
+      await updateDoc(classHomework, {
+        homeworks: currentHomework[0]
+      })
+  
+      getClassInfo()
+    }
   }
 
   // 공지사항 삭제
   const onClickDeleteNotice = async (e: any, idx: number) => {
     e.preventDefault()
-    alert('삭제하기')
 
-    const currentNotice = Object.values(classInfo.notice as Object)
-    currentNotice[0].splice(idx, 1)
-
-    const classNotice = doc(db, 'class_notice', params.id)
-
-    await updateDoc(classNotice, {
-      notices: currentNotice[0]
-    })
-
-    getClassInfo()
+    if (confirm('수업내용을 삭제하시겠습니까?')) {
+      const currentNotice = Object.values(classInfo.notice as Object)
+      currentNotice[0].splice(idx, 1)
+  
+      const classNotice = doc(db, 'class_notice', params.id)
+  
+      await updateDoc(classNotice, {
+        notices: currentNotice[0]
+      })
+  
+      getClassInfo()
+    }
   }
 
-  const [swiperCnt, setSwiperCnt] = useState<number>(1)
-  const [classInfo, setClassInfo] = useState<AdminClassDetailProps>({
-    className: '',
-    homework: {},
-    notice: {},
-    curriculum: {}
-  })
+  const getAllCurriculum = async () => {
+    const curriculumRef = collection(db, 'class_curriculum')
+    const curriculumSnapshot = await getDocs(curriculumRef)
+    const curriculumList = curriculumSnapshot.docs.map(doc => {
+      const curriculumData = doc.data()
+      curriculumData.id = doc.id
+      return curriculumData
+    })
+
+    setAllCurriculum(curriculumList)
+  }
+
+  // 커리큘럼 변경
+  const onChangeCurriculum = async (e: any) => {
+    const curriculumId = e.target.value
+
+    const selectedCurriculum = allCurriculum.find(curriculum => curriculum.id === curriculumId)
+
+    setCurrentCurriculum(selectedCurriculum as curriculumObject)
+  }
+
+  // 커리큘럼 변경 반영햐기
+  const onClickChangeCurriculum = async () => {
+    const currentCurriculumId = currentCurriculum?.id as string
+    const classCurriculum = doc(db, 'class_curriculum', currentCurriculumId)
+    
+    await updateDoc(doc(db, 'class', params.id), {
+      curriculum: classCurriculum
+    }).then(() => {
+      alert('커리큘럼이 변경되었습니다')
+    })
+  }
 
   const getClassInfo = async () => {
     const classRef = doc(db, 'class', params.id)
@@ -231,6 +292,7 @@ function ClassDetailContent({ params }: { params: { id: string } }) {
       const classData = classSnapshot.data()
       const classHomework = classData.homework ? (await getDoc(classData.homework)).data() : null
       const classNotice = classData.notice ? (await getDoc(classData.notice)).data() : null
+      const classCurriculum = classData.curriculum ? (await getDoc(classData.curriculum)).data() : null
 
       if (classHomework) {
         Object.entries(classHomework).forEach(([key, value]) => {
@@ -252,8 +314,10 @@ function ClassDetailContent({ params }: { params: { id: string } }) {
         className: classData.name,
         homework: classHomework as Object,
         notice: classNotice as Object,
-        curriculum: classData.curriculum
+        curriculum: classCurriculum as curriculumObject
       })
+
+      setCurrentCurriculum(classCurriculum as curriculumObject)
 
       setHomeworkEditMode(new Array(Object.values(classHomework as Object)[0].length).fill(false))
       setNoticeEditMode(new Array(Object.values(classNotice as Object)[0].length).fill(false))
@@ -261,6 +325,7 @@ function ClassDetailContent({ params }: { params: { id: string } }) {
   }
 
   useEffect(() => {
+    getAllCurriculum()
     getClassInfo()
   }, [])
 
@@ -341,14 +406,14 @@ function ClassDetailContent({ params }: { params: { id: string } }) {
     setShowAddHomework(false)
 
     setNewHomework({
-      date: '',
+      date: new Date().toISOString().slice(0, 10),
       content: ''
     })
   }
 
   // 과제 내용 수정
   const onChangeHomework = (e: any) => {
-    e.preventDefault()
+    // e.preventDefault()
     setEditHomework(e.target.value)
   }
 
@@ -417,7 +482,7 @@ function ClassDetailContent({ params }: { params: { id: string } }) {
     setShowAddNotice(false)
 
     setNewNotice({
-      date: '',
+      date: new Date().toISOString().slice(0, 10),
       content: ''
     })
   }
@@ -634,30 +699,50 @@ function ClassDetailContent({ params }: { params: { id: string } }) {
       </section>
 
       <section>
-        <div className="section-title">
-          커리큘럼
+        <div className="section-header space-between">
+          <div className="section-title">
+            커리큘럼
+          </div>
+          <Button
+            color='primary'
+            size='small'
+            onClick={onClickChangeCurriculum}
+          >
+            저장하기
+          </Button>
         </div>
         <div>
           {
-            classInfo.curriculum && (
-              Object.entries(classInfo.curriculum as Object).map(([month, curriculum]) => (
-                curriculum.month.map((singleMonth: { days: { content: string }[] }, contentIdx: number) => (
-                  <div key={contentIdx}>
-                    Month { contentIdx + 1 }
-                    <div>
-                      {
-                        singleMonth.days.map((day, dayIdx: number) => (
-                          <div key={dayIdx}>
-                            Day { dayIdx + 1 }
-                            <div key={dayIdx}>
-                              { day.content }
-                            </div>
-                          </div>
-                        ))
-                      }
-                    </div>
+            currentCurriculum && (
+              <DynoSelect value={currentCurriculum.id} onChange={onChangeCurriculum}>
+                {
+                  allCurriculum.map((curriculum) => (
+                    <option key={curriculum.id} value={curriculum.id}>
+                      { curriculum.name }
+                    </option>
+                  ))
+                }
+              </DynoSelect>
+            )
+          }
+        </div>
+        <div>
+          {
+            currentCurriculum && (
+              Object.entries(currentCurriculum?.curriculum as Object).map(([month, curriculum]) => (
+                <div key={month}>
+                  <div>
+                    {
+                      curriculum.month.map((item: Month, idx: number) => (
+                        <CurriculumList
+                          key={idx}
+                          idx={idx}
+                          month={item}
+                        />
+                      ))
+                    }
                   </div>
-                ))
+                </div>
               ))
             )
           }
