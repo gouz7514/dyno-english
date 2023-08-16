@@ -13,8 +13,11 @@ const CurriculumMonthStyle = styled.div`
   margin-bottom: 12px;
 
   .class-curriculum {
+    border-radius: 12px;
+    background-color: white;
+
     .class-curriculum-month {
-      background-color: #eee;
+      background-color: #d9d9d9;
       padding: 6px 12px;
       border-radius: 12px;
       display: flex;
