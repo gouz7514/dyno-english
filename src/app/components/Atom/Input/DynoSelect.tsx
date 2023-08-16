@@ -12,6 +12,11 @@ const SelectStyle = styled.select`
   background-position: right 8px center;
   background-size: 12px 12px;
   margin-bottom: 12px;
+  outline: none;
+
+  &:focus {
+    border: 1px solid var(--primary-green);
+  }
 `
 
 type SelectProps = {
