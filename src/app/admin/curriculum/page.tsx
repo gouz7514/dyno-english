@@ -9,22 +9,19 @@ import { getDocs, collection, DocumentData } from 'firebase/firestore'
 
 import Skeleton from '@/app/components/Skeleton'
 import LinkButton from '@/app/components/LinkButton'
-import CardItem from '@/app/components/Atom/CardItem'
+import ListItem from '@/app/components/Atom/ListItem'
 import IsStaff from '@/app/components/Template/IsStaff'
 
 const AdminCurriculumStyle = styled.div`
-  max-width: 1024px;
-
-  .content-title {
-    font-size: 1.5rem;
-    font-weight: 700;
-  }
-
-  .content-container {
+  .content-header {
     display: flex;
-    flex-wrap: wrap;
-    gap: 12px;
-    margin-top: 24px;
+    justify-content: space-between;
+    margin-bottom: 24px;
+
+    .content-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+    }
   }
 `
 
@@ -59,19 +56,21 @@ function AdminCurriculmContent() {
           <Skeleton />
         ) : (
           <div>
-            <div className="content-title">
-              커리큘럼 목록
+            <div className="content-header">
+              <div className="content-title">
+                커리큘럼 목록
+              </div>
+              <LinkButton href="/admin/curriculum/form">
+                커리큘럼 추가
+              </LinkButton>
             </div>
-            <LinkButton href="/admin/curriculum/form">
-              커리큘럼 추가
-            </LinkButton>
             <div className="content-container">
               {
                 curriculumList.map((curriculum, index) => (
-                  <CardItem
+                  <ListItem
                     key={index}
                     href={`/admin/curriculum/${curriculum.id}`}
-                    cardItem={curriculum}
+                    title={curriculum.name}
                   />
                 ))
               }

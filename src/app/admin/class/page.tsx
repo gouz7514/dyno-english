@@ -9,22 +9,19 @@ import { getDocs, collection, DocumentData } from 'firebase/firestore'
 
 import Skeleton from '@/app/components/Skeleton'
 import LinkButton from '@/app/components/LinkButton'
-import CardItem from '@/app/components/Atom/CardItem'
+import ListItem from '@/app/components/Atom/ListItem'
 import IsStaff from '@/app/components/Template/IsStaff'
 
 const AdminClassStyle = styled.div`
-  max-width: 1024px;
-
-  .content-title {
-    font-size: 1.5rem;
-    font-weight: 700;
-  }
-
-  .content-container {
+  .content-header {
     display: flex;
-    flex-wrap: wrap;
-    gap: 12px;
-    margin-top: 24px;
+    justify-content: space-between;
+    margin-bottom: 24px;
+
+    .content-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+    }
   }
 `
 
@@ -65,19 +62,21 @@ function AdminClassContent() {
           <Skeleton />
         ) : (
           <div>
-            <div className='content-title'>
-              수업 목록
+            <div className="content-header">
+              <div className='content-title'>
+                수업 목록
+              </div>
+              <LinkButton href='/admin/class/form'>
+                수업 추가
+              </LinkButton>
             </div>
-            <LinkButton href='/admin/class/form'>
-              수업 추가
-            </LinkButton>
             <div className='content-container'>
               {
                 classList.map((classItem, index) => (
-                  <CardItem
+                  <ListItem
                     key={index}
+                    title={classItem.name}
                     href={`/admin/class/${classItem.id}`}
-                    cardItem={classItem}
                   />
                 ))
               }
