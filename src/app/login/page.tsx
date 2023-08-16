@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation'
 import { signIn, useSession } from 'next-auth/react'
 
 import Button from '@/app/components/Button'
+import DynoInput from '@/app/components/Atom/Input/DynoInput'
 
 const LoginStyle = styled.div`
   display: flex;
@@ -126,7 +127,7 @@ export default function LoginPage() {
             </div>
             <form onSubmit={onSubmit}>
               <div className='input-container'>
-                <input ref={passwordRef} type="password" placeholder="비밀번호"/>
+                <DynoInput ref={passwordRef} type="password" placeholder="비밀번호"/>
                 <Button onClick={onSubmit}>로그인</Button>
               </div>
             </form>

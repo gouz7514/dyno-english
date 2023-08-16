@@ -7,6 +7,7 @@ import { addDoc, collection, getDoc, deleteDoc, doc, updateDoc } from 'firebase/
 import Button from '@/app/components/Button'
 import ImageButton from '@/app/components/Atom/Button/ImageButton'
 import Badge from '@/app/components/Molecule/Badge'
+import DynoInput from '@/app/components/Atom/Input/DynoInput'
 
 import styled from 'styled-components'
 
@@ -53,19 +54,6 @@ const AdminCurriculumFormStyle = styled.div`
         justify-content: space-between;
         gap: 10px;
         align-items: center;
-
-        input {
-          height: 40px;
-          border-radius: 8px;
-          padding-left: 8px;
-          outline: none;
-          border: 0;
-          width: 100%;
-  
-          &:focus {
-            border: 1px solid var(--primary-green);
-          }
-        }
       }
     }
   }
@@ -236,7 +224,7 @@ export default function AdminCurriculumForm({ isEdit }: AdminCurriculumFormProps
       <AdminCurriculumFormStyle>
         <div className="input-container">
           <div className="input-indicator">커리큘럼 이름</div>
-          <input
+          <DynoInput
             type="text"
             id="curriculumName"
             name="curriculumName"
@@ -275,7 +263,7 @@ export default function AdminCurriculumForm({ isEdit }: AdminCurriculumFormProps
                       <div key={dayIdx} className='dynamic-day-container'>
                         <label htmlFor={`curriculumDay-${dayIdx}`}>{ dayIdx + 1 } 일자</label>
                         <div className="dynamic-day-input">
-                          <input
+                          <DynoInput
                             type="text"
                             id={`curriculumDay-${dayIdx}`}
                             placeholder={`Day ${dayIdx + 1}`}

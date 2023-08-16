@@ -3,9 +3,10 @@ import styled, { css } from 'styled-components'
 const InputStyle = styled.input<InputProps>`
   height: 40px;
   border-radius: 8px;
+  border: 1px solid #ccc;
   outline: none;
-  border: 0;
   width: 100%;
+  padding: 0 8px;
 
   &:focus {
     border: 1px solid var(--primary-green);
@@ -14,11 +15,7 @@ const InputStyle = styled.input<InputProps>`
   ${({ type }) => css`
     ${type === 'date' && css`
       position: relative;
-      border-radius: 8px;
-      padding: 0 8px;
-      height: 40px;
       outline: none;
-      border: 1px solid #ccc;
 
       &::-webkit-calendar-picker-indicator {
         position: absolute;

@@ -7,6 +7,7 @@ import styled from 'styled-components'
 
 import Button from '@/app/components/Button'
 import ImageButton from '@/app/components/Atom/Button/ImageButton'
+import DynoInput from '@/app/components/Atom/Input/DynoInput'
 
 import { UserProps } from '@/types/types'
 
@@ -373,7 +374,7 @@ export default function ProfilePage() {
             </div>
             <div className="profile-item phone">
               <div className='profile-item-title'>보호자 연락처</div>
-              <input
+              <DynoInput
                 type="text"
                 name="phone"
                 id="phone"
@@ -411,7 +412,7 @@ export default function ProfilePage() {
                         )
                       }
                     </div>
-                    <input
+                    <DynoInput
                       type="text"
                       id={`kidName-${idx}`}
                       placeholder="학생 이름을 입력해주세요"
@@ -427,7 +428,7 @@ export default function ProfilePage() {
                   </div>
                   <div className="profile-item birth">
                     <div className='profile-item-title'>학생 생년월일</div>
-                    <input
+                    <DynoInput
                       type="date"
                       id={`kidBirth-${idx}`}
                       name="birth"

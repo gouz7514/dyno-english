@@ -11,7 +11,7 @@ import EmptyState from '@/app/components/Molecule/EmptyState'
 import ImageButton from '@/app/components/Atom/Button/ImageButton'
 import Button from '@/app/components/Button'
 import Modal from '@/app/components/Organism/Modal'
-import Input from '@/app/components/Atom/Input/Input'
+import DynoInput from '@/app/components/Atom/Input/DynoInput'
 import IsStaff from '@/app/components/Template/IsStaff'
 import CurriculumList from '@/app/components/Organism/CurriculumList'
 import DynoSelect from '@/app/components/Atom/Input/DynoSelect'
@@ -511,7 +511,7 @@ function ClassDetailContent({ params }: { params: { id: string } }) {
                   과제 추가하기
                 </div>
                 <form>
-                  <Input value={newHomework.date} type='date' onChange={onChangeNewHomeworkDate} />
+                  <DynoInput value={newHomework.date} type='date' onChange={onChangeNewHomeworkDate} />
                   <textarea value={newHomework.content} cols={30} rows={10} onChange={onChangeNewHomework}></textarea>
                   <div className="button-container">
                     <Button color='primary' disabled={!newHomework.date || !newHomework.content} onClick={onClickSubmitNewHomework}>추가</Button>
@@ -613,7 +613,7 @@ function ClassDetailContent({ params }: { params: { id: string } }) {
                   수업내용 추가하기
                 </div>
                 <form>
-                  <Input value={newNotice.date} type='date' onChange={onChangeNewNoticeDate} />
+                  <DynoInput value={newNotice.date} type='date' onChange={onChangeNewNoticeDate} />
                   <textarea value={newNotice.content} cols={30} rows={10} onChange={onChangeNewNotice}></textarea>
                   <div className="button-container">
                     <Button color='primary' disabled={!newNotice.date || !newNotice.content} onClick={onClickSubmitNewNotice}>추가</Button>

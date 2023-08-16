@@ -1,13 +1,15 @@
 'use client'
 
 import { useEffect, useState, useCallback } from 'react'
+import { useRouter } from 'next/navigation'
+import { useSession } from 'next-auth/react'
+
 import Button from '@/app/components/Button'
 import { FormStyle } from '@/app/styles/styles'
+import DynoInput from '@/app/components/Atom/Input/DynoInput'
 
 import { TestimonialProps } from '@/types/types'
 
-import { useRouter } from 'next/navigation'
-import { useSession } from 'next-auth/react'
 import { db } from "@/firebase/config"
 import { collection, addDoc } from 'firebase/firestore'
 
@@ -124,7 +126,7 @@ export default function TestimonialForm() {
         <div>
           <div className="input-container">
             <label htmlFor="name">이름</label>
-            <input
+            <DynoInput
               type="text"
               name="by"
               value={testimonials.by}
