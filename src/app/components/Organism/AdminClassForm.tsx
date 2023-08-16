@@ -1,12 +1,15 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 
 import { useRouter } from 'next/navigation'
 import { db } from '@/firebase/config'
-import { addDoc, collection, setDoc, doc, updateDoc } from 'firebase/firestore'
+import { addDoc, collection, setDoc, doc, updateDoc, getDocs, DocumentData } from 'firebase/firestore'
 
 import Button from '@/app/components/Button'
-import ImageButton from '@/app/components/Atom/Button/ImageButton'
-import Badge from '@/app/components/Molecule/Badge'
+import DynoSelect from '@/app/components/Atom/Input/DynoSelect'
+import DynoInput from '@/app/components/Atom/Input/DynoInput'
+import CurriculumList from '@/app/components/Organism/CurriculumList'
+
+import { Month } from '@/types/types'
 
 import styled from 'styled-components'
 
@@ -72,14 +75,28 @@ const AdminClassFormStyle = styled.div`
   }
 `
 
+type curriculumObject = {
+  name: string,
+  curriculum: object,
+  id?: string
+}
+
 const AdminClassForm = React.memo(() => {
   const router = useRouter()
   const [className, setClassName] = useState('')
   const [loading, setLoading] = useState<boolean>(false)
+  // 전체 커리큘럼
+  const [allCurriculum, setAllCurriculum] = useState<DocumentData[]>([])
+  // 현재 선택된 커리큘럼
+  const [currentCurriculum, setCurrentCurriculum] = useState<curriculumObject>()
   
   const [curriculums, setCurriculums] = useState<{ name: string; days: string[] }[]>([
     { name: 'Month 1', days: [''] },
   ])
+
+  useEffect(() => {
+    getAllCurriculum()
+  }, [])
 
   const handleClassNameChange = (e: any) => {
     const { name, value } = e.target
@@ -89,70 +106,38 @@ const AdminClassForm = React.memo(() => {
     }
   }
 
-  const addMonth = (e: any) => {
-    e.preventDefault()
-    const lastMonth = curriculums[curriculums.length - 1]
-    const monthNumber = parseInt(lastMonth.name.split(' ')[1]) + 1
-    const newMonth = { name: `Month ${monthNumber}`, days: [''] };
-    setCurriculums([...curriculums, newMonth])
-  }
-
-  const removeMonth = (idx: number, e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault()
-    const updatedMonths = curriculums.filter((_, i) => i !== idx)
-
-    updatedMonths.forEach((month, idx) => {
-      month.name = `Month ${idx + 1}`
+  const getAllCurriculum = async () => {
+    const curriculumRef = collection(db, 'class_curriculum')
+    const curriculumSnapshot = await getDocs(curriculumRef)
+    const curriculumList = curriculumSnapshot.docs.map(doc => {
+      const curriculumData = doc.data()
+      curriculumData.id = doc.id
+      return curriculumData
     })
 
-    setCurriculums(updatedMonths)
+    setAllCurriculum(curriculumList)
   }
 
-  const addWeek = (monthIdx: number, e: any) => {
-    e.preventDefault()
-    const updatedMonths = [...curriculums]
-    updatedMonths[monthIdx].days.push('')
-    setCurriculums(updatedMonths)
-  }
+  const onChangeCurriculum = async (e: any) => {
+    const curriculumId = e.target.value
 
-  const removeWeek = (monthIdx: number, weekIdx: number, e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault()
-    const updatedMonths = [...curriculums]
-    updatedMonths[monthIdx].days.splice(weekIdx, 1)
+    const selectedCurriculum = allCurriculum.find(curriculum => curriculum.id === curriculumId)
 
-    setCurriculums(updatedMonths)
-  }
-
-  const handleWeekChange = (monthIdx: number, weekIdx: number, e: any) => {
-    const updatedMonths = [...curriculums]
-    updatedMonths[monthIdx].days[weekIdx] = e.target.value
-    setCurriculums(updatedMonths)
+    setCurrentCurriculum(selectedCurriculum as curriculumObject)
   }
 
   const handleSubmit = async (e: any) => {
     e.preventDefault()
-
-    const formattedCurriculum = {
-      months: {
-        month: curriculums.map((curriculum) => {
-          return {
-            days: curriculum.days.map((day) => {
-              return {
-                content: day
-              }
-            })
-          }
-        })
-      }
-    }
-
     setLoading(true)
+
+    const currentCurriculumId = currentCurriculum?.id as string
+    const classCurriculum = doc(db, 'class_curriculum', currentCurriculumId)
 
     // 수업을 추가하고 나면 id 생성
     // 생성된 id를 기반으로 class_homework, class_notice 문서 생성
     const addClass = await addDoc(collection(db, 'class'), {
       name: className,
-      curriculum: formattedCurriculum
+      curriculum: classCurriculum
     })
 
     const classId = addClass.id
@@ -185,7 +170,7 @@ const AdminClassForm = React.memo(() => {
       <AdminClassFormStyle>
         <div className="input-container">
           <div className="input-indicator">수업명</div>
-          <input
+          <DynoInput
             type="text"
             id="className"
             name="className"
@@ -195,63 +180,39 @@ const AdminClassForm = React.memo(() => {
         </div>
         <div className="dynamic-input-container">
           <div className="input-indicator">커리큘럼</div>
-          <Button
-            size='small'
-            onClick={addMonth}
-          >
-            수업 월 추가하기
-          </Button>
           {
-            curriculums.map((curriculum, monthIdx) => (
-              <div key={monthIdx} className='dynamic-month-container'>
-                <div className="dynamic-month-indicator">
-                  <Badge
-                    text={curriculum.name}
-                  />
-                  {
-                    curriculums.length > 1 && (
-                      <ImageButton
-                        onClick={(e) => removeMonth(monthIdx, e)}
-                        role='delete'
-                      />
-                    )
-                  }
-                </div>
-                <div>
-                  {
-                    curriculum.days.map((day, dayIdx) => (
-                      <div key={dayIdx} className='dynamic-day-container'>
-                        <label htmlFor={`curriculumDay-${dayIdx}`}>{ dayIdx + 1 } 일자</label>
-                        <div className="dynamic-day-input">
-                          <input
-                            type="text"
-                            id={`curriculumDay-${dayIdx}`}
-                            placeholder={`Day ${dayIdx + 1}`}
-                            value={day}
-                            onChange={(e) => handleWeekChange(monthIdx, dayIdx, e)}
-                          />
-                          {
-                            curriculum.days.length > 1 && (
-                              <ImageButton
-                                onClick={(e) => removeWeek(monthIdx, dayIdx, e)}
-                                role='delete'
-                              />
-                            )
-                          }
-                        </div>
-                      </div>
-                    ))
-                  }
-                  <Button
-                    size="small"
-                    onClick={(e) => addWeek(monthIdx, e)}
-                  >
-                    수업 일자 추가하기
-                  </Button>
-                </div>
-              </div>
-            ))
+            allCurriculum.length > 0 &&
+            (
+              <DynoSelect value={currentCurriculum ? currentCurriculum.id : allCurriculum[0].id} onChange={onChangeCurriculum}>
+                {
+                  allCurriculum.map((curriculum) => (
+                    <option key={curriculum.id} value={curriculum.id}>{ curriculum.name }</option>
+                  ))
+                }
+              </DynoSelect>
+            )
           }
+          <div>
+            {
+              currentCurriculum && (
+                Object.entries(currentCurriculum?.curriculum as Object).map(([month, curriculum]) => (
+                  <div key={month}>
+                    <div>
+                      {
+                        curriculum.month.map((item: Month, idx: number) => (
+                          <CurriculumList
+                            key={idx}
+                            idx={idx}
+                            month={item}
+                          />
+                        ))
+                      }
+                    </div>
+                  </div>
+                ))
+              )
+            }
+          </div>
         </div>
         <Button
           onClick={handleSubmit}

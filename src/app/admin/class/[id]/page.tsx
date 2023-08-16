@@ -708,7 +708,7 @@ function ClassDetailContent({ params }: { params: { id: string } }) {
             size='small'
             onClick={onClickChangeCurriculum}
           >
-            저장하기
+            변경하기
           </Button>
         </div>
         <div>
