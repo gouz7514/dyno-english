@@ -17,8 +17,7 @@ const AdminCurriculumFormStyle = styled.div`
   }
 
   .dynamic-input-container {
-    height: 400px;
-    max-height: 400px;
+    min-height: 400px;
     overflow-y: scroll;
     overflow-x: hidden;
     margin-bottom: 40px;
@@ -80,12 +79,7 @@ const AdminCurriculumFormStyle = styled.div`
 type AdminCurriculumFormProps = {
   isEdit?: boolean
 }
-/*
-  isEdit이 true인 경우 수정 액션
-  커리큘럼 이름 가져오기
-  커리큘럼 정보 가져오기
-  제출 동작 바꾸기
-*/
+
 export default function AdminCurriculumForm({ isEdit }: AdminCurriculumFormProps) {
   const params = useParams()
   const router = useRouter()
@@ -100,7 +94,7 @@ export default function AdminCurriculumForm({ isEdit }: AdminCurriculumFormProps
     if (isEdit) {
       getCurriculumInfo()
     }
-  })
+  }, [isEdit])
 
   const getCurriculumInfo = async () => {
     const curriculumRef = doc(db, 'class_curriculum', params.id)
