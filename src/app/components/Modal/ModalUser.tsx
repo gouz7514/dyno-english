@@ -4,6 +4,7 @@ import { DocumentData } from "firebase/firestore"
 
 import Button from '@/app/components/Button'
 import Toggle from '@/app/components/Toggle/Toggle'
+import DynoSelect from '@/app/components/Atom/Input/DynoSelect'
 
 import { db } from "@/firebase/config"
 import { doc, updateDoc } from 'firebase/firestore'
@@ -51,19 +52,6 @@ const ModalStyle = styled.div`
         display: flex;
         flex-direction: column;
         margin-bottom: 16px;
-        
-        select {
-          width: 100%;
-          height: 40px;
-          border-radius: 8px;
-          border: 1px solid #ddd;
-          padding: 0 8px;
-          appearance: none;
-          background-image: url('/icon/icon-arrow-down.webp');
-          background-repeat: no-repeat;
-          background-position: right 8px center;
-          background-size: 12px 12px;
-        }
 
         h3 {
           margin-bottom: 8px;
@@ -169,12 +157,11 @@ export default function Modal({ isOpen, onClose, currentUser, currentClassId, al
               </div>
             </div>
             <div className='modal-item'>
-              {/* 수업명은 전체 수업 정보 가져와서 토글로 할 수 있어야 한다 */}
               <h3>
                 수업명
               </h3>
               <div className="modal-item-content">
-                <select value={selectedClass} onChange={handleChangeSelect}>
+                <DynoSelect value={selectedClass} onChange={handleChangeSelect}>
                   {
                     allClass.map((cls) => (
                       <option value={cls.id} key={cls.id}>
@@ -182,7 +169,7 @@ export default function Modal({ isOpen, onClose, currentUser, currentClassId, al
                       </option>
                     ))
                   }
-                </select>
+                </DynoSelect>
               </div>
             </div>
             <div className="modal-item">
