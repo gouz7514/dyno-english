@@ -13,8 +13,6 @@ import ListItem2 from '@/app/components/Atom/ListItem2'
 import IsStaff from '@/app/components/Template/IsStaff'
 
 const AdminUserStyle = styled.div`
-  max-width: 1024px;
-
   .admin-user-list {
     display: flex;
     justify-content: space-between;
