@@ -210,19 +210,23 @@ function ClassDetailContent({ params }: { params: { id: string } }) {
   const [allCurriculum, setAllCurriculum] = useState<DocumentData[]>([])
   // 현재 선택된 커리큘럼
   const [currentCurriculum, setCurrentCurriculum] = useState<curriculumObject>()
+  // 초기 커리큘럼
+  const [initialCurriculum, setInitialCurriculum] = useState<curriculumObject>()
 
   // 과제 수정
-  const onClickEditHomework = (idx: number) => {
-    setEditHomework('')
+  const onClickEditHomework = (idx: number, content: string) => {
+    setEditHomework(content)
     const newEditModes = homeworkEditMode.map((mode, i) => (i === idx ? !mode : false));
-    setHomeworkEditMode(newEditModes);
+    setHomeworkEditMode(newEditModes)
+    if (!newEditModes) setEditHomework('')
   }
 
   // 공지사항 수정
-  const onClickEditNotice = (idx: number) => {
-    setEditNotice('')
+  const onClickEditNotice = (idx: number, content: string) => {
+    setEditNotice(content)
     const newEditModes = noticeEditMode.map((mode, i) => (i === idx ? !mode : false));
-    setNoticeEditMode(newEditModes);
+    setNoticeEditMode(newEditModes)
+    if (!newEditModes) setEditNotice('')
   }
 
   // 과제 삭제
@@ -292,6 +296,8 @@ function ClassDetailContent({ params }: { params: { id: string } }) {
     }).then(() => {
       alert('커리큘럼이 변경되었습니다')
     })
+
+    getClassInfo()
   }
 
   const getClassInfo = async () => {
@@ -305,10 +311,14 @@ function ClassDetailContent({ params }: { params: { id: string } }) {
       const classData = classSnapshot.data()
       const classHomework = classData.homework ? (await getDoc(classData.homework)).data() : null
       const classNotice = classData.notice ? (await getDoc(classData.notice)).data() : null
-      const classCurriculum = classData.curriculum ? (await getDoc(classData.curriculum)).data() : null
+      const classCurriculum = classData.curriculum ? (await getDoc(classData.curriculum).then((doc) => {
+        const curriculumData = doc.data() as curriculumObject
+        curriculumData.id = doc.id
+        return curriculumData
+      })) : null
 
       if (classHomework) {
-        Object.entries(classHomework).forEach(([key, value]) => {
+        Object.entries(classHomework).forEach(([_, value]) => {
           value.sort((a: { date: string }, b : { date: string }) => {
             return new Date(a.date).getTime() - new Date(b.date).getTime()
           })
@@ -316,7 +326,7 @@ function ClassDetailContent({ params }: { params: { id: string } }) {
       }
 
       if (classNotice) {
-        Object.entries(classNotice).forEach(([key, value]) => {
+        Object.entries(classNotice).forEach(([_, value]) => {
           value.sort((a: { date: string }, b : { date: string }) => {
             return new Date(a.date).getTime() - new Date(b.date).getTime()
           })
@@ -331,7 +341,7 @@ function ClassDetailContent({ params }: { params: { id: string } }) {
       })
 
       setCurrentCurriculum(classCurriculum as curriculumObject)
-
+      setInitialCurriculum(classCurriculum as curriculumObject)
       setHomeworkEditMode(new Array(Object.values(classHomework as Object)[0].length).fill(false))
       setNoticeEditMode(new Array(Object.values(classNotice as Object)[0].length).fill(false))
     }
@@ -560,7 +570,7 @@ function ClassDetailContent({ params }: { params: { id: string } }) {
                                 </div>
                                 <div className="swiper-btn-container">
                                   <ImageButton
-                                    onClick={() => onClickEditHomework(idx)}
+                                    onClick={() => onClickEditHomework(idx, item.content)}
                                     role='edit'
                                   />
                                   <ImageButton
@@ -577,7 +587,6 @@ function ClassDetailContent({ params }: { params: { id: string } }) {
                                         <textarea
                                           value={editHomework}
                                           onChange={(e) => onChangeHomework(e)}
-                                          placeholder={item.content}
                                         />
                                         <Button
                                           color='default'
@@ -663,7 +672,7 @@ function ClassDetailContent({ params }: { params: { id: string } }) {
                                   </div>
                                   <div className="swiper-btn-container">
                                     <ImageButton
-                                      onClick={() => onClickEditNotice(idx)}
+                                      onClick={() => onClickEditNotice(idx, item.content)}
                                       role='edit'
                                     />
                                     <ImageButton
@@ -680,7 +689,6 @@ function ClassDetailContent({ params }: { params: { id: string } }) {
                                           <textarea
                                             value={editNotice}
                                             onChange={(e) => setEditNotice(e.target.value)}
-                                            placeholder={item.content}
                                           />
                                           <Button
                                             color='default'
@@ -720,6 +728,7 @@ function ClassDetailContent({ params }: { params: { id: string } }) {
             color='primary'
             size='small'
             onClick={onClickChangeCurriculum}
+            disabled={currentCurriculum?.id === initialCurriculum?.id}
           >
             변경하기
           </Button>
