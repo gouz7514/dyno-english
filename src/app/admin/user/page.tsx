@@ -9,12 +9,13 @@ import { getDocs, collection, DocumentData } from 'firebase/firestore'
 
 import Skeleton from '@/app/components/Skeleton'
 import ModalUser from '@/app/components/Modal/ModalUser'
+import ListItem2 from '@/app/components/Atom/ListItem2'
 import IsStaff from '@/app/components/Template/IsStaff'
 
 const AdminUserStyle = styled.div`
   max-width: 1024px;
 
-  .table-header {
+  .admin-user-list {
     display: flex;
     justify-content: space-between;
     margin-bottom: 12px;
@@ -23,33 +24,6 @@ const AdminUserStyle = styled.div`
     &-title {
       font-size: 1.5rem;
       font-weight: 700;
-    }
-  }
-
-  table {
-    width: 100%;
-    border-spacing: 0;
-
-    th {
-      padding: 4px;
-      border: 1px solid #eee;
-    }
-
-    tbody {
-      tr {
-        border: 1px solid #000;
-        background-color: #ddd;
-        height: 40px;
-
-        &.table-user-row {
-          cursor: pointer;
-        }
-      }
-    
-      td {
-        text-align: center;
-        border: 1px solid #eee;
-      }
     }
   }
 `
@@ -117,83 +91,29 @@ function AdminUserContent() {
           <Skeleton />
         ) : (
           <div>
-            <div className="table-header">
-              <div className="table-header-title">
+            <div className="admin-user-list">
+              <div className="admin-user-list-title">
                 회원 목록
               </div>
               <div>
                 총 회원 수: {users.length}
               </div>
             </div>
-            <table>
-              <thead>
-                <tr>
-                  <th rowSpan={2}>
-                    이름
-                  </th>
-                  <th rowSpan={2}>
-                    전화번호
-                  </th>
-                  <th rowSpan={2}>
-                    수업명
-                  </th>
-                  <th colSpan={2}>
-                    아이 정보
-                  </th>
-                  <th rowSpan={2}>
-                    후기 가능 여부
-                  </th>
-                </tr>
-                <tr>
-                  <th>
-                    이름
-                  </th>
-                  <th>
-                    생년월일
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {
-                  users.map((user, idx) => {
-                    return (
-                      <tr
-                        key={idx}
-                        onClick={() => onClickUser(user)}
-                        className="table-user-row"
-                      >
-                        <td>
-                          {user.name}
-                        </td>
-                        <td>
-                          {user.phone}
-                        </td>
-                        <td>
-                          {
-                            dynoClass.map((cls) => {
-
-                              if (cls.id === user.class.id) {
-                                return cls.name
-                              }
-                            })
-                          }
-                        </td>
-                        <td>
-                          { user.kids.length ? user.kids[0].name : '' }
-                        </td>
-                        <td>
-                          { user.kids.length ? user.kids[0].birth : '' }
-                        </td>
-                        <td>
-                          { user.testimonialAvailable ? '가능' : '불가능' }
-                        </td>
-                      </tr>
-                    )
-                  }
+            <div>
+              {
+                users.map((user, idx) => {
+                  const userKidsName = user.kids.map((kid: any) => kid.name).join(', ')
+                  const userItemTitle = userKidsName ? `${user.name} (${userKidsName} 학부모님)` : user.name
+                  return (
+                    <ListItem2
+                      key={idx}
+                      title={userItemTitle}
+                      onClick={() => onClickUser(user)}
+                    />
                   )
-                }
-              </tbody>
-            </table>
+                })
+              }
+            </div>
           </div>
         )
       }
