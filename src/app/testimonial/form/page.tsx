@@ -19,7 +19,7 @@ export default function TestimonialForm() {
   const { data: session, status } = useSession()
 
   const [testimonials, setTestimonials] = useState<TestimonialProps>({
-    by: '',
+    by: session?.user?.name as string,
     content: '',
     id: '',
     createdAt: new Date()
@@ -132,6 +132,7 @@ export default function TestimonialForm() {
               value={testimonials.by}
               onChange={handleChange}
               onBlur={handleBlur}
+              disabled
             />
             <div className="input-error">
               {

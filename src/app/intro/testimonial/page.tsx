@@ -232,7 +232,7 @@ export default function IntroTestimonial() {
                           { testimonial.content.replaceAll('/n', '\n') }
                         </div>
                         <div className="testimonial-by">
-                          - {testimonial.by}
+                          - {testimonial.by[0] + '***'}
                         </div>
                       </div>
                     </SwiperSlide>

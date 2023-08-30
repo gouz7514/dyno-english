@@ -12,6 +12,11 @@ const InputStyle = styled.input<InputProps>`
     border: 1px solid var(--primary-green);
   }
 
+  &:disabled {
+    background-color: #eaeaea;
+    cursor: not-allowed;
+  }
+
   ${({ type }) => css`
     ${type === 'date' && css`
       position: relative;
@@ -41,6 +46,7 @@ type InputProps = {
   value?: string
   onChange?: (e: any) => void
   onBlur?: (e: any) => void
+  disabled?: boolean
 }
 
 export default function Input(...props: InputProps[]) {
@@ -54,6 +60,7 @@ export default function Input(...props: InputProps[]) {
       value={props[0].value}
       onChange={props[0].onChange}
       onBlur={props[0].onBlur}
+      disabled={props[0].disabled}
     >
     </InputStyle>
   )
