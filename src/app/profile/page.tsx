@@ -9,6 +9,7 @@ import styled from 'styled-components'
 import Skeleton from '@/app/components/Skeleton'
 import CurriculumList from '@/app/components/Organism/CurriculumList'
 import EmptyState from '@/app/components/Molecule/EmptyState'
+import Callout from '@/app/components/Molecule/Callout'
 
 import { convertDate } from '@/lib/utils/date'
 
@@ -52,12 +53,18 @@ const ProfileStyle = styled.div`
       }
     }
 
+    .simple-notice-content {
+      &:not(:last-child) {
+        margin-bottom: 12px;
+      }
+    }
+
     .profile-class {
       width: 100%;
 
       .class-title {
         font-size: 1.2rem;
-        margin-bottom: 12px;
+        margin: 12px 0;
       }
 
       .swiper-slide {
@@ -137,11 +144,6 @@ export default function ProfilePage() {
     }
   }, [session, router, status])
 
-  const onClickToggle = function(curriculumRef: React.RefObject<HTMLDivElement>) {
-    if (!curriculumRef.current) return
-    curriculumRef.current.classList.toggle('show')
-  }
-
   return (
     <ProfileStyle className='container'>
       {
@@ -154,6 +156,19 @@ export default function ProfilePage() {
                 { session?.user.kids.length ? `${session?.user.kids.map(kid => kid.name).join(', ')} 학부모님` : `${session?.user.name} 님` }
               </div>
               <Link href='/profile/account' className='profile-setting' />
+            </div>
+            <div>
+              <Callout title='공지사항'>
+                {
+                  session?.simpleNotice && (
+                    session?.simpleNotice.map((notice, index) => (
+                      <div key={index} className='simple-notice-content'>
+                        { notice.content }
+                      </div>
+                    ))
+                  )
+                }
+              </Callout>
             </div>
             {
               session?.classInfo.name !== null ? (
