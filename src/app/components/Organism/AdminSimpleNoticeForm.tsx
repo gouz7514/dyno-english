@@ -19,12 +19,8 @@ export default function AdminSimpleNoticeForm({ isEdit }: AdminSimpleNoticeFormP
   const simpleNoticeId = useSearchParams().get('id') as string
   const router = useRouter()
 
-  useEffect(() => {
-    if (isEdit) getSimpleNoticeInfo()
-  }, [isEdit])
-
-  const getSimpleNoticeInfo = async () => {
-    const docRef = doc(db, 'notice_simple', simpleNoticeId)
+  const getSimpleNoticeInfo = async (id: string) => {
+    const docRef = doc(db, 'notice_simple', id)
     const docSnap = await getDoc(docRef)
 
     if (docSnap.exists()) {
@@ -36,6 +32,8 @@ export default function AdminSimpleNoticeForm({ isEdit }: AdminSimpleNoticeFormP
       router.push('/admin/notice/simple')
     }
   }
+
+  if (isEdit) getSimpleNoticeInfo(simpleNoticeId)
 
   const handleSimpleNoticeChange = (e: any) => {
     setSimpleNotice(e.target.value)

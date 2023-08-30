@@ -81,12 +81,6 @@ export default function AdminCurriculumForm({ isEdit }: AdminCurriculumFormProps
     { name: 'Month 1', days: [''] },
   ])
 
-  useEffect(() => {
-    if (isEdit) {
-      getCurriculumInfo()
-    }
-  }, [isEdit])
-
   const getCurriculumInfo = async () => {
     const curriculumRef = doc(db, 'class_curriculum', curriculumId)
     const curriculumSnap = await getDoc(curriculumRef)
@@ -114,6 +108,8 @@ export default function AdminCurriculumForm({ isEdit }: AdminCurriculumFormProps
       setLoading(false)
     }
   }
+
+  if (isEdit) getCurriculumInfo()
 
   const onChangeCurriculumName = (e: any) => {
     const { name, value } = e.target
