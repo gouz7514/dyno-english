@@ -87,7 +87,7 @@ export default function AdminSimpleNoticeForm({ isEdit }: AdminSimpleNoticeFormP
                 type="text"
                 id="simpleNotice"
                 name="simpleNotice"
-                placeholder="새롭게 추가할 간단 공지사항을 입력해주세요"
+                placeholder={ isEdit ? "수정할 간단 공지사항을 입력해주세요" : "새롭게 추가할 간단 공지사항을 입력해주세요" }
                 value={simpleNotice}
                 onChange={handleSimpleNoticeChange}
               />
