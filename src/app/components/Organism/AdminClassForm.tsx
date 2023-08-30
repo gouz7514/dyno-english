@@ -89,10 +89,6 @@ const AdminClassForm = React.memo(() => {
   const [allCurriculum, setAllCurriculum] = useState<DocumentData[]>([])
   // 현재 선택된 커리큘럼
   const [currentCurriculum, setCurrentCurriculum] = useState<curriculumObject>()
-  
-  const [curriculums, setCurriculums] = useState<{ name: string; days: string[] }[]>([
-    { name: 'Month 1', days: [''] },
-  ])
 
   useEffect(() => {
     getAllCurriculum()
@@ -174,6 +170,7 @@ const AdminClassForm = React.memo(() => {
             type="text"
             id="className"
             name="className"
+            placeholder='새롭게 추가할 수업명을 입력해주세요'
             value={className}
             onChange={handleClassNameChange}
           />
@@ -216,7 +213,7 @@ const AdminClassForm = React.memo(() => {
         </div>
         <Button
           onClick={handleSubmit}
-          disabled={className === ''}
+          disabled={className === '' || loading}
         >
           저장하기
         </Button>

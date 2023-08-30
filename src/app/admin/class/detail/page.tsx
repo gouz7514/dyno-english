@@ -1,6 +1,6 @@
 'use client'
 
-import { useParams } from 'next/navigation'
+import { useSearchParams } from 'next/navigation'
 import styled from 'styled-components'
 import { useEffect, useState } from "react"
 
@@ -766,14 +766,12 @@ function ClassDetailContent({ params }: { params: { id: string } }) {
 }
 
 export default function AdminClassDetailPage() {
-  const params = useParams()
-  const pageParams = {
-    id: params.id
-  }
+  const searchParams = useSearchParams()
+  const id = searchParams.get('id')
 
   return (
     <IsStaff>
-      <ClassDetailContent params={pageParams} />
+      <ClassDetailContent params={{ id: id as string }} />
     </IsStaff>
   )
 }

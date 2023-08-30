@@ -69,7 +69,7 @@ function AdminCurriculmContent() {
                 curriculumList.map((curriculum, index) => (
                   <ListItem
                     key={index}
-                    href={`/admin/curriculum/${curriculum.id}`}
+                    href={`/admin/curriculum/detail?id=${curriculum.id}`}
                     title={curriculum.name}
                   />
                 ))

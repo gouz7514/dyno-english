@@ -76,7 +76,7 @@ function AdminClassContent() {
                   <ListItem
                     key={index}
                     title={classItem.name}
-                    href={`/admin/class/${classItem.id}`}
+                    href={`/admin/class/detail?id=${classItem.id}`}
                   />
                 ))
               }

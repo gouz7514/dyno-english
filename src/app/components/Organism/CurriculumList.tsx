@@ -17,11 +17,12 @@ const CurriculumMonthStyle = styled.div`
     background-color: white;
 
     .class-curriculum-month {
+      display: flex;
+      gap: 12px;
       background-color: #d9d9d9;
       padding: 6px 12px;
       border-radius: 12px;
-      display: flex;
-      gap: 12px;
+      cursor: pointer;
 
       .class-curriculum-month-title {
         font-size: 20px;
@@ -34,7 +35,6 @@ const CurriculumMonthStyle = styled.div`
         height: 24px;
         background-size: 24px 24px;
         background-image: url('/icon/icon-arrow-down.svg');
-        cursor: pointer;
       }
 
       &.show {
@@ -75,11 +75,11 @@ export default function CurriculumMonth({ month, idx }: Props) {
   return (
     <CurriculumMonthStyle>
       <div className='class-curriculum'>
-        <div className='class-curriculum-month' ref={curriculumRef}>
+        <div className='class-curriculum-month' ref={curriculumRef} onClick={() => onClickToggle(curriculumRef)}>
           <div className="class-curriculum-month-title">
             Month { idx + 1 }
           </div>
-          <div className="class-curriculum-month-toggle" onClick={() => onClickToggle(curriculumRef)} />
+          <div className="class-curriculum-month-toggle"/>
         </div>
         <table className='class-curriculum-table'>
           <tbody>

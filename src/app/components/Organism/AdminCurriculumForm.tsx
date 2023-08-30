@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 
-import { useRouter, useParams } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { db } from '@/firebase/config'
 import { addDoc, collection, getDoc, deleteDoc, doc, updateDoc } from 'firebase/firestore'
 
@@ -8,6 +8,7 @@ import Button from '@/app/components/Button'
 import ImageButton from '@/app/components/Atom/Button/ImageButton'
 import Badge from '@/app/components/Molecule/Badge'
 import DynoInput from '@/app/components/Atom/Input/DynoInput'
+import Skeleton from '@/app/components/Skeleton'
 
 import styled from 'styled-components'
 
@@ -69,10 +70,12 @@ type AdminCurriculumFormProps = {
 }
 
 export default function AdminCurriculumForm({ isEdit }: AdminCurriculumFormProps) {
-  const params = useParams()
+  const searchParams = useSearchParams()
+  const curriculumId = searchParams.get('id') as string
   const router = useRouter()
   const [curriculumName, setCurriculumName] = useState('')
-  const [loading, setLoading] = useState<boolean>(false)
+  const [submitting, setSubmitting] = useState<boolean>(false)
+  const [loading, setLoading] = useState(isEdit ? true : false)
   
   const [curriculums, setCurriculums] = useState<{ name: string; days: string[] }[]>([
     { name: 'Month 1', days: [''] },
@@ -85,7 +88,7 @@ export default function AdminCurriculumForm({ isEdit }: AdminCurriculumFormProps
   }, [isEdit])
 
   const getCurriculumInfo = async () => {
-    const curriculumRef = doc(db, 'class_curriculum', params.id)
+    const curriculumRef = doc(db, 'class_curriculum', curriculumId)
     const curriculumSnap = await getDoc(curriculumRef)
 
     if (!curriculumSnap.exists()) {
@@ -108,6 +111,7 @@ export default function AdminCurriculumForm({ isEdit }: AdminCurriculumFormProps
       })
 
       setCurriculums(initialCurriculums)
+      setLoading(false)
     }
   }
 
@@ -173,7 +177,7 @@ export default function AdminCurriculumForm({ isEdit }: AdminCurriculumFormProps
       }
     }
 
-    setLoading(true)
+    setSubmitting(true)
 
     if (isEdit) {
       await updateCurriculum(formattedCurriculum)
@@ -184,11 +188,11 @@ export default function AdminCurriculumForm({ isEdit }: AdminCurriculumFormProps
 
   // 커리큘럼 수정
   const updateCurriculum = async (formattedCurriculum: any) => {
-    await updateDoc(doc(db, 'class_curriculum', params.id), {
+    await updateDoc(doc(db, 'class_curriculum', curriculumId), {
       name: curriculumName,
       curriculum: formattedCurriculum
     }).then(() => {
-      setLoading(false)
+      setSubmitting(false)
       alert('커리큘럼이 수정되었습니다')
       router.push('/admin/curriculum')
     })
@@ -200,7 +204,7 @@ export default function AdminCurriculumForm({ isEdit }: AdminCurriculumFormProps
       name: curriculumName,
       curriculum: formattedCurriculum
     }).then(() => {
-      setLoading(false)
+      setSubmitting(false)
       alert('커리큘럼이 추가되었습니다')
       router.push('/admin/curriculum')
     })
@@ -211,9 +215,9 @@ export default function AdminCurriculumForm({ isEdit }: AdminCurriculumFormProps
     e.preventDefault()
 
     if (confirm('정말로 커리큘럼을 삭제하시겠습니까?')) {
-      setLoading(true)
-      await deleteDoc(doc(db, 'class_curriculum', params.id))
-      setLoading(false)
+      setSubmitting(true)
+      await deleteDoc(doc(db, 'class_curriculum', curriculumId))
+      setSubmitting(false)
       alert('커리큘럼이 삭제되었습니다')
       router.push('/admin/curriculum')
     }
@@ -221,98 +225,104 @@ export default function AdminCurriculumForm({ isEdit }: AdminCurriculumFormProps
 
   return (
     <form className='admin-class-form'>
-      <AdminCurriculumFormStyle>
-        <div className="input-container">
-          <div className="input-indicator">커리큘럼 이름</div>
-          <DynoInput
-            type="text"
-            id="curriculumName"
-            name="curriculumName"
-            placeholder='수업 추가 시 커리큘럼을 지정할 수 있습니다'
-            value={curriculumName}
-            onChange={onChangeCurriculumName}
-          />
-        </div>
-        <div className="dynamic-input-container">
-          <div className="input-indicator">커리큘럼</div>
-          <Button
-            size='small'
-            onClick={addMonth}
-          >
-            수업 월 추가하기
-          </Button>
-          {
-            curriculums.map((curriculum, monthIdx) => (
-              <div key={monthIdx} className='dynamic-month-container'>
-                <div className="dynamic-month-indicator">
-                  <Badge
-                    text={curriculum.name}
-                  />
-                  {
-                    curriculums.length > 1 && (
-                      <ImageButton
-                        onClick={(e) => removeMonth(monthIdx, e)}
-                        role='delete'
-                      />
-                    )
-                  }
-                </div>
-                <div>
-                  {
-                    curriculum.days.map((day, dayIdx) => (
-                      <div key={dayIdx} className='dynamic-day-container'>
-                        <label htmlFor={`curriculumDay-${dayIdx}`}>{ dayIdx + 1 } 일자</label>
-                        <div className="dynamic-day-input">
-                          <DynoInput
-                            type="text"
-                            id={`curriculumDay-${dayIdx}`}
-                            placeholder={`Day ${dayIdx + 1}`}
-                            value={day}
-                            onChange={(e) => handleWeekChange(monthIdx, dayIdx, e)}
-                          />
-                          {
-                            curriculum.days.length > 1 && (
-                              <ImageButton
-                                onClick={(e) => removeWeek(monthIdx, dayIdx, e)}
-                                role='delete'
-                              />
-                            )
-                          }
-                        </div>
-                      </div>
-                    ))
-                  }
-                  <Button
-                    size="small"
-                    onClick={(e) => addWeek(monthIdx, e)}
-                  >
-                    수업 일자 추가하기
-                  </Button>
-                </div>
+      {
+        loading ? (
+            <Skeleton />
+          ) : (
+            <AdminCurriculumFormStyle>
+              <div className="input-container">
+                <div className="input-indicator">커리큘럼 이름</div>
+                <DynoInput
+                  type="text"
+                  id="curriculumName"
+                  name="curriculumName"
+                  placeholder='새롭게 추가할 커리큘럼 이름을 입력해주세요'
+                  value={curriculumName}
+                  onChange={onChangeCurriculumName}
+                />
               </div>
-            ))
-          }
-        </div>
-        <div className="button-container">
-          <Button
-            onClick={handleSubmit}
-            disabled={curriculumName === '' || loading}
-          >
-            { isEdit ? '수정하기' : '추가하기' }
-          </Button>
-          {
-            isEdit && (
-              <Button
-                color='danger'
-                onClick={handleDelete}
-                disabled={loading}
-              >
-                삭제하기
-              </Button>
-            )
-          }
-        </div>
-      </AdminCurriculumFormStyle>
+              <div className="dynamic-input-container">
+                <div className="input-indicator">커리큘럼</div>
+                <Button
+                  size='small'
+                  onClick={addMonth}
+                >
+                  수업 월 추가하기
+                </Button>
+                {
+                  curriculums.map((curriculum, monthIdx) => (
+                    <div key={monthIdx} className='dynamic-month-container'>
+                      <div className="dynamic-month-indicator">
+                        <Badge
+                          text={curriculum.name}
+                        />
+                        {
+                          curriculums.length > 1 && (
+                            <ImageButton
+                              onClick={(e) => removeMonth(monthIdx, e)}
+                              role='delete'
+                            />
+                          )
+                        }
+                      </div>
+                      <div>
+                        {
+                          curriculum.days.map((day, dayIdx) => (
+                            <div key={dayIdx} className='dynamic-day-container'>
+                              <label htmlFor={`curriculumDay-${dayIdx}`}>{ dayIdx + 1 } 일자</label>
+                              <div className="dynamic-day-input">
+                                <DynoInput
+                                  type="text"
+                                  id={`curriculumDay-${dayIdx}`}
+                                  placeholder={`Day ${dayIdx + 1}`}
+                                  value={day}
+                                  onChange={(e) => handleWeekChange(monthIdx, dayIdx, e)}
+                                />
+                                {
+                                  curriculum.days.length > 1 && (
+                                    <ImageButton
+                                      onClick={(e) => removeWeek(monthIdx, dayIdx, e)}
+                                      role='delete'
+                                    />
+                                  )
+                                }
+                              </div>
+                            </div>
+                          ))
+                        }
+                        <Button
+                          size="small"
+                          onClick={(e) => addWeek(monthIdx, e)}
+                        >
+                          수업 일자 추가하기
+                        </Button>
+                      </div>
+                    </div>
+                  ))
+                }
+              </div>
+              <div className="button-container">
+                <Button
+                  onClick={handleSubmit}
+                  disabled={curriculumName === '' || submitting}
+                >
+                  { isEdit ? '수정하기' : '추가하기' }
+                </Button>
+                {
+                  isEdit && (
+                    <Button
+                      color='danger'
+                      onClick={handleDelete}
+                      disabled={submitting}
+                    >
+                      삭제하기
+                    </Button>
+                  )
+                }
+              </div>
+            </AdminCurriculumFormStyle>
+          )
+      }
     </form>
   )
 }
