@@ -1,26 +1,26 @@
 'use client'
 
-import AdminClassForm from '@/app/components/Organism/AdminClassForm'
+import AdminCurriculumForm from '@/app/components/Organism/AdminCurriculumForm'
 import { FormStyle } from '@/app/styles/styles'
 import IsStaff from '@/app/components/Template/IsStaff'
 
-function AdminClassFormContent() {
+function AdminCurriculumFormContent() {
   return (
     <FormStyle className='container'>
       <div className="form-title">
         <h1>
-          수업 정보 추가하기
+          커리큘럼 추가하기
         </h1>
       </div>
-      <AdminClassForm />
+      <AdminCurriculumForm />
     </FormStyle>
   )
 }
 
-export default function AdminClassFormPage() {
+export default function AdminCurriculumFormPage() {
   return (
     <IsStaff>
-      <AdminClassFormContent />
+      <AdminCurriculumFormContent />
     </IsStaff>
   )
 }

@@ -12,7 +12,7 @@ import LinkButton from '@/app/components/LinkButton'
 import ListItem from '@/app/components/Atom/ListItem'
 import IsStaff from '@/app/components/Template/IsStaff'
 
-const AdminClassStyle = styled.div`
+const AdminCurriculumStyle = styled.div`
   .content-header {
     display: flex;
     justify-content: space-between;
@@ -25,20 +25,14 @@ const AdminClassStyle = styled.div`
   }
 `
 
-/*
-  TODO List
-  1. 수업 클릭 시 해당 수업 정보 보이기 (커리큘럼, 과제, 수업 내용)
-  2. 수업 내용 및 과제 추가 form
-*/
+function AdminCurriculmContent() {
+  const [curriculumList, setCurriculumList] = useState<DocumentData[]>([])
+  const [loading, setLoading] = useState<boolean>(true)
 
-function AdminClassContent() {
-  const [classList, setClassList] = useState<DocumentData[]>([])
-  const [loading, setLoading] = useState(true)
-
-  const getClass = async () => {
-    const classRef = collection(db, 'class')
-    const classSnapshot = await getDocs(classRef)
-    const classList = classSnapshot.docs.map(doc => {
+  const getCurriculums = async () => {
+    const curriculumRef = collection(db, 'class_curriculum')
+    const curriculumSnapshot = await getDocs(curriculumRef)
+    const curriculumList = curriculumSnapshot.docs.map(doc => {
       const docData = {
         id: doc.id,
         name: doc.data().name
@@ -47,36 +41,36 @@ function AdminClassContent() {
       return docData
     })
 
-    setClassList(classList)
+    setCurriculumList(curriculumList)
     setLoading(false)
   }
 
   useEffect(() => {
-    getClass()
+    getCurriculums()
   }, [])
 
   return (
-    <AdminClassStyle className='container'>
+    <AdminCurriculumStyle className='container'>
       {
-        loading ? (
+        loading? (
           <Skeleton />
         ) : (
           <div>
             <div className="content-header">
-              <div className='content-title'>
-                수업 목록
+              <div className="content-title">
+                커리큘럼 목록
               </div>
-              <LinkButton href='/admin/class/form'>
-                수업 추가
+              <LinkButton href="/admin/curriculum/form">
+                커리큘럼 추가
               </LinkButton>
             </div>
-            <div className='content-container'>
+            <div className="content-container">
               {
-                classList.map((classItem, index) => (
+                curriculumList.map((curriculum, index) => (
                   <ListItem
                     key={index}
-                    title={classItem.name}
-                    href={`/admin/class/detail?id=${classItem.id}`}
+                    href={`/admin/curriculum/detail?id=${curriculum.id}`}
+                    title={curriculum.name}
                   />
                 ))
               }
@@ -84,14 +78,14 @@ function AdminClassContent() {
           </div>
         )
       }
-    </AdminClassStyle>
+    </AdminCurriculumStyle>
   )
 }
 
-export default function AdminClassPage() {
+export default function AdminCUrriculumPage() {
   return (
     <IsStaff>
-      <AdminClassContent />
+      <AdminCurriculmContent />
     </IsStaff>
   )
 }

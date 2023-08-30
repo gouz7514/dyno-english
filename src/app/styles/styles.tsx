@@ -87,18 +87,6 @@ export const FormStyle = styled.div`
       margin-bottom: 8px;
     }
 
-    input[type=text] {
-      height: 40px;
-      border-radius: 8px;
-      padding-left: 8px;
-      outline: none;
-      border: 0;
-
-      &:focus {
-        border: 1px solid var(--primary-green);
-      }
-    }
-
     .input-error {
       margin-top: 8px;
       color: red;
@@ -110,8 +98,7 @@ export const FormStyle = styled.div`
       height: 200px;
       border-radius: 8px;
       padding: 8px;
-      outline: none;
-      border: 0;
+      border: 1px solid #ccc;
 
       &:focus {
         border: 1px solid var(--primary-green);

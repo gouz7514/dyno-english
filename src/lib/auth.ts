@@ -4,9 +4,9 @@ import KakaoProvider from "next-auth/providers/kakao"
 import axios from "axios"
 import { auth as firebaseAuth, db } from "@/firebase/config"
 import { signInWithCustomToken } from "firebase/auth"
-import { doc, getDoc, setDoc, DocumentSnapshot } from "firebase/firestore"
+import { doc, getDoc, getDocs, collection, setDoc, DocumentSnapshot } from "firebase/firestore"
 
-import { ClassDetail, ClassHomeworks, ClassNotices, Datetime, Notice, Homework } from "@/types/types"
+import { ClassDetail, ClassHomeworks, ClassNotices, Notice, Homework } from "@/types/types"
 
 const kakaoCustomProvider = KakaoProvider({
   clientId: process.env.KAKAO_CLIENT_ID as string,
@@ -39,11 +39,13 @@ const getClassInfo = async (classId: string) => {
     if (classInfo.exists()) {
       const classHomeworks = classInfo.data().homework ? await getDoc(classInfo.data().homework) : null
       const classNotices = classInfo.data().notice ? await getDoc(classInfo.data().notice) : null
+      const classCurriculums = classInfo.data().curriculum ? await getDoc(classInfo.data().curriculum) : null
 
       return {
         info: classInfo.data(),
         homeworks: classHomeworks?.data(),
-        notices: classNotices?.data()
+        notices: classNotices?.data(),
+        curriculums: classCurriculums?.data()
       }
     } else {
       return null
@@ -52,6 +54,19 @@ const getClassInfo = async (classId: string) => {
     console.error(error)
     return null
   }
+}
+
+const getSimpleNotice = async () => {
+  const simpleNoticeSnap = await getDocs(collection(db, 'notice_simple'))
+
+  const simpleNotice = simpleNoticeSnap.docs.map((doc) => {
+    return {
+      id: doc.id,
+      ...doc.data()
+    }
+  })
+
+  return simpleNotice
 }
 
 export const authOptions: NextAuthOptions = {
@@ -111,6 +126,8 @@ export const authOptions: NextAuthOptions = {
     async session({ session, token }) {
       const userId = token.sub as string
       const userInfo = await getUserInfo(userId)
+      const simpleNotice = await getSimpleNotice()
+      session.simpleNotice = simpleNotice
 
       if (userInfo) {
         session.user.name = userInfo.name
@@ -131,12 +148,13 @@ export const authOptions: NextAuthOptions = {
           const classInfo = await getClassInfo(classId)
   
           if (classInfo) {
-            const { id, name, curriculum } = classInfo.info
+            const { id, name } = classInfo.info
+            const curriculums = classInfo.curriculums as any
             
             session.classInfo = {
               id,
               name,
-              curriculum
+              curriculum : curriculums
             }
             
             const homeworks = classInfo.homeworks as ClassHomeworks
@@ -151,16 +169,15 @@ export const authOptions: NextAuthOptions = {
 
             combinedData.forEach((item) => {
               const { date, type, content } = item
-              const dateString = new Date(date.seconds * 1000).toISOString().slice(0, 10);
             
-              if (!classDetails[dateString]) {
-                classDetails[dateString] = { date: dateString, homework: '', notice: '' };
+              if (!classDetails[date]) {
+                classDetails[date] = { date: date, homework: '', notice: '' };
               }
 
               if (type === 'notice') {
-                classDetails[dateString].notice = content
+                classDetails[date].notice = content
               } else if (type === 'homework') {
-                classDetails[dateString].homework = content
+                classDetails[date].homework = content
               }
             })
 

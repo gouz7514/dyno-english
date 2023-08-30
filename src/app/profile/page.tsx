@@ -1,14 +1,17 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react'
 import Link from 'next/link'
 import styled from 'styled-components'
 
 import Skeleton from '@/app/components/Skeleton'
-import CurriculumMonth from '@/app/components/CurriculumMonth'
+import CurriculumList from '@/app/components/Organism/CurriculumList'
 import EmptyState from '@/app/components/Molecule/EmptyState'
+import Callout from '@/app/components/Molecule/Callout'
+
+import { convertDate } from '@/lib/utils/date'
 
 import { Swiper, SwiperSlide } from 'swiper/react'
 import SwiperCore, { Pagination } from "swiper"
@@ -26,7 +29,7 @@ const ProfileStyle = styled.div`
     height: 650px !important;
 
     @media screen and (min-width: 600px) {
-      height: 350px !important;
+      height: 400px !important;
     }
   }
 
@@ -50,12 +53,18 @@ const ProfileStyle = styled.div`
       }
     }
 
+    .simple-notice-content {
+      &:not(:last-child) {
+        margin-bottom: 12px;
+      }
+    }
+
     .profile-class {
       width: 100%;
 
       .class-title {
         font-size: 1.2rem;
-        margin-bottom: 12px;
+        margin: 12px 0;
       }
 
       .swiper-slide {
@@ -76,9 +85,25 @@ const ProfileStyle = styled.div`
       .class-homework {
         box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
         width: 100%;
-        height: 300px;
+        height: 400px;
         border-radius: 12px;
         padding: 12px;
+      }
+
+      .content-title {
+        font-size: 1.2rem;
+        font-weight: 700;
+      }
+
+      .content-inner {
+        white-space: pre-line;
+        word-break: keep-all;
+        height: calc(100% - 44px);
+        overflow-y: scroll;
+
+        &::-webkit-scrollbar {
+          display: none;
+        }
       }
 
       .class-notice {
@@ -119,17 +144,6 @@ export default function ProfilePage() {
     }
   }, [session, router, status])
 
-  const convertDate = function(date: string) {
-    const [_year, month, day] = date.split('-')
-
-    return `${month}월 ${day}일`
-  }
-
-  const onClickToggle = function(curriculumRef: React.RefObject<HTMLDivElement>) {
-    if (!curriculumRef.current) return
-    curriculumRef.current.classList.toggle('show')
-  }
-
   return (
     <ProfileStyle className='container'>
       {
@@ -142,6 +156,19 @@ export default function ProfilePage() {
                 { session?.user.kids.length ? `${session?.user.kids.map(kid => kid.name).join(', ')} 학부모님` : `${session?.user.name} 님` }
               </div>
               <Link href='/profile/account' className='profile-setting' />
+            </div>
+            <div>
+              <Callout title='공지사항'>
+                {
+                  session?.simpleNotice && (
+                    session?.simpleNotice.map((notice, index) => (
+                      <div key={index} className='simple-notice-content'>
+                        { notice.content }
+                      </div>
+                    ))
+                  )
+                }
+              </Callout>
             </div>
             {
               session?.classInfo.name !== null ? (
@@ -168,18 +195,18 @@ export default function ProfilePage() {
                                 Object.entries(session?.classDetails).map(([key, value]) => (
                                   <SwiperSlide key={key} className='class-info'>
                                     <div className="class-notice">
-                                      <div>
+                                      <div className='content-title'>
                                         { convertDate(key) } 수업내용
                                       </div>
-                                      <div>
+                                      <div className='content-inner'>
                                         { value.notice }
                                       </div>
                                     </div>
                                     <div className="class-homework">
-                                      <div>
+                                      <div className='content-title'>
                                       { convertDate(key) } 숙제
                                       </div>
-                                      <div>
+                                      <div className='content-inner'>
                                         { value.homework }
                                       </div>
                                     </div>
@@ -198,13 +225,18 @@ export default function ProfilePage() {
                       session?.classInfo.curriculum && (
                         <div>
                           {
-                            session?.classInfo.curriculum?.months?.month.map((month, idx) => (
-                              <CurriculumMonth
-                                key={idx}
-                                idx={idx}
-                                month={month}
-                                onClickToggle={onClickToggle}
-                              />
+                            Object.entries(session?.classInfo.curriculum).map(([key, value]) => (
+                              (
+                                key === 'curriculum' && (
+                                  value.months?.month.map((month: any, index: any) => (
+                                    <CurriculumList
+                                      key={index}
+                                      idx={index}
+                                      month={month}
+                                    />
+                                  ))
+                                )
+                              )
                             ))
                           }
                         </div>  

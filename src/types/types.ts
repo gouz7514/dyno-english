@@ -38,7 +38,7 @@ export interface TestimonialProps {
 }
 
 type ButtonSize = 'small' | 'medium' | 'large'
-type buttontheme = 'primary' | 'secondary' | 'default'
+type buttontheme = 'primary' | 'secondary' | 'danger' | 'default'
 
 export interface ButtonProps {
   onClick: ((e: any) => void) | ((e: any) => Promise<void>),
@@ -63,19 +63,14 @@ export interface UserProps {
   }[] | [],
 }
 
-export interface Datetime {
-  seconds: number
-  nanoseconds: number
-}
-
 export interface Notice {
-  date: Datetime
+  date: string
   type: string
   content: string
 }
 
 export interface Homework {
-  date: Datetime
+  date: string
   type: string
   content: string
 }
@@ -91,8 +86,11 @@ export interface Month {
 }
 
 export interface Curriculum {
-  months: {
-    month: Month[],
+  name: string,
+  curriculum: {
+    curriculum: {
+      months: Month[]
+    }
   }
 }
 
@@ -104,10 +102,7 @@ export interface ClassInfo {
 
 export interface ClassItem {
   content: string;
-  date: {
-    seconds: number;
-    nanoseconds: number;
-  }
+  date: string
 }
 
 export interface ClassHomeworks {

@@ -1,26 +1,26 @@
 'use client'
 
-import AdminClassForm from '@/app/components/Organism/AdminClassForm'
+import AdminSimpleNoticeForm from '@/app/components/Organism/AdminSimpleNoticeForm'
 import { FormStyle } from '@/app/styles/styles'
 import IsStaff from '@/app/components/Template/IsStaff'
 
-function AdminClassFormContent() {
+function AdminNoticeSimpleEditContet() {
   return (
     <FormStyle className='container'>
       <div className="form-title">
         <h1>
-          수업 정보 추가하기
+          간단 공지사항 수정하기
         </h1>
       </div>
-      <AdminClassForm />
+      <AdminSimpleNoticeForm isEdit={true} />
     </FormStyle>
   )
 }
 
-export default function AdminClassFormPage() {
+export default function AdminNoticeSimpleEditPage() {
   return (
     <IsStaff>
-      <AdminClassFormContent />
+      <AdminNoticeSimpleEditContet />
     </IsStaff>
   )
 }

@@ -48,6 +48,11 @@ const BtnStyle = styled.button<ButtonProps>`
       background-color: var(--button-default);
       color: black;
     `}
+
+    ${color === 'danger' && css`
+      background-color: var(--button-danger);
+      color: white;
+    `}
   `}
 `
 

@@ -8,12 +8,14 @@ declare module "next-auth" {
       userId: string,
       isStaff: boolean,
       kids: {
-        name: string,
-        birth: string
+        [key: string]: string
       }[],
       testimonialAvailable: boolean,
     },
     classInfo: ClassInfo,
     classDetails: ClassDetails,
+    simpleNotice: {
+      [key: string]: string
+    }[]
   }
 }

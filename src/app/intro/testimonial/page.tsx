@@ -215,10 +215,10 @@ export default function IntroTestimonial() {
                   clickable: true
                 }}
                 loop={true}
-                // autoplay={{
-                //   delay: 3000,
-                //   disableOnInteraction: false
-                // }}
+                autoplay={{
+                  delay: 3000,
+                  disableOnInteraction: false
+                }}
                 onBeforeInit={(swiper: SwiperCore) => {
                   swiperRef.current = swiper
                 }}
