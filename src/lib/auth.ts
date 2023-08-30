@@ -4,7 +4,7 @@ import KakaoProvider from "next-auth/providers/kakao"
 import axios from "axios"
 import { auth as firebaseAuth, db } from "@/firebase/config"
 import { signInWithCustomToken } from "firebase/auth"
-import { doc, getDoc, setDoc, DocumentSnapshot } from "firebase/firestore"
+import { doc, getDoc, getDocs, collection, setDoc, DocumentSnapshot } from "firebase/firestore"
 
 import { ClassDetail, ClassHomeworks, ClassNotices, Notice, Homework } from "@/types/types"
 
@@ -54,6 +54,19 @@ const getClassInfo = async (classId: string) => {
     console.error(error)
     return null
   }
+}
+
+const getSimpleNotice = async () => {
+  const simpleNoticeSnap = await getDocs(collection(db, 'notice_simple'))
+
+  const simpleNotice = simpleNoticeSnap.docs.map((doc) => {
+    return {
+      id: doc.id,
+      ...doc.data()
+    }
+  })
+
+  return simpleNotice
 }
 
 export const authOptions: NextAuthOptions = {
@@ -113,6 +126,8 @@ export const authOptions: NextAuthOptions = {
     async session({ session, token }) {
       const userId = token.sub as string
       const userInfo = await getUserInfo(userId)
+      const simpleNotice = await getSimpleNotice()
+      session.simpleNotice = simpleNotice
 
       if (userInfo) {
         session.user.name = userInfo.name
