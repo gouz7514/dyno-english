@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react'
 import { db } from '@/firebase/config'
 import { getDocs, collection, DocumentData } from 'firebase/firestore'
 
+import EmptyState from '@/app/components/Molecule/EmptyState'
 import Skeleton from '@/app/components/Skeleton'
 import LinkButton from '@/app/components/LinkButton'
 import ListItem from '@/app/components/Atom/ListItem'
@@ -66,13 +67,20 @@ function AdminCurriculmContent() {
             </div>
             <div className="content-container">
               {
-                curriculumList.map((curriculum, index) => (
-                  <ListItem
-                    key={index}
-                    href={`/admin/curriculum/detail?id=${curriculum.id}`}
-                    title={curriculum.name}
+                curriculumList.length === 0 ? (
+                  <EmptyState
+                    mainText="커리큘럼이 없습니다."
+                    subText="커리큘럼을 추가해주세요."
                   />
-                ))
+                ) : (
+                  curriculumList.map((curriculum, index) => (
+                    <ListItem
+                      key={index}
+                      href={`/admin/curriculum/detail?id=${curriculum.id}`}
+                      title={curriculum.name}
+                    />
+                  ))
+                )
               }
             </div>
           </div>
