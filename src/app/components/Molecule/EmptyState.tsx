@@ -26,6 +26,7 @@ const EmptyStateStyle = styled.div<EmptyStateprops>`
     width: 100px;
     height: 100px;
     margin-bottom: 12px;
+    border-radius: 50%;
   }
 
   .empty-container-text {

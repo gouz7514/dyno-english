@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react'
 import { db } from '@/firebase/config'
 import { getDocs, collection, DocumentData } from 'firebase/firestore'
 
+import EmptyState from '@/app/components/Molecule/EmptyState'
 import Skeleton from '@/app/components/Skeleton'
 import LinkButton from '@/app/components/LinkButton'
 import ListItem from '@/app/components/Atom/ListItem'
@@ -72,17 +73,26 @@ function AdminNoticeSimpleContent() {
                 </div>
               </div>
             </div>
-            <div className="content-container">
-              {
-                simpleNoticeList.map((notice, index) => (
-                  <ListItem
-                    key={index}
-                    title={notice.content}
-                    href={`/admin/notice/simple/edit?id=${notice.id}`}
-                  />
-                ))
-              }
-            </div>
+            {
+              simpleNoticeList.length === 0 ? (
+                <EmptyState
+                  mainText="등록된 간단 공지사항이 없습니다."
+                  subText="간단 공지사항을 추가해주세요."
+                />
+              ) : (
+                <div className="content-container">
+                  {
+                    simpleNoticeList.map((notice, index) => (
+                      <ListItem
+                        key={index}
+                        title={notice.content}
+                        href={`/admin/notice/simple/edit?id=${notice.id}`}
+                      />
+                    ))
+                  }
+                </div>
+              )
+            }
           </div>
         )
       }

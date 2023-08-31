@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react'
 import { db } from '@/firebase/config'
 import { getDocs, collection, DocumentData } from 'firebase/firestore'
 
+import EmptyState from '@/app/components/Molecule/EmptyState'
 import Skeleton from '@/app/components/Skeleton'
 import LinkButton from '@/app/components/LinkButton'
 import ListItem from '@/app/components/Atom/ListItem'
@@ -72,13 +73,20 @@ function AdminClassContent() {
             </div>
             <div className='content-container'>
               {
-                classList.map((classItem, index) => (
-                  <ListItem
-                    key={index}
-                    title={classItem.name}
-                    href={`/admin/class/detail?id=${classItem.id}`}
+                classList.length === 0 ? (
+                  <EmptyState
+                    mainText="등록된 수업이 없습니다."
+                    subText="수업을 추가해주세요."
                   />
-                ))
+                ) : (
+                  classList.map((classItem, index) => (
+                    <ListItem
+                      key={index}
+                      title={classItem.name}
+                      href={`/admin/class/detail?id=${classItem.id}`}
+                    />
+                  ))
+                )
               }
             </div>
           </div>
