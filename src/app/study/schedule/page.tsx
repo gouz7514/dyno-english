@@ -17,7 +17,7 @@ import { ClassSchedules } from '@/types/types'
 import CalendarHeader from '@/app/components/Calendar/Header'
 import CalendarToolbar from '@/app/components/Calendar/Toolbar'
 
-const CalendarContainer = styled.div`
+const ScheduleContainer = styled.div`
   width: 100%;
   max-width: 1024px;
   align-items: center;
@@ -69,7 +69,7 @@ const CalendarContainer = styled.div`
 `
 
 export default function StudyCalendar() {
-  const [calendarEvents, setCalendarEvents] = useState<any[]>([])
+  const [scheduleEvents, setScheduleEvents] = useState<any[]>([])
   const [calendarView, setCalendarView] = useState<View>('week')
   const localizer = momentLocalizer(moment)
 
@@ -89,14 +89,14 @@ export default function StudyCalendar() {
       })
       const recurringEvents = generateRecurringEvents(convertedSchedules)
       
-      setCalendarEvents(recurringEvents)
+      setScheduleEvents(recurringEvents)
     }
 
     getSchedules()
   }, [])
 
   return (
-    <CalendarContainer>
+    <ScheduleContainer>
       <Calendar
         view={calendarView}
         views={['month', 'week']}
@@ -107,7 +107,7 @@ export default function StudyCalendar() {
         startAccessor="start"
         endAccessor="end"
         style={{ height: 800 }}
-        events={calendarEvents}
+        events={scheduleEvents}
         formats={{
           timeGutterFormat: (date) => {
             return moment(date).format('H')
@@ -154,6 +154,6 @@ export default function StudyCalendar() {
           }
         }}
       />
-    </CalendarContainer>
+    </ScheduleContainer>
   )
 }
