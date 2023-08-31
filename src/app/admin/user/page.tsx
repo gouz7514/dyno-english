@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react'
 import { db } from '@/firebase/config'
 import { getDocs, collection, DocumentData } from 'firebase/firestore'
 
+import EmptyState from '@/app/components/Molecule/EmptyState'
 import Skeleton from '@/app/components/Skeleton'
 import ModalUser from '@/app/components/Modal/ModalUser'
 import ListItem2 from '@/app/components/Atom/ListItem2'
@@ -99,17 +100,23 @@ function AdminUserContent() {
             </div>
             <div>
               {
-                users.map((user, idx) => {
-                  const userKidsName = user.kids.map((kid: any) => kid.name).join(', ')
-                  const userItemTitle = userKidsName ? `${user.name} (${userKidsName} 학부모님)` : user.name
-                  return (
-                    <ListItem2
-                      key={idx}
-                      title={userItemTitle}
-                      onClick={() => onClickUser(user)}
-                    />
-                  )
-                })
+                users.length === 0 ? (
+                  <EmptyState
+                    mainText="등록된 회원이 없습니다."
+                  />
+                ) : (
+                  users.map((user, idx) => {
+                    const userKidsName = user.kids.map((kid: any) => kid.name).join(', ')
+                    const userItemTitle = userKidsName ? `${user.name} (${userKidsName} 학부모님)` : user.name
+                    return (
+                      <ListItem2
+                        key={idx}
+                        title={userItemTitle}
+                        onClick={() => onClickUser(user)}
+                      />
+                    )
+                  })
+                )
               }
             </div>
           </div>
