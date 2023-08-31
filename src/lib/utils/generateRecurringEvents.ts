@@ -5,8 +5,8 @@ interface Event {
   start: Date
   end: Date
   bgColor: string
-  repeatStart?: Date
-  repeatEnd?: Date
+  repeatStart?: Date | null
+  repeatEnd?: Date | null
 }
 
 export function generateRecurringEvents(events: Event[]): Event[] {

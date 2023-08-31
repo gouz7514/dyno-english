@@ -1,17 +1,19 @@
 'use client'
 
 import styled from 'styled-components'
-import React, { useRef, useState } from "react"
-
-import dynamic from 'next/dynamic'
+import React, { useState, useEffect } from "react"
 
 import { Calendar, momentLocalizer, View } from 'react-big-calendar'
 import 'react-big-calendar/lib/css/react-big-calendar.css'
 import moment from 'moment'
 import 'moment/locale/ko'
 
+import { db } from '@/firebase/config'
+import { getDocs, collection } from 'firebase/firestore'
+
 import { generateRecurringEvents } from '@/lib/utils/generateRecurringEvents'
 
+import { ClassSchedules } from '@/types/types'
 import CalendarHeader from '@/app/components/Calendar/Header'
 import CalendarToolbar from '@/app/components/Calendar/Toolbar'
 
@@ -67,30 +69,31 @@ const CalendarContainer = styled.div`
 `
 
 export default function StudyCalendar() {
+  const [calendarEvents, setCalendarEvents] = useState<any[]>([])
   const [calendarView, setCalendarView] = useState<View>('week')
   const localizer = momentLocalizer(moment)
 
-  // TODO : get event from server and apply recurring rule
-  const events = [
-    {
-      title: '파닉스-K (1)',
-      start: moment('2023-08-03T13:00:00+09:00').toDate(),
-      end: moment('2023-08-03T13:50:00+09:00').toDate(),
-      bgColor: 'lightblue',
-      repeatStart: moment('2023-08-03T13:00:00+09:00').toDate(),
-      repeatEnd: moment('2023-08-31T13:50:00+09:00').toDate(),
-    },
-    {
-      title: '원서리딩',
-      start: moment('2023-08-01T14:00:00+09:00').toDate(),
-      end: moment('2023-08-01T14:50:00+09:00').toDate(),
-      bgColor: 'lightgreen',
-      repeatStart: moment('2023-08-01T14:00:00+09:00').toDate(),
-      repeatEnd: moment('2023-08-31T14:50:00+09:00').toDate(),
-    },
-  ]
+  useEffect(() => {
+    const getSchedules = async () => {
+      const docSnap = await getDocs(collection(db, 'class_schedule'))
+      const schedules = docSnap.docs.map(doc => doc.data()) as ClassSchedules
+      const convertedSchedules = schedules.map((schedule) => {
+        return {
+          title: schedule.title,
+          start: moment(schedule.start).toDate(),
+          end: moment(schedule.end).toDate(),
+          bgColor: schedule.bgColor,
+          repeatStart: schedule.isRepeat ? moment(schedule.repeatStart).toDate() : null,
+          repeatEnd: schedule.isRepeat ? moment(schedule.repeatEnd).toDate() : null,
+        }
+      })
+      const recurringEvents = generateRecurringEvents(convertedSchedules)
+      
+      setCalendarEvents(recurringEvents)
+    }
 
-  const recurringEvents = generateRecurringEvents(events)
+    getSchedules()
+  }, [])
 
   return (
     <CalendarContainer>
@@ -104,7 +107,7 @@ export default function StudyCalendar() {
         startAccessor="start"
         endAccessor="end"
         style={{ height: 800 }}
-        events={recurringEvents}
+        events={calendarEvents}
         formats={{
           timeGutterFormat: (date) => {
             return moment(date).format('H')

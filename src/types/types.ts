@@ -122,3 +122,15 @@ export interface ClassDetail {
 export interface ClassDetails {
   [date: string]: ClassDetail
 }
+
+export interface ClassSchedule {
+  title: string
+  start: string
+  end: string
+  bgColor: string
+  isRepeat: boolean
+  repeatStart: string | null
+  repeatEnd: string | null
+}
+
+export interface ClassSchedules extends Array<ClassSchedule> {}
