@@ -102,7 +102,7 @@ const SwiperStyle = styled.div`
     margin: 12px 0;
 
     .swiper-item {
-      background-color: rgba(48, 166, 128, 0.6);
+      background-color: var(--color-card);
       border-radius: 12px;
       padding: 24px;
 
