@@ -24,6 +24,7 @@ function AdminContent() {
         <ListItem title="수업 관리" href="/admin/class" />
         <ListItem title="커리큘럼 관리" href="/admin/curriculum" />
         <ListItem title="간단 공지사항 관리" href="/admin/notice/simple" />
+        <ListItem title="수업 시간표 관리" href="/admin/schedule" />
       </div>
     </AdminContainer>
   )

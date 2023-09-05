@@ -77,14 +77,35 @@ export default function StudyCalendar() {
     const getSchedules = async () => {
       const docSnap = await getDocs(collection(db, 'class_schedule'))
       const schedules = docSnap.docs.map(doc => doc.data()) as ClassSchedules
-      const convertedSchedules = schedules.map((schedule) => {
-        return {
-          title: schedule.title,
-          start: moment(schedule.start).toDate(),
-          end: moment(schedule.end).toDate(),
-          bgColor: schedule.bgColor,
-          repeatStart: schedule.isRepeat ? moment(schedule.repeatStart).toDate() : null,
-          repeatEnd: schedule.isRepeat ? moment(schedule.repeatEnd).toDate() : null,
+
+      const convertedSchedules: Array<any> = []
+
+      schedules.forEach((schedule) => {
+        if (schedule.isRepeat && schedule.repeatRule) {
+          schedule.repeatRule.forEach((rule) => {
+            const convertedSchedule = {
+              title: schedule.title,
+              start: moment(schedule.start).toDate(),
+              end: moment(schedule.end).toDate(),
+              bgColor: schedule.bgColor,
+              isRepeat: schedule.isRepeat,
+              repeatDay: rule.repeatDay,
+              repeatStart: moment(rule.repeatStart).toDate(),
+              repeatEnd: moment(rule.repeatEnd).toDate(),
+            }
+
+            convertedSchedules.push(convertedSchedule);
+          })
+        } else {
+          const convertedSchedule = {
+            title: schedule.title,
+            start: moment(schedule.start).toDate(),
+            end: moment(schedule.end).toDate(),
+            bgColor: schedule.bgColor,
+            isRepeat: schedule.isRepeat,
+          }
+
+          convertedSchedules.push(convertedSchedule)
         }
       })
       const recurringEvents = generateRecurringEvents(convertedSchedules)
