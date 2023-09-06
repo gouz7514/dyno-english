@@ -59,10 +59,10 @@ function AdminScheduleContent() {
         <div className="content-header">
           <div className="d-flex justify-content-between align-items-center">
             <div className="content-title">
-              수업 일정
+              수업 시간표
             </div>
             <LinkButton href="/admin/schedule/form">
-              수업 일정 추가
+              추가하기
             </LinkButton>
           </div>
           <span className='small-text text-gray'>
@@ -76,7 +76,7 @@ function AdminScheduleContent() {
             scheduleList.length === 0 ? (
               <EmptyState
                 mainText="수업 일정이 없습니다."
-                subText="수업 일정을 추가해주세요."
+                subText="시간표를 추가해주세요."
               />
             ) : (
               <div className="content-container">
