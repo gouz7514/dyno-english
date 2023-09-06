@@ -30,7 +30,6 @@ const ScheduleItemStyle = styled.div`
   }
 
   .schedule-time-container {
-    margin-bottom: 12px;
     display: grid;
     grid-template-columns: repeat(2, 1fr);
 
@@ -39,13 +38,20 @@ const ScheduleItemStyle = styled.div`
     }
   }
 
+  .schedule-repeat {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 12px;
+  }
+
   .schedule-repeat-container {
     margin-top: 12px;
-    gap: 12px;
+    gap: 6px;
 
     .schedule-repeat-time-container {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
+      display: flex;
+      gap: 12px;
     }
 
     .schedule-repeat-content {
@@ -75,7 +81,7 @@ export default function ScheduleItem(props: ScheduleItemProps) {
               수업 시작 시간
             </div>
             <div>
-              { convertTimeToHHMM(start) }
+              { isRepeat ? convertTimeToHHMM(start) : convertTimeToMMDD(start) + ' ' + convertTimeToHHMM(start) }
             </div>
           </div>
           <div className="schedule-time d-flex flex-column">
@@ -83,42 +89,38 @@ export default function ScheduleItem(props: ScheduleItemProps) {
               수업 종료 시간
             </div>
             <div>
-              { convertTimeToHHMM(end) }
+              { isRepeat ? convertTimeToHHMM(end) : convertTimeToMMDD(end) + ' ' + convertTimeToHHMM(end) }
             </div>
           </div>
         </div>
-        <div>
-          {
-            isRepeat && (
-              repeatRule.map((rule: any, idx: number) => (
-                <div key={idx} className='schedule-repeat-container d-flex flex-column'>
-                  <div className='schedule-repeat-day text-bold-700'>
-                    매주 { DayKorean[rule.repeatDay as keyof typeof DayKorean] }요일
-                  </div>
-                  <div className='schedule-repeat-time-container'>
-                    <div className='schedule-repeat-content d-flex flex-column'>
-                      <div className="schedule-repeat-title text-bold-700">
-                        반복 시작
+        {
+          isRepeat && (
+            <div className='schedule-repeat'>
+              {
+                  repeatRule.map((rule: any, idx: number) => (
+                    <div key={idx} className='schedule-repeat-container d-flex flex-column'>
+                      <div className='schedule-repeat-day text-bold-700'>
+                        매주 { DayKorean[rule.repeatDay as keyof typeof DayKorean] }요일
                       </div>
-                      <div>
-                        { convertTimeToMMDD(rule.repeatStart) }
-                      </div>
-                    </div>
-                    <div className="schedule-repeat-content d-flex flex-column">
-                      <div className="schedule-repeat-title text-bold-700">
-                        반복 종료
-                      </div>
-                      <div>
-                        { convertTimeToMMDD(rule.repeatEnd) }
+                      <div className='schedule-repeat-time-container'>
+                        <div className='schedule-repeat-content d-flex flex-column'>
+                          <span>
+                            { convertTimeToMMDD(rule.repeatStart) }
+                          </span>
+                        </div>
+                        ~
+                        <div className="schedule-repeat-content d-flex flex-column">
+                          <span>
+                            { convertTimeToMMDD(rule.repeatEnd) }
+                          </span>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </div>
-              )
-              )
-            )
-          }
-        </div>
+                  ))
+              }
+            </div>
+          )
+        }
       </div>
     </ScheduleItemStyle>
   )
