@@ -49,10 +49,10 @@ export default function CurriculmPhonics() {
             교재는 미국 원서
           </p>
           <p>
-            <span className="text-bg-yellow text-bold">Sadlier Phonics</span>
+            <span className="text-yellow text-bold">Sadlier Phonics</span>
           </p>
           <p>
-            <span className="text-bg-yellow text-bold">Level K</span>를
+            <span className="text-yellow text-bold">Level K</span>를
           </p>
           <p>
             사용합니다.
