@@ -1,3 +1,13 @@
+enum dayToKorean {
+  '일',
+  '월',
+  '화',
+  '수',
+  '목',
+  '금',
+  '토'
+}
+
 export const convertDate = (date: string) => {
   const [year, month, day] = date.split('-')
   return `${month}월 ${day}일`
@@ -14,6 +24,7 @@ export const convertTimeToMMDD = (time: string) => {
   const date = new Date(time)
   const month = date.getMonth() + 1
   const day = date.getDate()
+  const korDay = dayToKorean[date.getDay()]
 
-  return `${month}월 ${day}일`
+  return `${month}월 ${day}일 (${korDay})`
 }
