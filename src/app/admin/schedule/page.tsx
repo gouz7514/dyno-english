@@ -66,7 +66,7 @@ function AdminScheduleContent() {
             </LinkButton>
           </div>
           <span className='small-text text-gray'>
-            * 하루만 수업이 있는 경우, 수업 시작일과 종료일이 나타납니다.
+            * 하루만 진행하는 수업인 경우, 수업 시작일과 종료일이 나타납니다.
           </span>
         </div>
         {
