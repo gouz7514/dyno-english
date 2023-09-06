@@ -25,9 +25,9 @@ function findNextMatchingDay(eventStart: string, repeatDay: Day) {
     startDate.setDate(startDate.getDate() + daysUntilRepeatDay)
   }
 
-  if (startDate <= new Date(eventStart)) {
-    startDate.setDate(startDate.getDate() + 7)
-  }
+  // if (startDate <= new Date(eventStart)) {
+  //   startDate.setDate(startDate.getDate() + 7)
+  // }
 
   startDate.setHours(0, 0, 0, 0)
 
