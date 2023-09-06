@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import { useEffect, useState } from 'react'
 
 import { db } from '@/firebase/config'
-import { getDocs, collection, DocumentData } from 'firebase/firestore'
+import { getDocs, collection, DocumentData, deleteDoc, doc } from 'firebase/firestore'
 
 import { ClassSchedule } from '@/types/types'
 
@@ -53,6 +53,15 @@ function AdminScheduleContent() {
     getSchedules()
   }, [])
 
+  const handleDeleteSchedule = async function(id: string) {
+    if (confirm('정말로 삭제하시겠습니까?')) {
+      await deleteDoc(doc(db, 'class_schedule', id))
+      setLoading(true)
+      alert('시간표가 삭제되었습니다')
+      getSchedules()
+    }
+  }
+
   return (
     <AdminScheduleStyle className='container'>
       <div>
@@ -85,6 +94,7 @@ function AdminScheduleContent() {
                     <ScheduleItem
                       key={schedule.id}
                       schedule={schedule as ClassSchedule}
+                      onClickDelete={() => handleDeleteSchedule(schedule.id)}
                     />
                   ))
                 }

@@ -1,12 +1,15 @@
 import styled from 'styled-components'
 
+import ImageButton from '@/app/components/Atom/Button/ImageButton'
+
 import {  DayKorean } from "@/types/types"
 
 import { convertTimeToHHMM, convertTimeToMMDD } from '@/lib/utils/date'
 
 interface ScheduleItemProps {
   key: string
-  schedule: any
+  schedule: any,
+  onClickDelete: (e: any) => void
 }
 
 const ScheduleItemStyle = styled.div`
@@ -15,16 +18,20 @@ const ScheduleItemStyle = styled.div`
   border-radius: 12px;
   padding: 24px;
 
-  .schedule-title-container {
+  .schedule-header {
     margin-bottom: 12px;
+
+    .schedule-title-container {
+      gap: 12px;
+    }
 
     .schedule-title {
       font-size: 1.5rem;
     }
 
     .schedule-color {
-      width: 24px;
-      height: 24px;
+      width: 28px;
+      height: 28px;
       border-radius: 50%;
     }
   }
@@ -59,20 +66,20 @@ const ScheduleItemStyle = styled.div`
     }
   }
 `
-/*
-  단건 수업인 경우 시작 시간, 종료 시간 어떻게 표현할지
-  반복 수업인 경우 반복 시작, 반복 종료일 옆에 요일 표시해야 함
-*/
-export default function ScheduleItem(props: ScheduleItemProps) {
-  const { title, start, end, bgColor, isRepeat, repeatRule } = props.schedule
+
+export default function ScheduleItem({ schedule, onClickDelete }: ScheduleItemProps) {
+  const { title, start, end, bgColor, isRepeat, repeatRule } = schedule
   
   return (
     <ScheduleItemStyle>
-      <div className="schedule-title-container d-flex justify-content-between">
-        <div className='schedule-title text-bold'>
-          { title }
+      <div className="schedule-header d-flex justify-content-between">
+        <div className="schedule-title-container d-flex">
+          <div className='schedule-color' style={{ backgroundColor: bgColor }} />
+          <div className='schedule-title text-bold'>
+            { title }
+          </div>
         </div>
-        <div className='schedule-color' style={{ backgroundColor: bgColor }} />
+        <ImageButton role='delete' onClick={onClickDelete} />
       </div>
       <div className='schedule-content'>
         <div className="schedule-time-container">
