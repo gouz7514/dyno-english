@@ -109,7 +109,11 @@ export default function AdminCurriculumForm({ isEdit }: AdminCurriculumFormProps
     }
   }
 
-  if (isEdit) getCurriculumInfo()
+  useEffect(() => {
+    if (isEdit) {
+      getCurriculumInfo()
+    }
+  }, [])
 
   const onChangeCurriculumName = (e: any) => {
     const { name, value } = e.target
@@ -120,8 +124,8 @@ export default function AdminCurriculumForm({ isEdit }: AdminCurriculumFormProps
     e.preventDefault()
     const lastMonth = curriculums[curriculums.length - 1]
     const monthNumber = parseInt(lastMonth.name.split(' ')[1]) + 1
-    const newMonth = { name: `Month ${monthNumber}`, days: [''] };
-    setCurriculums([...curriculums, newMonth])
+    const newCurriculum = { name: `Month ${monthNumber}`, days: [''] }
+    setCurriculums([...curriculums, newCurriculum])
   }
 
   const removeMonth = (idx: number, e: React.MouseEvent<HTMLButtonElement>) => {
