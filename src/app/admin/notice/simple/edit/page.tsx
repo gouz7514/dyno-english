@@ -12,7 +12,7 @@ function AdminNoticeSimpleEditContet() {
           간단 공지사항 수정하기
         </h1>
       </div>
-      <AdminSimpleNoticeForm isEdit={true} />
+      <AdminSimpleNoticeForm isEdit />
     </FormStyle>
   )
 }
