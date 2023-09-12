@@ -2,7 +2,7 @@ import styled from 'styled-components'
 
 import ImageButton from '@/app/components/Atom/Button/ImageButton'
 
-import {  DayKorean } from "@/types/types"
+import { DayKorean } from "@/types/types"
 
 import { convertTimeToHHMM, convertTimeToMMDD } from '@/lib/utils/date'
 
@@ -64,6 +64,11 @@ const ScheduleItemStyle = styled.div`
     .schedule-repeat-content {
       gap: 6px;
     }
+  }
+
+  &:hover {
+    transform: translateY(-4px) scale(1.01);
+    transition: all .2s ease-in-out;
   }
 `
 

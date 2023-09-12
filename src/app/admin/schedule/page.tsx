@@ -1,5 +1,6 @@
 'use client'
 
+import Link from 'next/link'
 import styled from 'styled-components'
 import { useEffect, useState } from 'react'
 
@@ -53,7 +54,8 @@ function AdminScheduleContent() {
     getSchedules()
   }, [])
 
-  const handleDeleteSchedule = async function(id: string) {
+  const handleDeleteSchedule = async (e: Event, id: string) => {
+    e.preventDefault()
     if (confirm('정말로 삭제하시겠습니까?')) {
       await deleteDoc(doc(db, 'class_schedule', id))
       setLoading(true)
@@ -91,11 +93,13 @@ function AdminScheduleContent() {
               <div className="content-container">
                 {
                   scheduleList.map((schedule) => (
-                    <ScheduleItem
-                      key={schedule.id}
-                      schedule={schedule as ClassSchedule}
-                      onClickDelete={() => handleDeleteSchedule(schedule.id)}
-                    />
+                    <Link key={schedule.id} href={`/admin/schedule/edit?id=${schedule.id}`}>
+                      <ScheduleItem
+                        key={schedule.id}
+                        schedule={schedule as ClassSchedule}
+                        onClickDelete={(e) => handleDeleteSchedule(e, schedule.id)}
+                      />
+                    </Link>
                   ))
                 }
               </div>

@@ -128,7 +128,8 @@ export interface ClassSchedule {
   start: string
   end: string
   bgColor: string
-  isRepeat: boolean
+  isRepeat: boolean,
+  isCustom: boolean,
   repeatRule?: {
     repeatDay: string
     repeatStart: string
@@ -157,3 +158,11 @@ export enum DayKorean {
   FRI = '금',
   SAT = '토',
 }
+
+export interface scheduleRepeatRule {
+  repeatDay: string
+  repeatStart: string
+  repeatEnd: string
+}
+
+export interface scheduleRepeatRules extends Array<scheduleRepeatRule> {}
