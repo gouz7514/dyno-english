@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef, useState } from 'react'
+import { useState } from 'react'
 import styled from 'styled-components'
 import { useRouter } from 'next/navigation'
 import { signIn, useSession } from 'next-auth/react'
@@ -89,7 +89,7 @@ const kakaoLogin = () => {
 export default function LoginPage() {
   const router = useRouter()
   const { data: session, status } = useSession()
-  const passwordRef = useRef<HTMLInputElement>(null)
+  const [password, setPassword] = useState('')
   const [isValid, setIsValid] = useState(false)
 
   if (status !== 'loading') {
@@ -99,14 +99,12 @@ export default function LoginPage() {
   }
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    const password = passwordRef.current?.value
     
     if (password === process.env.NEXT_PUBLIC_LOGIN_ADMIN_PASSWORD) {
       setIsValid(true)
     } else {
       alert('비밀번호가 틀렸습니다')
-      passwordRef.current!.value = ''
+      setPassword('')
     }
   }
 
@@ -127,8 +125,13 @@ export default function LoginPage() {
             </div>
             <form onSubmit={onSubmit}>
               <div className='input-container'>
-                <DynoInput ref={passwordRef} type="password" placeholder="비밀번호"/>
-                <Button onClick={onSubmit}>로그인</Button>
+                <DynoInput
+                  type="password"
+                  placeholder="비밀번호"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+                <Button>로그인</Button>
               </div>
             </form>
           </div>

@@ -11,6 +11,7 @@ const CalloutStyle = styled.div`
   padding: 12px;
   display: flex;
   flex-direction: column;
+  margin-bottom: 12px;
 
   .callout-title {
     font-weight: 700;

@@ -100,10 +100,7 @@ export const authOptions: NextAuthOptions = {
                 image: user?.image,
                 staff: false,
                 phone: '',
-                kid: {
-                  name: '',
-                  birth: ''
-                },
+                kids: [],
                 class: {
                   id: ''
                 },

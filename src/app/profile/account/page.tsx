@@ -120,7 +120,8 @@ export default function ProfilePage() {
     kids: [
       {
         name: '',
-        birth: ''
+        birth: '',
+        classId: ''
       }
     ]
   }
@@ -143,7 +144,8 @@ export default function ProfilePage() {
     errors.kids = user.kids.map((kid, idx) => {
       return {
         name: '',
-        birth: ''
+        birth: '',
+        classId: ''
       }
     })
 
@@ -218,10 +220,9 @@ export default function ProfilePage() {
       const userInfo = docSnap.data()
       setUser({
         phone: userInfo.phone,
-        kids: userInfo.kids.length ? userInfo.kids : [{ name: '', birth: '' }]
+        kids: userInfo.kids.length ? userInfo.kids : [{ name: '', birth: '', classId: '' }]
       })
 
-      // setError and setTouched by kids.length
       setErrors({
         phone: '',
         kids: userInfo.kids.length ? userInfo.kids : [{ name: '', birth: '' }]
@@ -370,7 +371,14 @@ export default function ProfilePage() {
           <div className='profile-container'>
             <div className='profile-item name'>
               <div className='profile-item-title'>이름</div>
-              <div>{session?.user.name}</div>
+              <DynoInput
+                type="text"
+                name="name"
+                id="name"
+                placeholder="이름을 입력해주세요"
+                value={session?.user.name || ''}
+                disabled
+              />
             </div>
             <div className="profile-item phone">
               <div className='profile-item-title'>보호자 연락처</div>

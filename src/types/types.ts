@@ -41,7 +41,7 @@ type ButtonSize = 'small' | 'medium' | 'large'
 type buttontheme = 'primary' | 'secondary' | 'danger' | 'default'
 
 export interface ButtonProps {
-  onClick: ((e: any) => void) | ((e: any) => Promise<void>),
+  onClick?: ((e: any) => void) | ((e: any) => Promise<void>),
   children: React.ReactNode,
   width?: number,
   disabled?: boolean,
@@ -59,7 +59,8 @@ export interface UserProps {
   phone: string,
   kids: {
     name: string,
-    birth: string
+    birth: string,
+    classId?: string
   }[] | [],
 }
 

@@ -13,8 +13,9 @@ const InputStyle = styled.input<InputProps>`
   }
 
   &:disabled {
-    background-color: #eaeaea;
+    background-color: #dddddd;
     cursor: not-allowed;
+    opacity: 0.6;
   }
 
   ${({ type }) => css`

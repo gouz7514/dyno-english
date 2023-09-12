@@ -157,19 +157,17 @@ export default function ProfilePage() {
               </div>
               <Link href='/profile/account' className='profile-setting' />
             </div>
-            <div>
-              <Callout title='공지사항'>
-                {
-                  session?.simpleNotice && (
-                    session?.simpleNotice.map((notice, index) => (
-                      <div key={index} className='simple-notice-content'>
-                        { notice.content }
-                      </div>
-                    ))
-                  )
-                }
-              </Callout>
-            </div>
+            <Callout title='공지사항'>
+              {
+                session?.simpleNotice && (
+                  session?.simpleNotice.map((notice, index) => (
+                    <div key={index} className='simple-notice-content'>
+                      { notice.content }
+                    </div>
+                  ))
+                )
+              }
+            </Callout>
             {
               session?.classInfo.name !== null ? (
                 <div className="profile-class">
