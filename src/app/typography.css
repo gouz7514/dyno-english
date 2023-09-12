@@ -1,0 +1,27 @@
+h1 {
+  font-size: 1.6em;
+}
+
+.text-bold {
+  font-weight: 800;
+}
+
+.text-bold-700 {
+  font-weight: 700;
+}
+
+.text-normal {
+  font-weight: normal;
+}
+
+.text-yellow {
+  background-color: var(--second-yellow);
+}
+
+.text-gray {
+  color: #979797;
+}
+
+.small-text {
+  font-size: 0.8em;
+}

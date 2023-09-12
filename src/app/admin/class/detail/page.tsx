@@ -2,7 +2,7 @@
 
 import { useSearchParams } from 'next/navigation'
 import styled from 'styled-components'
-import { useEffect, useState } from "react"
+import { useEffect, useState, Fragment } from "react"
 
 import { db } from "@/firebase/config"
 import { doc, getDoc, updateDoc, getDocs, collection, DocumentData } from 'firebase/firestore'
@@ -102,7 +102,7 @@ const SwiperStyle = styled.div`
     margin: 12px 0;
 
     .swiper-item {
-      background-color: rgba(48, 166, 128, 0.6);
+      background-color: var(--color-card);
       border-radius: 12px;
       padding: 24px;
 
@@ -520,7 +520,7 @@ function ClassDetailContent({ params }: { params: { id: string } }) {
           <div className='section-title'>
             과제
           </div>
-          <div>
+          <Fragment>
             <ImageButton
               onClick={() => setShowAddHomework(!showAddHomework)}
               role='add'
@@ -543,7 +543,7 @@ function ClassDetailContent({ params }: { params: { id: string } }) {
                 </form>
               </div>
             </Modal>
-          </div>
+          </Fragment>
         </div>
         <SwiperStyle>
           {
@@ -733,7 +733,7 @@ function ClassDetailContent({ params }: { params: { id: string } }) {
             변경하기
           </Button>
         </div>
-        <div>
+        <Fragment>
           {
             currentCurriculum && (
               <DynoSelect value={currentCurriculum.id} onChange={onChangeCurriculum}>
@@ -747,13 +747,12 @@ function ClassDetailContent({ params }: { params: { id: string } }) {
               </DynoSelect>
             )
           }
-        </div>
-        <div>
+        </Fragment>
+        <Fragment>
           {
             currentCurriculum && (
               Object.entries(currentCurriculum?.curriculum as Object).map(([month, curriculum]) => (
-                <div key={month}>
-                  <div>
+                <Fragment key={month}>
                     {
                       curriculum.month.map((item: Month, idx: number) => (
                         <CurriculumList
@@ -763,12 +762,11 @@ function ClassDetailContent({ params }: { params: { id: string } }) {
                         />
                       ))
                     }
-                  </div>
-                </div>
+                </Fragment>
               ))
             )
           }
-        </div>
+        </Fragment>
       </section>
     </ClassDetailStyle>
   )

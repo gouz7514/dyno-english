@@ -1,4 +1,5 @@
 @import url('//cdn.jsdelivr.net/font-iropke-batang/1.2/font-iropke-batang.css');
+@import "typography.css";
 
 :root {
   --primary-green: #30A680;
@@ -6,6 +7,8 @@
   --primary-yellow: #ffC10C;
   --primary-yellow-hover: #fedd56;
   --second-yellow: #ffCB1C;
+
+  --color-card: rgba(48, 166, 128, 0.6);
 
   --button-default: #eee;
   --button-danger: #ff0000;
@@ -73,10 +76,6 @@ body {
   /* font-family: AppleSDGothic, -apple-system, BlinkMacSystemFont, sans-serif; */
 }
 
-h1 {
-  font-size: 1.6em;
-}
-
 .container {
   max-width: 600px;
   width: 100%;
@@ -87,18 +86,6 @@ h1 {
 
 .spacing {
   margin-top: 24px;
-}
-
-.text-bold {
-  font-weight: 800;
-}
-
-.text-bg-yellow {
-  background-color: var(--second-yellow);
-}
-
-.text-normal {
-  font-weight: normal;
 }
 
 .d-flex {

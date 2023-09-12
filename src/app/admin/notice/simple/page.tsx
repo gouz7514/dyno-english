@@ -24,6 +24,10 @@ const AdminNoticeSimpleStyle = styled.div`
       font-size: 1.5rem;
       font-weight: 700;
     }
+
+    .content-subtitle {
+      margin-top: 8px;
+    }
   }
 `
 

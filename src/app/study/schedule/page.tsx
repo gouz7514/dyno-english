@@ -1,21 +1,23 @@
 'use client'
 
 import styled from 'styled-components'
-import React, { useRef, useState } from "react"
-
-import dynamic from 'next/dynamic'
+import React, { useState, useEffect } from "react"
 
 import { Calendar, momentLocalizer, View } from 'react-big-calendar'
 import 'react-big-calendar/lib/css/react-big-calendar.css'
 import moment from 'moment'
 import 'moment/locale/ko'
 
+import { db } from '@/firebase/config'
+import { getDocs, collection } from 'firebase/firestore'
+
 import { generateRecurringEvents } from '@/lib/utils/generateRecurringEvents'
 
+import { ClassSchedules } from '@/types/types'
 import CalendarHeader from '@/app/components/Calendar/Header'
 import CalendarToolbar from '@/app/components/Calendar/Toolbar'
 
-const CalendarContainer = styled.div`
+const ScheduleContainer = styled.div`
   width: 100%;
   max-width: 1024px;
   align-items: center;
@@ -67,33 +69,58 @@ const CalendarContainer = styled.div`
 `
 
 export default function StudyCalendar() {
+  const [scheduleEvents, setScheduleEvents] = useState<any[]>([])
   const [calendarView, setCalendarView] = useState<View>('week')
   const localizer = momentLocalizer(moment)
 
-  // TODO : get event from server and apply recurring rule
-  const events = [
-    {
-      title: '파닉스-K (1)',
-      start: moment('2023-08-03T13:00:00+09:00').toDate(),
-      end: moment('2023-08-03T13:50:00+09:00').toDate(),
-      bgColor: 'lightblue',
-      repeatStart: moment('2023-08-03T13:00:00+09:00').toDate(),
-      repeatEnd: moment('2023-08-31T13:50:00+09:00').toDate(),
-    },
-    {
-      title: '원서리딩',
-      start: moment('2023-08-01T14:00:00+09:00').toDate(),
-      end: moment('2023-08-01T14:50:00+09:00').toDate(),
-      bgColor: 'lightgreen',
-      repeatStart: moment('2023-08-01T14:00:00+09:00').toDate(),
-      repeatEnd: moment('2023-08-31T14:50:00+09:00').toDate(),
-    },
-  ]
+  useEffect(() => {
+    const getSchedules = async () => {
+      const docSnap = await getDocs(collection(db, 'class_schedule'))
+      const schedules = docSnap.docs.map(doc => doc.data()) as ClassSchedules
+      // console.log(schedules)
 
-  const recurringEvents = generateRecurringEvents(events)
+      const convertedSchedules: Array<any> = []
+
+      schedules.forEach((schedule) => {
+        // console.log(schedule)
+        if (schedule.isRepeat && schedule.repeatRule) {
+          schedule.repeatRule.forEach((rule) => {
+            const convertedSchedule = {
+              title: schedule.title,
+              start: moment(schedule.start).toDate(),
+              end: moment(schedule.end).toDate(),
+              bgColor: schedule.bgColor,
+              isRepeat: schedule.isRepeat,
+              repeatDay: rule.repeatDay,
+              repeatStart: moment(rule.repeatStart).toDate(),
+              repeatEnd: moment(rule.repeatEnd).toDate(),
+            }
+
+            convertedSchedules.push(convertedSchedule);
+          })
+        } else {
+          const convertedSchedule = {
+            title: schedule.title,
+            start: moment(schedule.start).toDate(),
+            end: moment(schedule.end).toDate(),
+            bgColor: schedule.bgColor,
+            isRepeat: schedule.isRepeat,
+          }
+
+          convertedSchedules.push(convertedSchedule)
+        }
+      })
+
+      const recurringEvents = generateRecurringEvents(convertedSchedules)
+      
+      setScheduleEvents(recurringEvents)
+    }
+
+    getSchedules()
+  }, [])
 
   return (
-    <CalendarContainer>
+    <ScheduleContainer>
       <Calendar
         view={calendarView}
         views={['month', 'week']}
@@ -104,7 +131,7 @@ export default function StudyCalendar() {
         startAccessor="start"
         endAccessor="end"
         style={{ height: 800 }}
-        events={recurringEvents}
+        events={scheduleEvents}
         formats={{
           timeGutterFormat: (date) => {
             return moment(date).format('H')
@@ -151,6 +178,6 @@ export default function StudyCalendar() {
           }
         }}
       />
-    </CalendarContainer>
+    </ScheduleContainer>
   )
 }
