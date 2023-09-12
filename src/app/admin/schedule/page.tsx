@@ -61,6 +61,7 @@ function AdminScheduleContent() {
       setLoading(true)
       alert('시간표가 삭제되었습니다')
       getSchedules()
+      return
     }
   }
 

@@ -12,7 +12,7 @@ import { Hours, Minutes } from '@/lib/constants/constatns'
 import { DayKorean, scheduleRepeatRule, scheduleRepeatRules, ClassSchedule } from "@/types/types"
 
 import { db } from "@/firebase/config"
-import { collection, addDoc, doc, getDoc, getDocs, updateDoc } from 'firebase/firestore'
+import { collection, addDoc, doc, getDoc, getDocs, updateDoc, DocumentData } from 'firebase/firestore'
 
 import styled from 'styled-components'
 
@@ -185,7 +185,7 @@ export default function AdminScheduleForm({ isEdit }: AdminScheduleFormProps) {
     setStartDate({
       date: scheduleData.start.split('T')[0],
       hour: Object.keys(Hours)[parseInt(scheduleData.start.split('T')[1].split(':')[0])],
-      minute: Object.keys(Minutes)[parseInt(scheduleData.start.split('T')[1].split(':')[1])]
+      minute: Object.keys(Minutes)[parseInt(scheduleData.start.split('T')[1].split(':')[1]) / 10]
     })
     setEndDate({
       date: scheduleData.end.split('T')[0],
@@ -374,7 +374,7 @@ export default function AdminScheduleForm({ isEdit }: AdminScheduleFormProps) {
           rule.repeatStart += 'T00:00:00'
         }
         if (rule.repeatEnd.split('T').length === 1) {
-          rule.repeatEnd += 'T00:00:00'
+          rule.repeatEnd += 'T23:59:59'
         }
       })
     
@@ -389,9 +389,17 @@ export default function AdminScheduleForm({ isEdit }: AdminScheduleFormProps) {
   }
 
   const updateSchedule = async (schedule: ClassSchedule) => {
-    await updateDoc(doc(db, 'class_schedule', scheduleId), {
-      ...schedule
-    }).then(() => {
+    const newSchedule: ClassSchedule = {
+      title: schedule.title,
+      start: schedule.start,
+      end: schedule.end,
+      bgColor: schedule.bgColor,
+      isRepeat: schedule.isRepeat,
+      isCustom: schedule.isCustom,
+      repeatRule : schedule.isRepeat ? schedule.repeatRule : []
+    }
+
+    await updateDoc(doc(db, 'class_schedule', scheduleId), newSchedule as DocumentData).then(() => {
       setSubmitting(false)
       alert('수업을 수정했습니다')
       router.push('/admin/schedule')
