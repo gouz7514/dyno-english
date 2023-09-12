@@ -2,7 +2,7 @@
 
 import styled from 'styled-components'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, Suspense } from 'react'
 
 import { db } from '@/firebase/config'
 import { getDocs, collection, DocumentData } from 'firebase/firestore'
@@ -57,11 +57,8 @@ function AdminClassContent() {
   }, [])
 
   return (
-    <AdminClassStyle className='container'>
-      {
-        loading ? (
-          <Skeleton />
-        ) : (
+    <Suspense fallback={<Skeleton />}>
+      <AdminClassStyle className='container'>
           <div>
             <div className="content-header">
               <div className='content-title'>
@@ -73,26 +70,29 @@ function AdminClassContent() {
             </div>
             <div className='content-container'>
               {
-                classList.length === 0 ? (
-                  <EmptyState
-                    mainText="등록된 수업이 없습니다."
-                    subText="수업을 추가해주세요."
-                  />
+                loading ? (
+                  <Skeleton /> // Show a loading indicator if data is loading
                 ) : (
-                  classList.map((classItem, index) => (
-                    <ListItem
-                      key={index}
-                      title={classItem.name}
-                      href={`/admin/class/detail?id=${classItem.id}`}
+                  classList.length === 0 ? (
+                    <EmptyState
+                      mainText="등록된 수업이 없습니다."
+                      subText="수업을 추가해주세요."
                     />
-                  ))
+                  ) : (
+                    classList.map((classItem, index) => (
+                      <ListItem
+                        key={index}
+                        title={classItem.name}
+                        href={`/admin/class/detail?id=${classItem.id}`}
+                      />
+                    ))
+                  )
                 )
               }
             </div>
           </div>
-        )
-      }
-    </AdminClassStyle>
+      </AdminClassStyle>
+    </Suspense>
   )
 }
 
