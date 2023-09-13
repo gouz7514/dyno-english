@@ -93,7 +93,7 @@ type ModalProps = {
 
 export default function Modal({ isOpen, onClose, currentUser, allClass }: ModalProps) {
   const modalRef = useRef<HTMLDivElement>(null)
-  const [toggleValue, setToggleValue] = useState<boolean>(currentUser.testimonialAvailable)
+  const [toggleValue, setToggleValue] = useState<boolean>(false)
   const [userKids, setUserKids] = useState<DocumentData[]>(currentUser.kids)
 
   const handleChangeSelect = (e: any, idx: number) => {
@@ -121,6 +121,10 @@ export default function Modal({ isOpen, onClose, currentUser, allClass }: ModalP
       }
     }
 
+    if (isOpen && currentUser) {
+      setToggleValue(currentUser.testimonialAvailable)
+    }
+
     if (isOpen) {
       window.addEventListener('mousedown', handleOutsideClick)
       setUserKids(currentUser.kids)
@@ -130,7 +134,8 @@ export default function Modal({ isOpen, onClose, currentUser, allClass }: ModalP
       window.removeEventListener('mousedown', handleOutsideClick)
     }
 
-  }, [onClose, isOpen])
+  }, [onClose, isOpen, currentUser])
+
 
   const onSubmit = async () => {
     try {
