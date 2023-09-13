@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useCallback } from 'react'
 
 import { useRouter, useSearchParams } from 'next/navigation'
 import { db } from '@/firebase/config'
@@ -81,7 +81,7 @@ export default function AdminCurriculumForm({ isEdit }: AdminCurriculumFormProps
     { name: 'Month 1', days: [''] },
   ])
 
-  useEffect(() => {
+  const memoizedCurriculumInfo = useCallback(() => {
     const getCurriculumInfo = async () => {
       const curriculumRef = doc(db, 'class_curriculum', curriculumId)
       const curriculumSnap = await getDoc(curriculumRef)
@@ -114,6 +114,10 @@ export default function AdminCurriculumForm({ isEdit }: AdminCurriculumFormProps
       getCurriculumInfo()
     }
   }, [isEdit, curriculumId, router])
+
+  useEffect(() => {
+    memoizedCurriculumInfo()
+  }, [memoizedCurriculumInfo])
 
   const onChangeCurriculumName = (e: any) => {
     const { name, value } = e.target
