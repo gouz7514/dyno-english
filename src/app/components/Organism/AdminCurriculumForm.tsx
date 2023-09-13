@@ -81,39 +81,39 @@ export default function AdminCurriculumForm({ isEdit }: AdminCurriculumFormProps
     { name: 'Month 1', days: [''] },
   ])
 
-  const getCurriculumInfo = async () => {
-    const curriculumRef = doc(db, 'class_curriculum', curriculumId)
-    const curriculumSnap = await getDoc(curriculumRef)
-
-    if (!curriculumSnap.exists()) {
-      alert('커리큘럼 정보를 불러올 수 없습니다')
-      router.replace('/admin/curriculum')
-      return
-    } else {
-      const curriculumData = curriculumSnap.data()
-      setCurriculumName(curriculumData.name)
-
-      const initialCurriculums = curriculumData.curriculum.months.month.map((month: any, index: number) => {
-        const curriculumMonth = {
-          name : `Month ${index + 1}`,
-          days : month.days.map((day: any) => {
-            return day.content
-          })
-        }
-
-        return curriculumMonth
-      })
-
-      setCurriculums(initialCurriculums)
-      setLoading(false)
-    }
-  }
-
   useEffect(() => {
+    const getCurriculumInfo = async () => {
+      const curriculumRef = doc(db, 'class_curriculum', curriculumId)
+      const curriculumSnap = await getDoc(curriculumRef)
+  
+      if (!curriculumSnap.exists()) {
+        alert('커리큘럼 정보를 불러올 수 없습니다')
+        router.replace('/admin/curriculum')
+        return
+      } else {
+        const curriculumData = curriculumSnap.data()
+        setCurriculumName(curriculumData.name)
+  
+        const initialCurriculums = curriculumData.curriculum.months.month.map((month: any, index: number) => {
+          const curriculumMonth = {
+            name : `Month ${index + 1}`,
+            days : month.days.map((day: any) => {
+              return day.content
+            })
+          }
+  
+          return curriculumMonth
+        })
+  
+        setCurriculums(initialCurriculums)
+        setLoading(false)
+      }
+    }
+
     if (isEdit) {
       getCurriculumInfo()
     }
-  }, [])
+  }, [isEdit, curriculumId, router])
 
   const onChangeCurriculumName = (e: any) => {
     const { name, value } = e.target
