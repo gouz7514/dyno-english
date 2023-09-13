@@ -269,7 +269,7 @@ export default function ProfilePage() {
   const addKid = () => {
     setUser({
       ...user,
-      kids: [...user.kids, { name: '', birth: '' }]
+      kids: [...user.kids, { name: '', birth: '', classId: '' }]
     })
 
     setErrors({

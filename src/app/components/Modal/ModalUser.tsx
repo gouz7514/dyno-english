@@ -60,7 +60,11 @@ const ModalStyle = styled.div`
         .modal-item-flex {
           display: flex;
           justify-content: space-between;
-          gap: 12px;
+
+          .item-section {
+            margin-bottom: 12px;
+            gap: 8px;
+          }
 
           .modal-item-flex-item {
             flex: 1;
@@ -84,17 +88,26 @@ type ModalProps = {
   isOpen: boolean
   onClose: (message?: string) => void
   currentUser: DocumentData
-  currentClassId: string
   allClass: DocumentData[]
 }
 
-export default function Modal({ isOpen, onClose, currentUser, currentClassId, allClass }: ModalProps) {
+export default function Modal({ isOpen, onClose, currentUser, allClass }: ModalProps) {
   const modalRef = useRef<HTMLDivElement>(null)
   const [toggleValue, setToggleValue] = useState<boolean>(currentUser.testimonialAvailable)
-  const [selectedClass, setSelectedClass] = useState(currentClassId)
+  const [userKids, setUserKids] = useState<DocumentData[]>(currentUser.kids)
 
-  const handleChangeSelect = (e: any) => {
-    setSelectedClass(e.target.value)
+  const handleChangeSelect = (e: any, idx: number) => {
+    const newKids = userKids.map((kid, i) => {
+      if (i === idx) {
+        return {
+          ...kid,
+          classId: e.target.value
+        }
+      }
+      return kid
+    })
+
+    setUserKids(newKids)
   }
 
   const handleToggleChange = (isChecked: boolean) => {
@@ -102,7 +115,6 @@ export default function Modal({ isOpen, onClose, currentUser, currentClassId, al
   }
 
   useEffect(() => {
-    setSelectedClass(currentClassId)
     const handleOutsideClick = (e: MouseEvent) => {
       if (modalRef.current && !modalRef.current.contains(e.target as Node)) {
         onClose()
@@ -111,21 +123,20 @@ export default function Modal({ isOpen, onClose, currentUser, currentClassId, al
 
     if (isOpen) {
       window.addEventListener('mousedown', handleOutsideClick)
+      setUserKids(currentUser.kids)
     }
 
     return () => {
       window.removeEventListener('mousedown', handleOutsideClick)
     }
 
-  }, [onClose, isOpen, currentClassId])
+  }, [onClose, isOpen])
 
   const onSubmit = async () => {
     try {
       await updateDoc(doc(db, 'users', currentUser.id), {
         testimonialAvailable: toggleValue,
-        class: {
-          id: selectedClass
-        }
+        kids: userKids,
       })
       
       alert('수정되었습니다')
@@ -156,47 +167,42 @@ export default function Modal({ isOpen, onClose, currentUser, currentClassId, al
                 { currentUser.phone }
               </div>
             </div>
-            <div className='modal-item'>
-              <h3>
-                수업명
-              </h3>
-              <div className="modal-item-content">
-                <DynoSelect value={selectedClass} onChange={handleChangeSelect}>
-                  {
-                    allClass.map((cls) => (
-                      <option value={cls.id} key={cls.id}>
-                        { cls.name }
-                      </option>
-                    ))
-                  }
-                </DynoSelect>
-              </div>
-            </div>
             <div className="modal-item">
               <h3>
                 아이 정보
               </h3>
-              <div className={ `modal-item-flex ${currentUser.kids && currentUser.kids.length > 0 ? 'flex-column' : ''}` }>
+              <div className={ `modal-item-flex ${userKids && userKids.length > 0 ? 'flex-column' : ''}` }>
                 {
-                  currentUser.kids && currentUser.kids.length ? (
-                  currentUser.kids.map((kid: any, idx: number) => (
-                    <div className='modal-kid-item d-flex' key={idx}>
-                      <div className="modal-item-flex-item" key={`name-${idx}`}>
-                        <h4>
-                          이름
-                        </h4>
-                        <div className="modal-item-content">
-                          { kid.name }
+                  userKids && userKids.length ? (
+                    userKids.map((kid: any, idx: number) => (
+                    <div className='d-flex flex-column item-section' key={idx}>
+                      <div className="d-flex justify-content-between">
+                        <div className="modal-item-flex-item" key={`name-${idx}`}>
+                          <h4>
+                            이름
+                          </h4>
+                          <div className="modal-item-content">
+                            { kid.name }
+                          </div>
+                        </div>
+                        <div className="modal-item-flex-item" key={`birth-${idx}`}>
+                          <h4>
+                            생년월일
+                          </h4>
+                          <div className="modal-item-content">
+                            { kid.birth }
+                          </div>
                         </div>
                       </div>
-                      <div className="modal-item-flex-item" key={`birth-${idx}`}>
-                        <h4>
-                          생년월일
-                        </h4>
-                        <div className="modal-item-content">
-                          { kid.birth }
-                        </div>
-                      </div>
+                      <DynoSelect value={kid.classId} onChange={(e) => handleChangeSelect(e, idx)}>
+                        {
+                          allClass.map((cls) => (
+                            <option value={cls.id} key={cls.id}>
+                              { cls.name }
+                            </option>
+                          ))
+                        }
+                      </DynoSelect>
                     </div>
                   ))
                   ) : (

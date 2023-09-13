@@ -127,33 +127,38 @@ export const authOptions: NextAuthOptions = {
       session.simpleNotice = simpleNotice
 
       if (userInfo) {
-        session.user.name = userInfo.name
-        session.user.isStaff = userInfo.staff
+        const { name, staff, kids, testimonialAvailable } = userInfo
+        session.user.name = name
+        session.user.isStaff = staff
         session.user.userId = token.sub as string
-        session.user.kids = userInfo.kids
-        session.user.testimonialAvailable = userInfo.testimonialAvailable
-  
-        const classId = userInfo.class.id
-        
-        if (!classId) {
-          session.classInfo = {
-            id: null,
-            name: null,
-            curriculum: null
+        session.user.kids = kids
+        session.user.testimonialAvailable = testimonialAvailable
+
+        const classIds = kids.map((kid: any) => kid.classId)
+        // classIds.forEach((classId: string, index: number) => {
+        //   if (!classId) {
+        //     classIds.splice(index, 1)
+        //   }
+        // })
+
+        // console.log(classIds)
+
+        const classInfo = await Promise.all(classIds.map(async (classId: string) => {
+          if (!classId) {
+            return null
           }
-        } else {
           const classInfo = await getClassInfo(classId)
-  
+          const newClassInfo = {
+            id: '',
+            name: '',
+            curriculum: [],
+            details: {}
+          }
+
           if (classInfo) {
-            const { id, name } = classInfo.info
+            const { name } = classInfo.info
             const curriculums = classInfo.curriculums as any
-            
-            session.classInfo = {
-              id,
-              name,
-              curriculum : curriculums
-            }
-            
+
             const homeworks = classInfo.homeworks as ClassHomeworks
             const notices = classInfo.notices as ClassNotices
             
@@ -184,9 +189,16 @@ export const authOptions: NextAuthOptions = {
               sortedClassDetails[key] = classDetails[key]
             })
 
-            session.classDetails = sortedClassDetails
+            newClassInfo['id'] = classId
+            newClassInfo['name'] = name
+            newClassInfo['curriculum'] = curriculums
+            newClassInfo['details'] = sortedClassDetails
           }
-        }
+
+          return newClassInfo
+        }))
+
+        session.classInfo = classInfo as any
       }
 
       return session

@@ -126,7 +126,6 @@ function AdminUserContent() {
         isOpen={isModalOpen}
         onClose={handleModalClose}
         currentUser={currentUser}
-        currentClassId={currentUser.class ? currentUser.class.id : ''}
         allClass={dynoClass}
       />
     </AdminUserStyle>

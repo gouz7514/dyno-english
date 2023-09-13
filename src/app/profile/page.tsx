@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Fragment } from 'react'
 import { useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react'
 import Link from 'next/link'
@@ -10,6 +10,7 @@ import Skeleton from '@/app/components/Skeleton'
 import CurriculumList from '@/app/components/Organism/CurriculumList'
 import EmptyState from '@/app/components/Molecule/EmptyState'
 import Callout from '@/app/components/Molecule/Callout'
+import DynoSelect from '@/app/components/Atom/Input/DynoSelect'
 
 import { convertDate } from '@/lib/utils/date'
 
@@ -131,6 +132,8 @@ export default function ProfilePage() {
   const router = useRouter()
   const { data: session, status } = useSession()
   const [loading, setLoading] = useState<boolean>(true)
+  const [selectedKid, setSelectedKid] = useState<string>(session?.user.kids[0].name as string)
+  const [selectedClass, setSelectedClass] = useState<any>({})
 
   useEffect(() => {
     if (status !== 'loading') {
@@ -143,6 +146,27 @@ export default function ProfilePage() {
       }
     }
   }, [session, router, status])
+
+  const onChangeKidName = (e: any) => {
+    const selectedKid = session?.user.kids.find((kid: any) => kid.name === e.target.value)
+    setSelectedKid(selectedKid?.name as string)
+    if (selectedKid?.classId === '') {
+      setSelectedClass({})
+      return
+    }
+    const selectedClass = session?.classInfo.find((info: any) => info.id === selectedKid?.classId)
+    setSelectedClass(selectedClass)
+  }
+
+  useEffect(() => {
+    if (session?.user.kids.length) {
+      const selectedKid = session?.user.kids.find((kid: any) => kid.name === session?.user.kids[0].name)
+      setSelectedKid(selectedKid?.name as string)
+
+      const selectedClass = session?.classInfo.find((info: any) => info.id === selectedKid?.classId)
+      setSelectedClass(selectedClass)
+    }
+  }, [session])
 
   return (
     <ProfileStyle className='container'>
@@ -169,84 +193,100 @@ export default function ProfilePage() {
               }
             </Callout>
             {
-              session?.classInfo.name !== null ? (
-                <div className="profile-class">
+              session?.user.kids.length && (
+                <Fragment>
+                  <DynoSelect value={selectedKid} onChange={onChangeKidName}>
+                    {
+                      session?.user.kids.map((kid: any, idx: number) => (
+                        <option value={kid.name} key={idx}>
+                          { kid.name }
+                        </option>
+                      ))
+                    }
+                  </DynoSelect>
                   {
-                    <>
-                      <div className="class-title">
-                        {session?.classInfo.name}
-                      </div>
-                      {
-                        session?.classDetails && Object.keys(session?.classDetails).length === 0 ? (
-                          <EmptyState
-                            mainText='등록된 수업 정보가 없습니다.'
-                            size='medium'
-                          />
-                        ) : (
-                          <Swiper
-                            slidesPerView={1}
-                            pagination={{ clickable: true }}
-                            initialSlide={session?.classDetails ? Object.keys(session?.classDetails).length - 1 : 0}
-                          >
+                    Object.keys(selectedClass).length ? (
+                      <div className="profile-class">
+                        {
+                          <Fragment>
+                            <div className="class-title">
+                              { selectedClass.name }
+                            </div>
                             {
-                              session?.classDetails && (
-                                Object.entries(session?.classDetails).map(([key, value]) => (
-                                  <SwiperSlide key={key} className='class-info'>
-                                    <div className="class-notice">
-                                      <div className='content-title'>
-                                        { convertDate(key) } 수업내용
-                                      </div>
-                                      <div className='content-inner'>
-                                        { value.notice }
-                                      </div>
-                                    </div>
-                                    <div className="class-homework">
-                                      <div className='content-title'>
-                                      { convertDate(key) } 숙제
-                                      </div>
-                                      <div className='content-inner'>
-                                        { value.homework }
-                                      </div>
-                                    </div>
-                                  </SwiperSlide>
-                                ))
+                              selectedClass.details && Object.keys(selectedClass.details).length === 0 ? (
+                                <EmptyState
+                                  mainText='등록된 수업 정보가 없습니다.'
+                                  size='medium'
+                                />
+                              ) : (
+                                <Swiper
+                                  slidesPerView={1}
+                                  pagination={{ clickable: true }}
+                                  initialSlide={selectedClass ? Object.keys(selectedClass).length - 1 : 0}
+                                >
+                                  {
+                                    Object.keys(selectedClass).length && (
+                                      Object.entries(selectedClass.details).map(([key, value]: [string, any]) => (
+                                        <SwiperSlide key={key} className='class-info'>
+                                          <div className="class-notice">
+                                            <div className='content-title'>
+                                              { convertDate(key) } 수업내용
+                                            </div>
+                                            <div className='content-inner'>
+                                              { value.notice }
+                                            </div>
+                                          </div>
+                                          <div className="class-homework">
+                                            <div className='content-title'>
+                                            { convertDate(key) } 숙제
+                                            </div>
+                                            <div className='content-inner'>
+                                              { value.homework }
+                                            </div>
+                                          </div>
+                                        </SwiperSlide>
+                                      ))
+                                    )
+                                  }
+                                </Swiper>
                               )
                             }
-                          </Swiper>
-                        )
-                      }
-                    </>
-                  }
-                  <div className="class-curriculum-container">
-                    <div className='class-curriculum-header'>커리큘럼</div>
-                    {
-                      session?.classInfo.curriculum && (
-                        <div>
+                          </Fragment>
+                        }
+                        <div className="class-curriculum-container">
+                          <div className='class-curriculum-header'>커리큘럼</div>
                           {
-                            Object.entries(session?.classInfo.curriculum).map(([key, value]) => (
-                              (
-                                key === 'curriculum' && (
-                                  value.months?.month.map((month: any, index: any) => (
-                                    <CurriculumList
-                                      key={index}
-                                      idx={index}
-                                      month={month}
-                                    />
+                            selectedClass.curriculum && (
+                              <div>
+                                {
+                                  Object.entries(selectedClass.curriculum).map(([key, value]: [string, any]) => (
+                                    (
+                                      key === 'curriculum' && (
+                                        value.months?.month.map((month: any, index: any) => (
+                                          <CurriculumList
+                                            key={index}
+                                            idx={index}
+                                            month={month}
+                                          />
+                                        ))
+                                      )
+                                    )
                                   ))
-                                )
-                              )
-                            ))
+                                }
+                              </div>  
+                            )
                           }
-                        </div>  
-                      )
-                    }
-                  </div>
-                </div>
-              ) : (
-                <EmptyState
-                  mainText='등록된 수업 정보가 없습니다.'
-                  subText='다이앤 선생님이 수업을 등록하시면 수업 정보를 확인하실 수 있습니다.'
-                />
+                        </div>
+                      </div>
+                    ) : (
+                      <EmptyState
+                        mainText='등록된 수업이 없습니다.'
+                        subText='다이노 선생님이 수업을 등록할 때까지 기다려주세요.'
+                        size='medium'
+                      />
+                    )
+                  }
+                </Fragment>
               )
             }
           </div>
