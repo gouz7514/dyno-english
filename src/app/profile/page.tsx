@@ -132,7 +132,7 @@ export default function ProfilePage() {
   const router = useRouter()
   const { data: session, status } = useSession()
   const [loading, setLoading] = useState<boolean>(true)
-  const [selectedKid, setSelectedKid] = useState<string>(session?.user.kids[0].name as string)
+  const [selectedKid, setSelectedKid] = useState<string>('')
   const [selectedClass, setSelectedClass] = useState<any>({})
 
   useEffect(() => {
@@ -193,7 +193,7 @@ export default function ProfilePage() {
               }
             </Callout>
             {
-              session?.user.kids.length && (
+              session?.user.kids.length ? (
                 <Fragment>
                   <DynoSelect value={selectedKid} onChange={onChangeKidName}>
                     {
@@ -205,7 +205,7 @@ export default function ProfilePage() {
                     }
                   </DynoSelect>
                   {
-                    Object.keys(selectedClass).length ? (
+                    selectedClass && Object.keys(selectedClass).length ? (
                       <div className="profile-class">
                         {
                           <Fragment>
@@ -287,6 +287,12 @@ export default function ProfilePage() {
                     )
                   }
                 </Fragment>
+              ) : (
+                <EmptyState
+                  mainText='등록된 학생 정보가 없습니다'
+                  subText='학생 정보를 등록해주세요'
+                  size='medium'
+                />
               )
             }
           </div>

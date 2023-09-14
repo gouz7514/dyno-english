@@ -113,7 +113,7 @@ export default function TestimonialForm() {
     await addDoc(collection(db, 'testimonials'), newTestimonial).then(() => {
       setLoading(false)
       alert('후기 등록 완료!')
-      window.location.href = '/'
+      router.push('/intro/testimonial')
     })
   }
 

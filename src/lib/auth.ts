@@ -101,9 +101,6 @@ export const authOptions: NextAuthOptions = {
                 staff: false,
                 phone: '',
                 kids: [],
-                class: {
-                  id: ''
-                },
                 createdAt: new Date(),
                 testimonialAvailable: false,
               })
@@ -135,17 +132,10 @@ export const authOptions: NextAuthOptions = {
         session.user.testimonialAvailable = testimonialAvailable
 
         const classIds = kids.map((kid: any) => kid.classId)
-        // classIds.forEach((classId: string, index: number) => {
-        //   if (!classId) {
-        //     classIds.splice(index, 1)
-        //   }
-        // })
-
-        // console.log(classIds)
 
         const classInfo = await Promise.all(classIds.map(async (classId: string) => {
           if (!classId) {
-            return null
+            return
           }
           const classInfo = await getClassInfo(classId)
           const newClassInfo = {
@@ -198,7 +188,7 @@ export const authOptions: NextAuthOptions = {
           return newClassInfo
         }))
 
-        session.classInfo = classInfo as any
+        session.classInfo = classInfo.filter((item) => item !== undefined)
       }
 
       return session
