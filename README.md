@@ -3,6 +3,7 @@
 
 - [dyno-english](#dyno-english)
   - [소개](#소개)
+  - [설치 및 실행](#설치-및-실행)
   - [기술 스택](#기술-스택)
   - [아키텍쳐](#아키텍쳐)
   - [파일 구조](#파일-구조)
@@ -25,6 +26,25 @@
   - `develop` : main 브랜치로 머지되기 전 브랜치로 feature 브랜치가 분기되는 브랜치입니다.
   - `feature/~` : 필요한 기능별로 분리해 기능들을 개발하는 브랜치입니다. 작업이 완료되면 develop 브랜치로 머지합니다.
 - 현재 개발 진행중인 브랜치이며 작업 완료시 release와 함께 main 브랜치로 머지할 예정입니다. 개발중인 내용들은 각 브랜치와 Pull Request를 통해 확인할 수 있습니다.
+
+## 설치 및 실행
+패키지 설치
+```bash
+yarn
+```
+
+개발 서버를 실행합니다.
+```bash
+yarn dev
+```
+
+로컬 환경에서 실행합니다.
+```bash
+localhost:3306
+```
+
+> **참고**
+> 로컬 환경에서 실행하기 위해서는 db와 연결을 위한 firebase api key, 카카오 로그인을 위한 kakao client id 등이 저장된 `.env` 파일이 필요합니다. 보안 상 이슈로 위 파일은 제공되지 않으며 궁금하신 점이 있는 경우 [issue](https://github.com/gouz7514/dyno-english/issues) 혹은 [메일](mailto:gouz7514@gmail.com)으로 문의해주시길 바랍니다!
 
 ## 기술 스택
 [![Tech stacks](https://skillicons.dev/icons?i=ts,nextjs,vercel,firebase,styledcomponents)](https://skillicons.dev)
