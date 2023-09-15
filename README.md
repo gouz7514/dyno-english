@@ -43,8 +43,9 @@ yarn dev
 localhost:3306
 ```
 
-> **참고**
-> 로컬 환경에서 실행하기 위해서는 db와 연결을 위한 firebase api key, 카카오 로그인을 위한 kakao client id 등이 저장된 `.env` 파일이 필요합니다. 보안 상 이슈로 위 파일은 제공되지 않으며 궁금하신 점이 있는 경우 [issue](https://github.com/gouz7514/dyno-english/issues) 혹은 [메일](mailto:gouz7514@gmail.com)으로 문의해주시길 바랍니다!
+> **참고**<br />
+로컬 환경에서 실행하기 위해서는 db와 연결을 위한 firebase api key, 카카오 로그인을 위한 kakao client id 등이 저장된 `.env` 파일이 필요합니다.<br />
+보안 상 이슈로 위 파일은 제공되지 않으며 궁금하신 점이 있는 경우 [issue](https://github.com/gouz7514/dyno-english/issues) 혹은 [메일](mailto:gouz7514@gmail.com)으로 문의해주시길 바랍니다!
 
 ## 기술 스택
 [![Tech stacks](https://skillicons.dev/icons?i=ts,nextjs,vercel,firebase,styledcomponents)](https://skillicons.dev)
