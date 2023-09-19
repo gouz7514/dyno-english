@@ -12,10 +12,19 @@ declare module "next-auth" {
       }[],
       testimonialAvailable: boolean,
     },
-    classInfo: ClassInfo,
-    classDetails: ClassDetails,
     simpleNotice: {
       [key: string]: string
+    }[],
+    classInfo: {
+      id: string,
+      name: string,
+      curriculum: {
+        name: string,
+        curriculum: object[]
+      },
+      details: {
+        [key: string]: ClassDetails
+      }
     }[]
   }
 }
