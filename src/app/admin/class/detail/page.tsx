@@ -15,6 +15,7 @@ import DynoInput from '@/app/components/Atom/Input/DynoInput'
 import IsStaff from '@/app/components/Template/IsStaff'
 import CurriculumList from '@/app/components/Organism/CurriculumList'
 import DynoSelect from '@/app/components/Atom/Input/DynoSelect'
+import Skeleton from '@/app/components/Skeleton'
 
 import { convertDate } from '@/lib/utils/date'
 import { Month } from '@/types/types'
@@ -170,6 +171,7 @@ interface AdminClassDetailProps {
 }
 
 function ClassDetailContent({ params }: { params: { id: string } }) {
+  const [loading, setLoading] = useState(true)
   // 과제 편집 모드
   const [homeworkEditMode, setHomeworkEditMode] = useState<boolean[]>([])
   // 공지사항 편집 모드
@@ -344,6 +346,7 @@ function ClassDetailContent({ params }: { params: { id: string } }) {
       setInitialCurriculum(classCurriculum as curriculumObject)
       setHomeworkEditMode(new Array(Object.values(classHomework as Object)[0].length).fill(false))
       setNoticeEditMode(new Array(Object.values(classNotice as Object)[0].length).fill(false))
+      setLoading(false)
     }
   }
 
@@ -515,259 +518,272 @@ function ClassDetailContent({ params }: { params: { id: string } }) {
       <div className="class-title">
         { classInfo.className }
       </div>
-      <section>
-        <div className="section-header">
-          <div className='section-title'>
-            과제
-          </div>
+      {
+        loading ? (
+          <Skeleton />
+        ) : (
           <Fragment>
-            <ImageButton
-              onClick={() => setShowAddHomework(!showAddHomework)}
-              role='add'
-            />
-            <Modal
-              isOpen={showAddHomework}
-              onClose={() => setShowAddHomework(false)}
-            >
-              <div className='form-container'>
-                <div className='form-title'>
-                  과제 추가하기
+            <section>
+              <div className="section-header">
+                <div className='section-title'>
+                  과제
                 </div>
-                <form>
-                  <DynoInput value={newHomework.date} type='date' onChange={onChangeNewHomeworkDate} />
-                  <textarea value={newHomework.content} cols={30} rows={10} onChange={onChangeNewHomework}></textarea>
-                  <div className="button-container">
-                    <Button color='primary' disabled={!newHomework.date || !newHomework.content} onClick={onClickSubmitNewHomework}>추가</Button>
-                    <Button color='default' onClick={onClickCloseNewHomework}>취소</Button>
-                  </div>
-                </form>
-              </div>
-            </Modal>
-          </Fragment>
-        </div>
-        <SwiperStyle>
-          {
-            (classInfo.homework && Object.values(classInfo.homework as Object)[0]?.length === 0) ? (
-              <EmptyState
-                mainText='과제가 없습니다'
-                size="medium"
-              />
-            ) : (
-              <Swiper
-                slidesPerView={swiperCnt}
-                pagination={{ clickable: true }}
-                spaceBetween={12}
-                >
-                  {
-                    Object.entries(classInfo.homework as Object).map(([key, value]) => (
-                      <div key={key}>
-                        {
-                          value.map((item: { content: string, date: string, id: string }, idx: number) => (
-                            <SwiperSlide key={idx} className='swiper-item'>
-                              <div className="swiper-item-header">
-                                <div className='swiper-date'>
-                                  { convertDate(item.date) }
-                                </div>
-                                <div className="swiper-btn-container">
-                                  <ImageButton
-                                    onClick={() => onClickEditHomework(idx, item.content)}
-                                    role='edit'
-                                  />
-                                  <ImageButton
-                                    onClick={(e) => onClickDeleteHomework(e, idx)}
-                                    role='delete'
-                                  />
-                                </div>
-                              </div>
-                              <div className='swiper-content'>
-                                {
-                                  homeworkEditMode[idx] ? (
-                                    <div className='swiper-form-container'>
-                                      <form>
-                                        <textarea
-                                          value={editHomework}
-                                          onChange={(e) => onChangeHomework(e)}
-                                        />
-                                        <Button
-                                          color='default'
-                                          disabled={!editHomework}
-                                          onClick={(e) => onEditHomework(e, item.id, idx)}
-                                        >
-                                          수정하기
-                                        </Button>
-                                      </form>
-                                    </div>
-                                  ) : (
-                                    <div className='homework-content'>
-                                      { item.content }
-                                    </div>
-                                  )
-                                }
-                              </div>
-                            </SwiperSlide>
-                          ))
-                        }
+                <Fragment>
+                  <ImageButton
+                    onClick={() => setShowAddHomework(!showAddHomework)}
+                    role='add'
+                  />
+                  <Modal
+                    isOpen={showAddHomework}
+                    onClose={() => setShowAddHomework(false)}
+                  >
+                    <div className='form-container'>
+                      <div className='form-title'>
+                        과제 추가하기
                       </div>
-                    ))
-                  }
-              </Swiper>
-            )
-          }
-        </SwiperStyle>
-      </section>
-
-      <section>
-        <div className="section-header">
-          <div className="section-title">
-            수업내용
-          </div>
-          <div>
-            <ImageButton
-              onClick={() => setShowAddNotice(!showAddNotice)}
-              role='add'
-            />
-            <Modal
-              isOpen={showAddNotice}
-              onClose={() => setShowAddNotice(false)}
-            >
-              <div className='form-container'>
-                <div className='form-title'>
-                  수업내용 추가하기
-                </div>
-                <form>
-                  <DynoInput value={newNotice.date} type='date' onChange={onChangeNewNoticeDate} />
-                  <textarea value={newNotice.content} cols={30} rows={10} onChange={onChangeNewNotice}></textarea>
-                  <div className="button-container">
-                    <Button color='primary' disabled={!newNotice.date || !newNotice.content} onClick={onClickSubmitNewNotice}>추가</Button>
-                    <Button color='default' onClick={onClickCloseNewNotice}>취소</Button>
-                  </div>
-                </form>
+                      <form>
+                        <DynoInput value={newHomework.date} type='date' onChange={onChangeNewHomeworkDate} />
+                        <textarea value={newHomework.content} cols={30} rows={10} onChange={onChangeNewHomework}></textarea>
+                        <div className="button-container">
+                          <Button color='primary' disabled={!newHomework.date || !newHomework.content} onClick={onClickSubmitNewHomework}>추가</Button>
+                          <Button color='default' onClick={onClickCloseNewHomework}>취소</Button>
+                        </div>
+                      </form>
+                    </div>
+                  </Modal>
+                </Fragment>
               </div>
-            </Modal>
-            </div>
-        </div>
-        <SwiperStyle>
-          {
-            (classInfo.notice && Object.values(classInfo.notice as Object)[0]?.length === 0) ? (
-              <EmptyState
-                mainText='수업내용이 없습니다'
-                size="medium"
-              />
-            ) : (
-              <Swiper
-                slidesPerView={swiperCnt}
-                pagination={{ clickable: true }}
-                spaceBetween={12}
+              <SwiperStyle>
+                {
+                  (classInfo.homework && Object.values(classInfo.homework as Object)[0]?.length === 0) ? (
+                    <EmptyState
+                      mainText='과제가 없습니다'
+                      size="medium"
+                    />
+                  ) : (
+                    <Swiper
+                      slidesPerView={swiperCnt}
+                      pagination={{ clickable: true }}
+                      spaceBetween={12}
+                      initialSlide={Object.values(classInfo.homework as Object)[0]?.length - 1}
+                    >
+                      {
+                        Object.entries(classInfo.homework as Object).map(([key, value]) => (
+                          <div key={key}>
+                            {
+                              value.map((item: { content: string, date: string, id: string }, idx: number) => (
+                                <SwiperSlide
+                                  key={idx}
+                                  className='swiper-item homework'
+                                >
+                                  <div className="swiper-item-header">
+                                    <div className='swiper-date'>
+                                      { convertDate(item.date) }
+                                    </div>
+                                    <div className="swiper-btn-container">
+                                      <ImageButton
+                                        onClick={() => onClickEditHomework(idx, item.content)}
+                                        role='edit'
+                                      />
+                                      <ImageButton
+                                        onClick={(e) => onClickDeleteHomework(e, idx)}
+                                        role='delete'
+                                      />
+                                    </div>
+                                  </div>
+                                  <div className='swiper-content'>
+                                    {
+                                      homeworkEditMode[idx] ? (
+                                        <div className='swiper-form-container'>
+                                          <form>
+                                            <textarea
+                                              value={editHomework}
+                                              onChange={(e) => onChangeHomework(e)}
+                                            />
+                                            <Button
+                                              color='default'
+                                              disabled={!editHomework}
+                                              onClick={(e) => onEditHomework(e, item.id, idx)}
+                                            >
+                                              수정하기
+                                            </Button>
+                                          </form>
+                                        </div>
+                                      ) : (
+                                        <div className='homework-content'>
+                                          { item.content }
+                                        </div>
+                                      )
+                                    }
+                                  </div>
+                                </SwiperSlide>
+                              ))
+                            }
+                          </div>
+                        ))
+                      }
+                    </Swiper>
+                  )
+                }
+              </SwiperStyle>
+            </section>
+
+            <section>
+              <div className="section-header">
+                <div className="section-title">
+                  수업내용
+                </div>
+                <div>
+                  <ImageButton
+                    onClick={() => setShowAddNotice(!showAddNotice)}
+                    role='add'
+                  />
+                  <Modal
+                    isOpen={showAddNotice}
+                    onClose={() => setShowAddNotice(false)}
+                  >
+                    <div className='form-container'>
+                      <div className='form-title'>
+                        수업내용 추가하기
+                      </div>
+                      <form>
+                        <DynoInput value={newNotice.date} type='date' onChange={onChangeNewNoticeDate} />
+                        <textarea value={newNotice.content} cols={30} rows={10} onChange={onChangeNewNotice}></textarea>
+                        <div className="button-container">
+                          <Button color='primary' disabled={!newNotice.date || !newNotice.content} onClick={onClickSubmitNewNotice}>추가</Button>
+                          <Button color='default' onClick={onClickCloseNewNotice}>취소</Button>
+                        </div>
+                      </form>
+                    </div>
+                  </Modal>
+                  </div>
+              </div>
+              <SwiperStyle>
+                {
+                  (classInfo.notice && Object.values(classInfo.notice as Object)[0]?.length === 0) ? (
+                    <EmptyState
+                      mainText='수업내용이 없습니다'
+                      size="medium"
+                    />
+                  ) : (
+                    <Swiper
+                      slidesPerView={swiperCnt}
+                      pagination={{ clickable: true }}
+                      spaceBetween={12}
+                      initialSlide={Object.values(classInfo.notice as Object)[0]?.length - 1}
+                    >
+                      {
+                        classInfo.notice && (
+                          Object.entries(classInfo.notice as Object).map(([key, value]) => (
+                            <div key={key}>
+                              {
+                                value.map((item: { content: string, date: string }, idx: number) => (
+                                  <SwiperSlide key={idx} className='swiper-item'>
+                                    <div className="swiper-item-header">
+                                      <div className='swiper-date'>
+                                        { convertDate(item.date) }
+                                      </div>
+                                      <div className="swiper-btn-container">
+                                        <ImageButton
+                                          onClick={() => onClickEditNotice(idx, item.content)}
+                                          role='edit'
+                                        />
+                                        <ImageButton
+                                          onClick={(e) => onClickDeleteNotice(e, idx)}
+                                          role='delete'
+                                        />
+                                      </div>
+                                    </div>
+                                    <div className='swiper-content'>
+                                      {
+                                        noticeEditMode[idx] ? (
+                                          <div className='swiper-form-container'>
+                                            <form>
+                                              <textarea
+                                                value={editNotice}
+                                                onChange={(e) => setEditNotice(e.target.value)}
+                                              />
+                                              <Button
+                                                color='default'
+                                                disabled={!editNotice}
+                                                onClick={(e) => onEditHomework(e, item.date, idx)}
+                                              >
+                                                수정하기
+                                              </Button>
+                                            </form>
+                                          </div>
+                                        ) : (
+                                          <div className='notice-content'>
+                                            { item.content }
+                                          </div>
+                                        )
+                                      }
+                                    </div>
+                                  </SwiperSlide>
+                                ))
+                              }
+                            </div>
+                          ))
+                        )
+                      }
+                    </Swiper>
+                  )
+                }
+              </SwiperStyle>
+            </section>
+
+            <section>
+              <div className="section-header space-between">
+                <div className="section-title">
+                  커리큘럼
+                </div>
+                <Button
+                  color='primary'
+                  size='small'
+                  onClick={onClickChangeCurriculum}
+                  disabled={currentCurriculum?.id === initialCurriculum?.id}
                 >
-                  {
-                    classInfo.notice && (
-                      Object.entries(classInfo.notice as Object).map(([key, value]) => (
-                        <div key={key}>
+                  변경하기
+                </Button>
+              </div>
+              <Fragment>
+                {
+                  currentCurriculum && (
+                    <DynoSelect value={currentCurriculum.id} onChange={onChangeCurriculum}>
+                      {
+                        allCurriculum.map((curriculum) => (
+                          <option key={curriculum.id} value={curriculum.id}>
+                            { curriculum.name }
+                          </option>
+                        ))
+                      }
+                    </DynoSelect>
+                  )
+                }
+              </Fragment>
+              <Fragment>
+                {
+                  currentCurriculum && (
+                    Object.entries(currentCurriculum?.curriculum as Object).map(([month, curriculum]) => (
+                      <Fragment key={month}>
                           {
-                            value.map((item: { content: string, date: string }, idx: number) => (
-                              <SwiperSlide key={idx} className='swiper-item'>
-                                <div className="swiper-item-header">
-                                  <div className='swiper-date'>
-                                    { convertDate(item.date) }
-                                  </div>
-                                  <div className="swiper-btn-container">
-                                    <ImageButton
-                                      onClick={() => onClickEditNotice(idx, item.content)}
-                                      role='edit'
-                                    />
-                                    <ImageButton
-                                      onClick={(e) => onClickDeleteNotice(e, idx)}
-                                      role='delete'
-                                    />
-                                  </div>
-                                </div>
-                                <div className='swiper-content'>
-                                  {
-                                    noticeEditMode[idx] ? (
-                                      <div className='swiper-form-container'>
-                                        <form>
-                                          <textarea
-                                            value={editNotice}
-                                            onChange={(e) => setEditNotice(e.target.value)}
-                                          />
-                                          <Button
-                                            color='default'
-                                            disabled={!editNotice}
-                                            onClick={(e) => onEditHomework(e, item.date, idx)}
-                                          >
-                                            수정하기
-                                          </Button>
-                                        </form>
-                                      </div>
-                                    ) : (
-                                      <div className='notice-content'>
-                                        { item.content }
-                                      </div>
-                                    )
-                                  }
-                                </div>
-                              </SwiperSlide>
+                            curriculum.month.map((item: Month, idx: number) => (
+                              <CurriculumList
+                                key={idx}
+                                idx={idx}
+                                month={item}
+                              />
                             ))
                           }
-                        </div>
-                      ))
-                    )
-                  }
-              </Swiper>
-            )
-          }
-        </SwiperStyle>
-      </section>
-
-      <section>
-        <div className="section-header space-between">
-          <div className="section-title">
-            커리큘럼
-          </div>
-          <Button
-            color='primary'
-            size='small'
-            onClick={onClickChangeCurriculum}
-            disabled={currentCurriculum?.id === initialCurriculum?.id}
-          >
-            변경하기
-          </Button>
-        </div>
-        <Fragment>
-          {
-            currentCurriculum && (
-              <DynoSelect value={currentCurriculum.id} onChange={onChangeCurriculum}>
-                {
-                  allCurriculum.map((curriculum) => (
-                    <option key={curriculum.id} value={curriculum.id}>
-                      { curriculum.name }
-                    </option>
-                  ))
+                      </Fragment>
+                    ))
+                  )
                 }
-              </DynoSelect>
-            )
-          }
-        </Fragment>
-        <Fragment>
-          {
-            currentCurriculum && (
-              Object.entries(currentCurriculum?.curriculum as Object).map(([month, curriculum]) => (
-                <Fragment key={month}>
-                    {
-                      curriculum.month.map((item: Month, idx: number) => (
-                        <CurriculumList
-                          key={idx}
-                          idx={idx}
-                          month={item}
-                        />
-                      ))
-                    }
-                </Fragment>
-              ))
-            )
-          }
-        </Fragment>
-      </section>
+              </Fragment>
+            </section>
+          </Fragment>
+        )
+      }
     </ClassDetailStyle>
   )
 }
