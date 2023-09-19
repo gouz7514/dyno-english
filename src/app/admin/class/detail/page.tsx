@@ -140,21 +140,52 @@ const SwiperStyle = styled.div`
           }
         }
 
-        form {
-          margin-top: 12px;
-
-          textarea {
-            width: 100%;
-            height: 150px;
-            border: none;
-            border-radius: 12px;
-            padding: 12px;
-            margin-bottom: 12px;
+        .swiper-form-container {
+          form {
+            margin-top: 12px;
+  
+            textarea {
+              width: 100%;
+              height: 150px;
+              border: none;
+              border-radius: 12px;
+              padding: 12px;
+              margin-bottom: 12px;
+            }
           }
         }
+
       }
     }
   }
+
+  .swiper-modal {
+    padding: 24px;
+
+    .form-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+
+    form {
+      margin-top: 12px;
+
+      textarea {
+        width: 100%;
+        height: 150px;
+        border: 1px solid #ddd;
+        border-radius: 12px;
+        padding: 12px;
+        margin: 12px 0;
+      }
+
+      .button-container {
+        gap: 12px;
+      }
+    }
+  }
+
 `
 
 type curriculumObject = {
@@ -173,9 +204,9 @@ interface AdminClassDetailProps {
 function ClassDetailContent({ params }: { params: { id: string } }) {
   const [loading, setLoading] = useState(true)
   // 과제 편집 모드
-  const [homeworkEditMode, setHomeworkEditMode] = useState<boolean[]>([])
+  const [homeworkEditMode, setHomeworkEditMode] = useState<boolean>(false)
   // 공지사항 편집 모드
-  const [noticeEditMode, setNoticeEditMode] = useState<boolean[]>([])
+  const [noticeEditMode, setNoticeEditMode] = useState<boolean>(false)
 
   // 과제 추가
   const [newHomework, setNewHomework] = useState({
@@ -194,8 +225,18 @@ function ClassDetailContent({ params }: { params: { id: string } }) {
   // 수업내용 추가 form 보이기
   const [showAddNotice, setShowAddNotice] = useState(false)
 
-  const [editHomework, setEditHomework] = useState('')
-  const [editNotice, setEditNotice] = useState('')
+  const [editHomework, setEditHomework] = useState({
+    date: '',
+    content: '',
+    id: ''
+  })
+
+  // const [editNotice, setEditNotice] = useState('')
+  const [editNotice, setEditNotice] = useState({
+    date: '',
+    content: '',
+    id: ''
+  })
 
   const [swiperCnt, setSwiperCnt] = useState<number>(1)
   const [classInfo, setClassInfo] = useState<AdminClassDetailProps>({
@@ -216,19 +257,23 @@ function ClassDetailContent({ params }: { params: { id: string } }) {
   const [initialCurriculum, setInitialCurriculum] = useState<curriculumObject>()
 
   // 과제 수정
-  const onClickEditHomework = (idx: number, content: string) => {
-    setEditHomework(content)
-    const newEditModes = homeworkEditMode.map((mode, i) => (i === idx ? !mode : false));
-    setHomeworkEditMode(newEditModes)
-    if (!newEditModes) setEditHomework('')
+  const onClickEditHomework = (date: string, content: string, id: string) => {
+    setEditHomework({
+      date,
+      content,
+      id
+    })
+    setHomeworkEditMode(true)
   }
 
   // 공지사항 수정
-  const onClickEditNotice = (idx: number, content: string) => {
-    setEditNotice(content)
-    const newEditModes = noticeEditMode.map((mode, i) => (i === idx ? !mode : false));
-    setNoticeEditMode(newEditModes)
-    if (!newEditModes) setEditNotice('')
+  const onClickEditNotice = (date: string, content: string, id: string) => {
+    setEditNotice({
+      date,
+      content,
+      id
+    })
+    setNoticeEditMode(true)
   }
 
   // 과제 삭제
@@ -344,8 +389,6 @@ function ClassDetailContent({ params }: { params: { id: string } }) {
 
       setCurrentCurriculum(classCurriculum as curriculumObject)
       setInitialCurriculum(classCurriculum as curriculumObject)
-      setHomeworkEditMode(new Array(Object.values(classHomework as Object)[0].length).fill(false))
-      setNoticeEditMode(new Array(Object.values(classNotice as Object)[0].length).fill(false))
       setLoading(false)
     }
   }
@@ -423,7 +466,6 @@ function ClassDetailContent({ params }: { params: { id: string } }) {
     })
 
     getClassInfo()
-    setHomeworkEditMode([])
   }
 
   // 새로운 과제 추가 취소
@@ -439,31 +481,57 @@ function ClassDetailContent({ params }: { params: { id: string } }) {
 
   // 과제 내용 수정
   const onChangeHomework = (e: any) => {
-    // e.preventDefault()
-    setEditHomework(e.target.value)
+    e.preventDefault()
+    setEditHomework({
+      ...editHomework,
+      content: e.target.value
+    })
   }
 
   // 과제 내용 수정 완료
-  const onEditHomework = async (e: any, id: string, idx: number) => {
+  const onEditHomework = async (e: any) => {
     e.preventDefault()
-    if (!editHomework) {
+    if (!editHomework.content) {
       alert('수정할 내용을 입력해주세요')
       return
     }
 
     const currentHomework = Object.values(classInfo.homework as Object)
-    currentHomework[0][idx].content = editHomework
+    const idx = currentHomework[0].findIndex((item: { id: string }) => item.id === editHomework.id)
+    currentHomework[0][idx].content = editHomework.content
     
     const classHomework = doc(db, 'class_homework', params.id)
 
-    await updateDoc(classHomework, {
-      homeworks: currentHomework[0]
-    })
+    try {
+      await updateDoc(classHomework, {
+        homeworks: currentHomework[0]
+      })
 
+      alert('과제 정보가 수정되었습니다')
+    } catch (error) {
+      console.log(error)
+    }
+
+    setHomeworkEditMode(false)
     getClassInfo()
   }
 
-  const onEditNotice = async (e: any, date: string, idx: number) => {
+  // 과제 내용 수정 취소
+  const onClickCloseEditHomework = (e: any) => {
+    e.preventDefault()
+    setHomeworkEditMode(false)
+  }
+
+  const onChangeNotice = (e: any) => {
+    e.preventDefault()
+    setEditNotice({
+      ...editNotice,
+      content: e.target.value
+    })
+  }
+
+  // 수업 내용 수정 완료
+  const onEditNotice = async (e: any) => {
     e.preventDefault()
     if (!editNotice) {
       alert('수정할 내용을 입력해주세요')
@@ -471,15 +539,29 @@ function ClassDetailContent({ params }: { params: { id: string } }) {
     }
 
     const currentNotice = Object.values(classInfo.notice as Object)
-    currentNotice[0][idx].content = editNotice
+    const idx = currentNotice[0].findIndex((item: { id: string }) => item.id === editNotice.id)
+    currentNotice[0][idx].content = editNotice.content
 
     const classNotice = doc(db, 'class_notice', params.id)
 
-    await updateDoc(classNotice, {
-      notices: currentNotice[0]
-    })
+    try {
+      await updateDoc(classNotice, {
+        notices: currentNotice[0]
+      })
 
+      alert('수업내용이 수정되었습니다')
+    } catch (error) {
+      console.log(error)
+    }
+
+    setNoticeEditMode(false)
     getClassInfo()
+  }
+
+  // 수업 내용 수정 취소
+  const onClickCloseEditNotice = (e: any) => {
+    e.preventDefault()
+    setNoticeEditMode(false)
   }
 
   // 새로운 공지 사항 날짜 변경
@@ -601,7 +683,7 @@ function ClassDetailContent({ params }: { params: { id: string } }) {
                                     </div>
                                     <div className="swiper-btn-container">
                                       <ImageButton
-                                        onClick={() => onClickEditHomework(idx, item.content)}
+                                        onClick={() => onClickEditHomework(item.date, item.content, item.id)}
                                         role='edit'
                                       />
                                       <ImageButton
@@ -611,29 +693,9 @@ function ClassDetailContent({ params }: { params: { id: string } }) {
                                     </div>
                                   </div>
                                   <div className='swiper-content'>
-                                    {
-                                      homeworkEditMode[idx] ? (
-                                        <div className='swiper-form-container'>
-                                          <form>
-                                            <textarea
-                                              value={editHomework}
-                                              onChange={(e) => onChangeHomework(e)}
-                                            />
-                                            <Button
-                                              color='default'
-                                              disabled={!editHomework}
-                                              onClick={(e) => onEditHomework(e, item.id, idx)}
-                                            >
-                                              수정하기
-                                            </Button>
-                                          </form>
-                                        </div>
-                                      ) : (
-                                        <div className='homework-content'>
-                                          { item.content }
-                                        </div>
-                                      )
-                                    }
+                                    <div className='homework-content'>
+                                      { item.content }
+                                    </div>
                                   </div>
                                 </SwiperSlide>
                               ))
@@ -644,6 +706,43 @@ function ClassDetailContent({ params }: { params: { id: string } }) {
                     </Swiper>
                   )
                 }
+                <Modal
+                  isOpen={homeworkEditMode}
+                  onClose={() => setHomeworkEditMode(false)}
+                >
+                  <div className='swiper-modal'>
+                    <div className='form-title'>
+                      과제 수정하기
+                    </div>
+                    <form>
+                      <DynoInput
+                        value={editHomework.date}
+                        type='date'
+                        onChange={onChangeNewHomeworkDate}
+                        disabled
+                      />
+                      <textarea
+                        value={editHomework.content}
+                        onChange={(e) => onChangeHomework(e)}
+                      />
+                      <div className="button-container d-flex">
+                        <Button
+                          color='primary'
+                          disabled={!editHomework}
+                          onClick={(e) => onEditHomework(e)}
+                        >
+                          수정하기
+                        </Button>
+                        <Button
+                          color='default'
+                          onClick={onClickCloseEditHomework}
+                        >
+                          취소
+                        </Button>
+                      </div>
+                    </form>
+                  </div>
+                </Modal>
               </SwiperStyle>
             </section>
 
@@ -696,7 +795,7 @@ function ClassDetailContent({ params }: { params: { id: string } }) {
                           Object.entries(classInfo.notice as Object).map(([key, value]) => (
                             <div key={key}>
                               {
-                                value.map((item: { content: string, date: string }, idx: number) => (
+                                value.map((item: { content: string, date: string, id: string }, idx: number) => (
                                   <SwiperSlide key={idx} className='swiper-item'>
                                     <div className="swiper-item-header">
                                       <div className='swiper-date'>
@@ -704,7 +803,7 @@ function ClassDetailContent({ params }: { params: { id: string } }) {
                                       </div>
                                       <div className="swiper-btn-container">
                                         <ImageButton
-                                          onClick={() => onClickEditNotice(idx, item.content)}
+                                          onClick={() => onClickEditNotice(item.date, item.content, item.id)}
                                           role='edit'
                                         />
                                         <ImageButton
@@ -714,29 +813,9 @@ function ClassDetailContent({ params }: { params: { id: string } }) {
                                       </div>
                                     </div>
                                     <div className='swiper-content'>
-                                      {
-                                        noticeEditMode[idx] ? (
-                                          <div className='swiper-form-container'>
-                                            <form>
-                                              <textarea
-                                                value={editNotice}
-                                                onChange={(e) => setEditNotice(e.target.value)}
-                                              />
-                                              <Button
-                                                color='default'
-                                                disabled={!editNotice}
-                                                onClick={(e) => onEditNotice(e, item.date, idx)}
-                                              >
-                                                수정하기
-                                              </Button>
-                                            </form>
-                                          </div>
-                                        ) : (
-                                          <div className='notice-content'>
-                                            { item.content }
-                                          </div>
-                                        )
-                                      }
+                                      <div className='notice-content'>
+                                        { item.content }
+                                      </div>
                                     </div>
                                   </SwiperSlide>
                                 ))
@@ -748,6 +827,43 @@ function ClassDetailContent({ params }: { params: { id: string } }) {
                     </Swiper>
                   )
                 }
+                <Modal
+                  isOpen={noticeEditMode}
+                  onClose={() => setNoticeEditMode(false)}
+                >
+                  <div className='swiper-modal'>
+                    <div className='form-title'>
+                      수업내용 수정하기
+                    </div>
+                    <form>
+                      <DynoInput
+                        value={editNotice.date}
+                        type='date'
+                        onChange={onChangeNewNoticeDate}
+                        disabled
+                      />
+                      <textarea
+                        value={editNotice.content}
+                        onChange={(e) => onChangeNotice(e)}
+                      />
+                      <div className="button-container d-flex">
+                        <Button
+                          color='primary'
+                          disabled={!editNotice}
+                          onClick={(e) => onEditNotice(e)}
+                        >
+                          수정하기
+                        </Button>
+                        <Button
+                          color='default'
+                          onClick={onClickCloseEditNotice}
+                        >
+                          취소
+                        </Button>
+                      </div>
+                    </form>
+                  </div>
+                </Modal>
               </SwiperStyle>
             </section>
 
