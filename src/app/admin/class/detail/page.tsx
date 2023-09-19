@@ -463,6 +463,25 @@ function ClassDetailContent({ params }: { params: { id: string } }) {
     getClassInfo()
   }
 
+  const onEditNotice = async (e: any, date: string, idx: number) => {
+    e.preventDefault()
+    if (!editNotice) {
+      alert('수정할 내용을 입력해주세요')
+      return
+    }
+
+    const currentNotice = Object.values(classInfo.notice as Object)
+    currentNotice[0][idx].content = editNotice
+
+    const classNotice = doc(db, 'class_notice', params.id)
+
+    await updateDoc(classNotice, {
+      notices: currentNotice[0]
+    })
+
+    getClassInfo()
+  }
+
   // 새로운 공지 사항 날짜 변경
   const onChangeNewNoticeDate = (e: any) => {
     setNewNotice({
@@ -706,7 +725,7 @@ function ClassDetailContent({ params }: { params: { id: string } }) {
                                               <Button
                                                 color='default'
                                                 disabled={!editNotice}
-                                                onClick={(e) => onEditHomework(e, item.date, idx)}
+                                                onClick={(e) => onEditNotice(e, item.date, idx)}
                                               >
                                                 수정하기
                                               </Button>
