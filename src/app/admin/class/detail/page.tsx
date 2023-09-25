@@ -416,24 +416,30 @@ function ClassDetailContent({ params }: { params: { id: string } }) {
   }, [])
 
   const onChangeNewHomework = (e: any) => {
-    setNewHomework({
-      ...newHomework,
-      content: e.target.value
+    setNewHomework((prevState) => {
+      return {
+        ...prevState,
+        content: e.target.value
+      }
     })
   }
 
   const onChangeNewNotice = (e: any) => {
-    setNewNotice({
-      ...newNotice,
-      content: e.target.value
+    setNewNotice((prevState) => {
+      return {
+        ...prevState,
+        content: e.target.value
+      }
     })
   }
 
   // 새로운 과제 날짜 변경
   const onChangeNewHomeworkDate = (e: any) => {
-    setNewHomework({
-      ...newHomework,
-      date: e.target.value
+    setNewHomework((prevState) => {
+      return {
+        ...prevState,
+        date: e.target.value
+      }
     })
   }
   
@@ -482,9 +488,11 @@ function ClassDetailContent({ params }: { params: { id: string } }) {
   // 과제 내용 수정
   const onChangeHomework = (e: any) => {
     e.preventDefault()
-    setEditHomework({
-      ...editHomework,
-      content: e.target.value
+    setEditHomework((prevState) => {
+      return {
+        ...prevState,
+        content: e.target.value
+      }
     })
   }
 
@@ -524,9 +532,11 @@ function ClassDetailContent({ params }: { params: { id: string } }) {
 
   const onChangeNotice = (e: any) => {
     e.preventDefault()
-    setEditNotice({
-      ...editNotice,
-      content: e.target.value
+    setEditNotice((prevState) => {
+      return {
+        ...prevState,
+        content: e.target.value
+      }
     })
   }
 
@@ -566,9 +576,11 @@ function ClassDetailContent({ params }: { params: { id: string } }) {
 
   // 새로운 공지 사항 날짜 변경
   const onChangeNewNoticeDate = (e: any) => {
-    setNewNotice({
-      ...newNotice,
-      date: e.target.value
+    setNewNotice((prevState) => {
+      return {
+        ...prevState,
+        date: e.target.value
+      }
     })
   }
 
