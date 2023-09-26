@@ -33,7 +33,11 @@ export default function AdminSimpleNoticeForm({ isEdit }: AdminSimpleNoticeFormP
     }
   }
 
-  if (isEdit) getSimpleNoticeInfo(simpleNoticeId)
+  useEffect(() => {
+    if (isEdit) {
+      getSimpleNoticeInfo(simpleNoticeId)
+    }
+  }, [isEdit])
 
   const handleSimpleNoticeChange = (e: any) => {
     setSimpleNotice(e.target.value)
