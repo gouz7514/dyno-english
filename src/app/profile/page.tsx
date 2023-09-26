@@ -101,7 +101,6 @@ const ProfileStyle = styled.div`
       }
 
       .content-inner {
-        white-space: pre-line;
         word-break: keep-all;
         height: calc(100% - 44px);
         overflow-y: scroll;
@@ -218,6 +217,14 @@ export default function ProfilePage() {
   const handleMeta = (meta: any) => {
     setShowMetaModal(true)
     setCurrentMeta(meta)
+  }
+
+  const closeMetaModal = () => {
+    setShowMetaModal(false)
+    setCurrentMeta({
+      url: '',
+      type: ''
+    })
   }
 
   const unLockModal = (e: React.FormEvent<HTMLFormElement>) => {
@@ -344,7 +351,7 @@ export default function ProfilePage() {
                         }
                         <Modal
                           isOpen={showMetaModal}
-                          onClose={() => setShowMetaModal(false)}
+                          onClose={closeMetaModal}
                         >
                           <MetaModalStyle>
                             <div className="modal-meta">

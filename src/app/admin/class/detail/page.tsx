@@ -124,7 +124,6 @@ const SwiperStyle = styled.div`
 
         .homework-content,
         .notice-content {
-          // white-space: pre-line;
           word-break: keep-all;
           height: 100%;
           overflow-y: scroll;
@@ -553,6 +552,14 @@ function ClassDetailContent({ params }: { params: { id: string } }) {
     setCurrentMeta(meta)
   }
 
+  const closeMetaModal = () => {
+    setShowMetaModal(false)
+    setCurrentMeta({
+      url: '',
+      type: ''
+    })
+  }
+
   // 수업 내용 수정 완료
   const onEditNotice = async (e: any) => {
     e.preventDefault()
@@ -740,7 +747,7 @@ function ClassDetailContent({ params }: { params: { id: string } }) {
                 }
                 <Modal
                   isOpen={showMetaModal}
-                  onClose={() => setShowMetaModal(false)}
+                  onClose={closeMetaModal}
                 >
                   <MetaModalStyle>
                     <div className="modal-meta">
