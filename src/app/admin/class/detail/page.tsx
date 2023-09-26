@@ -16,6 +16,8 @@ import IsStaff from '@/app/components/Template/IsStaff'
 import CurriculumList from '@/app/components/Organism/CurriculumList'
 import DynoSelect from '@/app/components/Atom/Input/DynoSelect'
 import Skeleton from '@/app/components/Skeleton'
+import TextEditor from '@/app/components/Organism/TextEditor'
+import EditableText from '@/app/components/Organism/EditableText'
 
 import { convertDate } from '@/lib/utils/date'
 import { Month } from '@/types/types'
@@ -62,10 +64,9 @@ const ClassDetailStyle = styled.div`
       }
     }
 
-    .form-container {
+    .editor-body {
       padding: 24px;
       border-radius: 12px;
-      background-color: #fff;
       width: 100%;
       max-width: 500px;
 
@@ -75,17 +76,10 @@ const ClassDetailStyle = styled.div`
         margin-bottom: 12px;
       }
 
-      form {
+      .editor-container {
         display: flex;
         flex-direction: column;
         gap: 12px;
-
-        textarea {
-          border: 1px solid #ddd;
-          border-radius: 12px;
-          padding: 12px;
-          outline: none;
-        }
 
         .button-container {
           display: flex;
@@ -130,7 +124,7 @@ const SwiperStyle = styled.div`
 
         .homework-content,
         .notice-content {
-          white-space: pre-line;
+          // white-space: pre-line;
           word-break: keep-all;
           height: 100%;
           overflow-y: scroll;
@@ -139,53 +133,62 @@ const SwiperStyle = styled.div`
             display: none;
           }
         }
-
-        .swiper-form-container {
-          form {
-            margin-top: 12px;
-  
-            textarea {
-              width: 100%;
-              height: 150px;
-              border: none;
-              border-radius: 12px;
-              padding: 12px;
-              margin-bottom: 12px;
-            }
-          }
-        }
-
       }
     }
   }
+`
 
-  .swiper-modal {
+const MetaModalStyle = styled.div`
+  .modal-meta {
+    padding: 16px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+
+    img {
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+  .form-container {
+    display: flex;
+    flex-direction: column;
+    background-color: #eee;
     padding: 24px;
+    border-radius: 12px;
+    width: 100%;
+    max-width: 450px;
+    gap: 24px;
 
-    .form-title {
-      font-size: 1.2rem;
-      font-weight: 700;
-      margin-bottom: 12px;
+    .form-description {
+      line-height: 1.5;
     }
 
     form {
-      margin-top: 12px;
+      display: flex;
+      flex-direction: column;
 
-      textarea {
-        width: 100%;
-        height: 150px;
-        border: 1px solid #ddd;
-        border-radius: 12px;
-        padding: 12px;
-        margin: 12px 0;
-      }
+      .input-container {
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
 
-      .button-container {
-        gap: 12px;
+        input {
+          height: 40px;
+          border-radius: 8px;
+          padding-left: 8px;
+          outline: none;
+          border: 0;
+    
+          &:focus {
+            border: 1px solid var(--primary-green);
+          }
+        }
       }
     }
   }
-
 `
 
 type curriculumObject = {
@@ -231,7 +234,6 @@ function ClassDetailContent({ params }: { params: { id: string } }) {
     id: ''
   })
 
-  // const [editNotice, setEditNotice] = useState('')
   const [editNotice, setEditNotice] = useState({
     date: '',
     content: '',
@@ -247,6 +249,13 @@ function ClassDetailContent({ params }: { params: { id: string } }) {
       name: '',
       curriculum: {}
     }
+  })
+
+  // 메타데이터 모달
+  const [showMetaModal, setShowMetaModal] = useState<boolean>(false)
+  const [currentMeta, setCurrentMeta] = useState({
+    url: '',
+    type: ''
   })
 
   // 전체 커리큘럼
@@ -415,20 +424,20 @@ function ClassDetailContent({ params }: { params: { id: string } }) {
     }
   }, [])
 
-  const onChangeNewHomework = (e: any) => {
+  const onChangeNewHomework = (value: string) => {
     setNewHomework((prevState) => {
       return {
         ...prevState,
-        content: e.target.value
+        content: value
       }
     })
   }
 
-  const onChangeNewNotice = (e: any) => {
+  const onChangeNewNotice = (value: string) => {
     setNewNotice((prevState) => {
       return {
         ...prevState,
-        content: e.target.value
+        content: value
       }
     })
   }
@@ -446,7 +455,6 @@ function ClassDetailContent({ params }: { params: { id: string } }) {
   // 새로운 과제 추가
   const onClickSubmitNewHomework = async (e: any) => {
     e.preventDefault()
-    setShowAddHomework(false)
 
     const classHomework = doc(db, 'class_homework', params.id)
     const classHomeworkSnapshot = await getDoc(classHomework)
@@ -472,6 +480,7 @@ function ClassDetailContent({ params }: { params: { id: string } }) {
     })
 
     getClassInfo()
+    setShowAddHomework(false)
   }
 
   // 새로운 과제 추가 취소
@@ -486,12 +495,11 @@ function ClassDetailContent({ params }: { params: { id: string } }) {
   }
 
   // 과제 내용 수정
-  const onChangeHomework = (e: any) => {
-    e.preventDefault()
+  const onChangeHomework = (value: string) => {
     setEditHomework((prevState) => {
       return {
         ...prevState,
-        content: e.target.value
+        content: value
       }
     })
   }
@@ -530,14 +538,19 @@ function ClassDetailContent({ params }: { params: { id: string } }) {
     setHomeworkEditMode(false)
   }
 
-  const onChangeNotice = (e: any) => {
-    e.preventDefault()
+  const onChangeNotice = (value: string) => {
     setEditNotice((prevState) => {
       return {
         ...prevState,
-        content: e.target.value
+        content: value
       }
     })
+  }
+
+  // EditableText에서 onClick 발생 시 metadata를 바인딩
+  const handleMeta = (meta: any) => {
+    setShowMetaModal(true)
+    setCurrentMeta(meta)
   }
 
   // 수업 내용 수정 완료
@@ -650,18 +663,22 @@ function ClassDetailContent({ params }: { params: { id: string } }) {
                     isOpen={showAddHomework}
                     onClose={() => setShowAddHomework(false)}
                   >
-                    <div className='form-container'>
+                    <div className='editor-body'>
                       <div className='form-title'>
                         과제 추가하기
                       </div>
-                      <form>
+                      <div className='editor-container'>
                         <DynoInput value={newHomework.date} type='date' onChange={onChangeNewHomeworkDate} />
-                        <textarea value={newHomework.content} cols={30} rows={10} onChange={onChangeNewHomework}></textarea>
+                        <TextEditor
+                          isOpen={showAddHomework}
+                          content={newHomework.content}
+                          onInputChange={onChangeNewHomework}
+                        />
                         <div className="button-container">
                           <Button color='primary' disabled={!newHomework.date || !newHomework.content} onClick={onClickSubmitNewHomework}>추가</Button>
                           <Button color='default' onClick={onClickCloseNewHomework}>취소</Button>
                         </div>
-                      </form>
+                      </div>
                     </div>
                   </Modal>
                 </Fragment>
@@ -706,7 +723,10 @@ function ClassDetailContent({ params }: { params: { id: string } }) {
                                   </div>
                                   <div className='swiper-content'>
                                     <div className='homework-content'>
-                                      { item.content }
+                                      <EditableText
+                                        content={item.content}
+                                        handleMeta={handleMeta}
+                                      />
                                     </div>
                                   </div>
                                 </SwiperSlide>
@@ -719,23 +739,41 @@ function ClassDetailContent({ params }: { params: { id: string } }) {
                   )
                 }
                 <Modal
+                  isOpen={showMetaModal}
+                  onClose={() => setShowMetaModal(false)}
+                >
+                  <MetaModalStyle>
+                    <div className="modal-meta">
+                      {
+                        currentMeta.type === 'image' ? (
+                          <img src={currentMeta.url} alt="modal" />
+                        ) : (
+                          <video src={currentMeta.url} controls width={'100%'}></video>
+                        )
+                      }
+                    </div>
+                  </MetaModalStyle>
+                </Modal>
+                <Modal
                   isOpen={homeworkEditMode}
                   onClose={() => setHomeworkEditMode(false)}
                 >
-                  <div className='swiper-modal'>
+                  <div className='editor-body'>
                     <div className='form-title'>
                       과제 수정하기
                     </div>
-                    <form>
+                    <div className='editor-container'>
                       <DynoInput
                         value={editHomework.date}
                         type='date'
                         onChange={onChangeNewHomeworkDate}
                         disabled
                       />
-                      <textarea
-                        value={editHomework.content}
-                        onChange={(e) => onChangeHomework(e)}
+                      <TextEditor
+                        isOpen={homeworkEditMode}
+                        content={editHomework.content}
+                        onInputChange={onChangeHomework}
+                        isEdit={true}
                       />
                       <div className="button-container d-flex">
                         <Button
@@ -752,7 +790,7 @@ function ClassDetailContent({ params }: { params: { id: string } }) {
                           취소
                         </Button>
                       </div>
-                    </form>
+                    </div>
                   </div>
                 </Modal>
               </SwiperStyle>
@@ -772,18 +810,22 @@ function ClassDetailContent({ params }: { params: { id: string } }) {
                     isOpen={showAddNotice}
                     onClose={() => setShowAddNotice(false)}
                   >
-                    <div className='form-container'>
+                    <div className='editor-body'>
                       <div className='form-title'>
                         수업내용 추가하기
                       </div>
-                      <form>
+                      <div className='editor-container'>
                         <DynoInput value={newNotice.date} type='date' onChange={onChangeNewNoticeDate} />
-                        <textarea value={newNotice.content} cols={30} rows={10} onChange={onChangeNewNotice}></textarea>
+                        <TextEditor
+                          isOpen={showAddNotice}
+                          content={newNotice.content}
+                          onInputChange={onChangeNewNotice}
+                        />
                         <div className="button-container">
                           <Button color='primary' disabled={!newNotice.date || !newNotice.content} onClick={onClickSubmitNewNotice}>추가</Button>
                           <Button color='default' onClick={onClickCloseNewNotice}>취소</Button>
                         </div>
-                      </form>
+                      </div>
                     </div>
                   </Modal>
                   </div>
@@ -826,7 +868,10 @@ function ClassDetailContent({ params }: { params: { id: string } }) {
                                     </div>
                                     <div className='swiper-content'>
                                       <div className='notice-content'>
-                                        { item.content }
+                                        <EditableText
+                                          content={item.content}
+                                          handleMeta={handleMeta}
+                                        />
                                       </div>
                                     </div>
                                   </SwiperSlide>
@@ -843,20 +888,22 @@ function ClassDetailContent({ params }: { params: { id: string } }) {
                   isOpen={noticeEditMode}
                   onClose={() => setNoticeEditMode(false)}
                 >
-                  <div className='swiper-modal'>
+                  <div className='editor-body'>
                     <div className='form-title'>
                       수업내용 수정하기
                     </div>
-                    <form>
+                    <div className='editor-container'>
                       <DynoInput
                         value={editNotice.date}
                         type='date'
                         onChange={onChangeNewNoticeDate}
                         disabled
                       />
-                      <textarea
-                        value={editNotice.content}
-                        onChange={(e) => onChangeNotice(e)}
+                      <TextEditor
+                        isOpen={noticeEditMode}
+                        content={editNotice.content}
+                        onInputChange={onChangeNotice}
+                        isEdit={true}
                       />
                       <div className="button-container d-flex">
                         <Button
@@ -873,7 +920,7 @@ function ClassDetailContent({ params }: { params: { id: string } }) {
                           취소
                         </Button>
                       </div>
-                    </form>
+                    </div>
                   </div>
                 </Modal>
               </SwiperStyle>
