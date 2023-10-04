@@ -34,6 +34,11 @@ const ModalStyle = styled.div`
     border: 1px solid #ccc;
     max-width: 300px;
 
+    .drag-label {
+      font-size: 14px;
+      margin-bottom: 12px;
+    }
+
     .button-container {
       margin-top: 12px;
       gap: 8px;
@@ -208,7 +213,7 @@ export default function TextEditor({ isOpen, content, onInputChange, isEdit }: T
       />
       <ModalStyle className={ `${modalVisible ? 'open' : 'close'}` } style={{ left: modalPosition.left, top: modalPosition.top}}>
         <div className='drag-modal'>
-          <p>링크를 입력하세요</p>
+          <p className='drag-label'>링크를 입력하세요</p>
           <DynoSelect value={metaData.type} onChange={(e) => setMetaData({ ...metaData, type: e.target.value })}>
             <option value="image">이미지</option>
             <option value="video">동영상</option>
