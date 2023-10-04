@@ -8,6 +8,7 @@ import styled from 'styled-components'
 import Button from '@/app/components/Button'
 import ImageButton from '@/app/components/Atom/Button/ImageButton'
 import DynoInput from '@/app/components/Atom/Input/DynoInput'
+import Skeleton from '@/app/components/Skeleton'
 
 import { UserProps } from '@/types/types'
 
@@ -58,52 +59,10 @@ const ProfileStyle = styled.div`
         }
       }
 
-      input{
-        height: 40px;
-        border-radius: 8px;
-        padding-left: 8px;
-        outline: none;
-        border: 0;
-
-        &:focus {
-          border: 1px solid var(--primary-green);
-        }
-      }
-
       .input-error {
         color: red;
         font-size: 12px;
         height: 12px;
-      }
-
-      input[type="date"] {
-        position: relative;
-        height: 40px;
-        border-radius: 8px;
-        padding: 0 8px;
-        outline: none;
-        border: 0;
-
-        &::-webkit-calendar-picker-indicator {
-          position: absolute;
-          left: 0;
-          top: 0;
-          width: 100%;
-          height: 100%;
-          background: transparent;
-          color: transparent;
-          cursor: pointer;
-        }
-
-        &::before {
-          content: '생년월일';
-          color: #aaa;
-        }
-
-        &:focus::before,
-        &:valid::before {
-          display: none;
-        }
       }
     }
   }
@@ -366,7 +325,7 @@ export default function ProfilePage() {
       </div>
       {
         pageLoading ? (
-          <div>로딩중...</div>
+          <Skeleton />
         ) : (
           <div className='profile-container'>
             <div className='profile-item name'>

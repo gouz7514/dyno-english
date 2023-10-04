@@ -91,7 +91,6 @@ interface AdminScheduleFormProps {
 const HOURS = Object.keys(Hours)
 const MINUTES = Object.keys(Minutes)
 
-// TODO : isEdit
 export default function AdminScheduleForm({ isEdit }: AdminScheduleFormProps) {
   const router = useRouter()
   const searchParams = useSearchParams()

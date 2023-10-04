@@ -1,12 +1,15 @@
 import styled, { css } from 'styled-components'
+import { forwardRef } from 'react'
 
 const InputStyle = styled.input<InputProps>`
   height: 40px;
   border-radius: 8px;
-  border: 1px solid #ccc;
+  border: none;
   outline: none;
   width: 100%;
   padding: 0 8px;
+  background-color: #fff;
+  z-index: 101;
 
   &:focus {
     border: 1px solid var(--primary-green);
@@ -21,7 +24,6 @@ const InputStyle = styled.input<InputProps>`
   ${({ type }) => css`
     ${type === 'date' && css`
       position: relative;
-      outline: none;
 
       &::-webkit-calendar-picker-indicator {
         position: absolute;
@@ -50,20 +52,23 @@ type InputProps = {
   disabled?: boolean
 }
 
-export default function Input(...props: InputProps[]) {
+const Input = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
   return (
     <InputStyle
-      type={props[0].type}
-      ref={props[0].ref}
-      name={props[0].name}
-      id={props[0].id}
-      placeholder={props[0].placeholder}
-      value={props[0].value}
-      onChange={props[0].onChange}
-      onBlur={props[0].onBlur}
-      disabled={props[0].disabled}
+      type={props.type}
+      ref={ref}
+      name={props.name}
+      id={props.id}
+      placeholder={props.placeholder}
+      value={props.value}
+      onChange={props.onChange}
+      onBlur={props.onBlur}
+      disabled={props.disabled}
     >
     </InputStyle>
   )
-}
+})
 
+Input.displayName = 'DynoInput'
+
+export default Input

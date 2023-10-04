@@ -11,6 +11,10 @@ import CurriculumList from '@/app/components/Organism/CurriculumList'
 import EmptyState from '@/app/components/Molecule/EmptyState'
 import Callout from '@/app/components/Molecule/Callout'
 import DynoSelect from '@/app/components/Atom/Input/DynoSelect'
+import DynoInput from '@/app/components/Atom/Input/DynoInput'
+import Button from '@/app/components/Button'
+import EditableText from '@/app/components/Organism/EditableText'
+import Modal from '@/app/components/Organism/Modal'
 
 import { convertDate } from '@/lib/utils/date'
 
@@ -97,7 +101,6 @@ const ProfileStyle = styled.div`
       }
 
       .content-inner {
-        white-space: pre-line;
         word-break: keep-all;
         height: calc(100% - 44px);
         overflow-y: scroll;
@@ -128,12 +131,76 @@ const ProfileStyle = styled.div`
   }
 `
 
+const MetaModalStyle = styled.div`
+  .modal-meta {
+    padding: 16px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+
+    img {
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+  .form-container {
+    display: flex;
+    flex-direction: column;
+    background-color: #eee;
+    padding: 24px;
+    border-radius: 12px;
+    width: 100%;
+    max-width: 450px;
+    gap: 24px;
+
+    .form-description {
+      line-height: 1.5;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+
+      .input-container {
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+
+        input {
+          height: 40px;
+          border-radius: 8px;
+          padding-left: 8px;
+          outline: none;
+          border: 0;
+    
+          &:focus {
+            border: 1px solid var(--primary-green);
+          }
+        }
+      }
+    }
+  }
+`
+
 export default function ProfilePage() {
   const router = useRouter()
   const { data: session, status } = useSession()
   const [loading, setLoading] = useState<boolean>(true)
   const [selectedKid, setSelectedKid] = useState<string>('')
   const [selectedClass, setSelectedClass] = useState<any>({})
+
+  // 이미지, 비디오용 모달
+  const [showMetaModal, setShowMetaModal] = useState<boolean>(false)
+  const [currentMeta, setCurrentMeta] = useState({
+    url: '',
+    type: ''
+  })
+
+  // unlock modal
+  const [modalUnlocked, setModalUnlocked] = useState<boolean>(false)
+  const [modalPassword, setModalPassword] = useState<string>('')
 
   useEffect(() => {
     if (status !== 'loading') {
@@ -146,6 +213,29 @@ export default function ProfilePage() {
       }
     }
   }, [session, router, status])
+
+  const handleMeta = (meta: any) => {
+    setShowMetaModal(true)
+    setCurrentMeta(meta)
+  }
+
+  const closeMetaModal = () => {
+    setShowMetaModal(false)
+    setCurrentMeta({
+      url: '',
+      type: ''
+    })
+  }
+
+  const unLockModal = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    if (modalPassword === process.env.NEXT_PUBLIC_LOGIN_ADMIN_PASSWORD) {
+      setModalUnlocked(true)
+    } else {
+      alert('비밀번호가 틀렸습니다')
+      setModalPassword('')
+    }
+  }
 
   const onChangeKidName = (e: any) => {
     const selectedKid = session?.user.kids.find((kid: any) => kid.name === e.target.value)
@@ -210,7 +300,7 @@ export default function ProfilePage() {
                         {
                           <Fragment>
                             <div className="class-title">
-                              { selectedClass.name }
+                              <span className='text-bold'>수업명</span> : { selectedClass.name }
                             </div>
                             {
                               selectedClass.details && Object.keys(selectedClass.details).length === 0 ? (
@@ -233,7 +323,10 @@ export default function ProfilePage() {
                                               { convertDate(key) } 수업내용
                                             </div>
                                             <div className='content-inner'>
-                                              { value.notice }
+                                              <EditableText
+                                                content={value.notice}
+                                                handleMeta={handleMeta}
+                                              />
                                             </div>
                                           </div>
                                           <div className="class-homework">
@@ -241,7 +334,10 @@ export default function ProfilePage() {
                                             { convertDate(key) } 숙제
                                             </div>
                                             <div className='content-inner'>
-                                              { value.homework }
+                                              <EditableText
+                                                content={value.homework}
+                                                handleMeta={handleMeta}
+                                              />
                                             </div>
                                           </div>
                                         </SwiperSlide>
@@ -253,6 +349,43 @@ export default function ProfilePage() {
                             }
                           </Fragment>
                         }
+                        <Modal
+                          isOpen={showMetaModal}
+                          onClose={closeMetaModal}
+                        >
+                          <MetaModalStyle>
+                            <div className="modal-meta">
+                              {
+                                currentMeta.type === 'video' ? (
+                                  <video controls width={'100%'}>
+                                      <source src={currentMeta.url} />
+                                    </video>
+                                ) : (
+                                  modalUnlocked ? (
+                                    <img src={currentMeta.url} alt='이미지' />
+                                  ) : (
+                                    <div className="form-container">
+                                      <div className="form-description">
+                                        이미지를 보시려면 비밀번호를 입력해주세요
+                                      </div>
+                                      <form onSubmit={unLockModal}>
+                                        <div className="input-container">
+                                          <DynoInput
+                                            type="password"
+                                            placeholder="비밀번호"
+                                            value={modalPassword}
+                                            onChange={(e) => setModalPassword(e.target.value)}
+                                          />
+                                          <Button>확인</Button>
+                                        </div>
+                                      </form>
+                                    </div>
+                                  )
+                                )
+                              }
+                            </div>
+                          </MetaModalStyle>
+                        </Modal>
                         <div className="class-curriculum-container">
                           <div className='class-curriculum-header'>커리큘럼</div>
                           {
