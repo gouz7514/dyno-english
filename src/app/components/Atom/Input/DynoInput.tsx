@@ -4,7 +4,7 @@ import { forwardRef } from 'react'
 const InputStyle = styled.input<InputProps>`
   height: 40px;
   border-radius: 8px;
-  border: none;
+  border: 1px solid #ccc;
   outline: none;
   width: 100%;
   padding: 0 8px;
