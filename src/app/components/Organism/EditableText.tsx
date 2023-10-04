@@ -109,6 +109,22 @@ export default function EditableText({ content, handleMeta }: EditableTextProps)
             {childrenHtml}
           </div>
         )
+      } else {
+        if (item.type === 'image' || item.type === 'video') {
+          return (
+            <span
+              key={index}
+              onClick={() => showModal(item.url!, item.type!)}
+              style={{
+                display: 'inline-block',
+                textDecoration: 'underline',
+                cursor: 'pointer'
+              }}
+            >
+              {item.content}
+            </span>
+          )
+        }
       }
       return (
         <span key={index}>
