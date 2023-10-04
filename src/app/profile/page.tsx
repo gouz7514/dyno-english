@@ -300,7 +300,7 @@ export default function ProfilePage() {
                         {
                           <Fragment>
                             <div className="class-title">
-                              { selectedClass.name }
+                              <span className='text-bold'>수업명</span> : { selectedClass.name }
                             </div>
                             {
                               selectedClass.details && Object.keys(selectedClass.details).length === 0 ? (
