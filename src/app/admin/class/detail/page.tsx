@@ -18,6 +18,7 @@ import DynoSelect from '@/app/components/Atom/Input/DynoSelect'
 import Skeleton from '@/app/components/Skeleton'
 import TextEditor from '@/app/components/Organism/TextEditor'
 import EditableText from '@/app/components/Organism/EditableText'
+import DynoUploader from '@/app/components/Atom/Input/DynoUploader'
 
 import { convertDate } from '@/lib/utils/date'
 import { Month } from '@/types/types'
@@ -69,6 +70,11 @@ const ClassDetailStyle = styled.div`
       border-radius: 12px;
       width: 100%;
       max-width: 500px;
+
+      .editor-title {
+        display: flex;
+        flex-direction: column;
+      }
 
       .form-title {
         font-size: 1.2rem;
@@ -671,8 +677,11 @@ function ClassDetailContent({ params }: { params: { id: string } }) {
                     onClose={() => setShowAddHomework(false)}
                   >
                     <div className='editor-body'>
-                      <div className='form-title'>
-                        과제 추가하기
+                      <div className="editor-title">
+                        <div className='form-title'>
+                          과제 추가하기
+                        </div>
+                        <DynoUploader />
                       </div>
                       <div className='editor-container'>
                         <DynoInput value={newHomework.date} type='date' onChange={onChangeNewHomeworkDate} />
@@ -766,8 +775,11 @@ function ClassDetailContent({ params }: { params: { id: string } }) {
                   onClose={() => setHomeworkEditMode(false)}
                 >
                   <div className='editor-body'>
-                    <div className='form-title'>
-                      과제 수정하기
+                    <div className="editor-title">
+                      <div className='form-title'>
+                        과제 수정하기
+                      </div>
+                      <DynoUploader />
                     </div>
                     <div className='editor-container'>
                       <DynoInput
@@ -818,8 +830,11 @@ function ClassDetailContent({ params }: { params: { id: string } }) {
                     onClose={() => setShowAddNotice(false)}
                   >
                     <div className='editor-body'>
-                      <div className='form-title'>
-                        수업내용 추가하기
+                      <div className="editor-title">
+                        <div className='form-title'>
+                          수업내용 추가하기
+                        </div>
+                        <DynoUploader />
                       </div>
                       <div className='editor-container'>
                         <DynoInput value={newNotice.date} type='date' onChange={onChangeNewNoticeDate} />
@@ -896,8 +911,11 @@ function ClassDetailContent({ params }: { params: { id: string } }) {
                   onClose={() => setNoticeEditMode(false)}
                 >
                   <div className='editor-body'>
-                    <div className='form-title'>
-                      수업내용 수정하기
+                    <div className="editor-title">
+                      <div className='form-title'>
+                        수업내용 수정하기
+                      </div>
+                      <DynoUploader />
                     </div>
                     <div className='editor-container'>
                       <DynoInput
