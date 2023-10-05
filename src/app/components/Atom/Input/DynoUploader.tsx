@@ -2,7 +2,7 @@
 
 import styled from 'styled-components'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { storage } from '@/firebase/config'
 import { ref, getDownloadURL, uploadBytes } from '@firebase/storage'
 
@@ -73,13 +73,22 @@ const DynoUploaderStyle = styled.div`
   }
 `
 
-export default function DynoUploader() {
+export default function DynoUploader({ isOpen }: { isOpen: boolean }) {
   const [uploading, setUploading] = useState<boolean>(false)
   const [selectedFile, setSelectedFile] = useState<any>(null)
   const [fileUrl, setFileUrl] = useState<string>('')
 
-  const onSelectFile = (e: any) => {
+  useEffect(() => {
+    if (!isOpen) {
+      setSelectedFile(null)
+      setFileUrl('')
+      setUploading(false)
+    }
+  }, [isOpen])
+
+  const onSelectFile = async (e: any) => {
     if (e.target.files && e.target.files.length > 0) {
+      console.log('wowwow')
       setSelectedFile(e.target.files[0])
       setUploading(true)
     } else {
@@ -89,8 +98,13 @@ export default function DynoUploader() {
     const file = e.target.files[0]
     const fileName = file.name
     const fileType = file.type.split('/')[0] === 'image' ? 'image' : 'video'
+    
+    const todyaYear = new Date().getFullYear()
+    const todayMonth = new Date().getMonth() + 1
+    const todayDate = new Date().getDate()
+    const fileDate = `${todyaYear}/${todayMonth}/${todayDate}`
 
-    const fileRef = ref(storage, `${fileType}/${fileName}`)
+    const fileRef = ref(storage, `${fileType}/${fileDate}/${fileName}`)
 
     try {
       uploadBytes(fileRef, file)
@@ -103,14 +117,16 @@ export default function DynoUploader() {
               setFileUrl(url)
             })
         })
+
+      return
     } catch (error) {
       console.log(error)
       alert('파일 업로드에 실패했습니다')
     }
-
   }
 
   const onClickCopy = () => {
+    if (!fileUrl) alert('파일을 업로드해주세요')
     navigator.clipboard.writeText(fileUrl)
       .then(() => {
         alert('URL이 복사되었습니다')
