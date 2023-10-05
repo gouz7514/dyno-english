@@ -1,7 +1,10 @@
 # dyno-english
 ![dyno-english](public/images/image-dyno-english-full.webp)
 
+### ❗️ 현재 작업중인 내용은 [develop 브랜치](https://github.com/gouz7514/dyno-english/tree/develop)에서 확인하실 수 있습니다.
+
 - [dyno-english](#dyno-english)
+    - [❗️ 현재 작업중인 내용은 develop 브랜치에서 확인하실 수 있습니다.](#️-현재-작업중인-내용은-develop-브랜치에서-확인하실-수-있습니다)
   - [소개](#소개)
   - [설치 및 실행](#설치-및-실행)
   - [기술 스택](#기술-스택)
