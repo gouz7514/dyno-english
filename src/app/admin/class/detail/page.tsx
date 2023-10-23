@@ -18,6 +18,7 @@ import DynoSelect from '@/app/components/Atom/Input/DynoSelect'
 import Skeleton from '@/app/components/Skeleton'
 import TextEditor from '@/app/components/Organism/TextEditor'
 import EditableText from '@/app/components/Organism/EditableText'
+import DynoUploader from '@/app/components/Atom/Input/DynoUploader'
 
 import { convertDate } from '@/lib/utils/date'
 import { Month } from '@/types/types'
@@ -69,6 +70,11 @@ const ClassDetailStyle = styled.div`
       border-radius: 12px;
       width: 100%;
       max-width: 500px;
+
+      .editor-title {
+        display: flex;
+        flex-direction: column;
+      }
 
       .form-title {
         font-size: 1.2rem;
@@ -666,28 +672,35 @@ function ClassDetailContent({ params }: { params: { id: string } }) {
                     onClick={() => setShowAddHomework(!showAddHomework)}
                     role='add'
                   />
-                  <Modal
-                    isOpen={showAddHomework}
-                    onClose={() => setShowAddHomework(false)}
-                  >
-                    <div className='editor-body'>
-                      <div className='form-title'>
-                        과제 추가하기
-                      </div>
-                      <div className='editor-container'>
-                        <DynoInput value={newHomework.date} type='date' onChange={onChangeNewHomeworkDate} />
-                        <TextEditor
-                          isOpen={showAddHomework}
-                          content={newHomework.content}
-                          onInputChange={onChangeNewHomework}
-                        />
-                        <div className="button-container">
-                          <Button color='primary' disabled={!newHomework.date || !newHomework.content} onClick={onClickSubmitNewHomework}>추가</Button>
-                          <Button color='default' onClick={onClickCloseNewHomework}>취소</Button>
+                  {
+                    showAddHomework && (
+                      <Modal
+                        isOpen={showAddHomework}
+                        onClose={() => setShowAddHomework(false)}
+                      >
+                        <div className='editor-body'>
+                          <div className="editor-title">
+                            <div className='form-title'>
+                              과제 추가하기
+                            </div>
+                            <DynoUploader isOpen={showAddHomework} />
+                          </div>
+                          <div className='editor-container'>
+                            <DynoInput value={newHomework.date} type='date' onChange={onChangeNewHomeworkDate} />
+                            <TextEditor
+                              isOpen={showAddHomework}
+                              content={newHomework.content}
+                              onInputChange={onChangeNewHomework}
+                            />
+                            <div className="button-container">
+                              <Button color='primary' disabled={!newHomework.date || !newHomework.content} onClick={onClickSubmitNewHomework}>추가</Button>
+                              <Button color='default' onClick={onClickCloseNewHomework}>취소</Button>
+                            </div>
+                          </div>
                         </div>
-                      </div>
-                    </div>
-                  </Modal>
+                      </Modal>
+                    )
+                  }
                 </Fragment>
               </div>
               <SwiperStyle>
@@ -761,45 +774,52 @@ function ClassDetailContent({ params }: { params: { id: string } }) {
                     </div>
                   </MetaModalStyle>
                 </Modal>
-                <Modal
-                  isOpen={homeworkEditMode}
-                  onClose={() => setHomeworkEditMode(false)}
-                >
-                  <div className='editor-body'>
-                    <div className='form-title'>
-                      과제 수정하기
-                    </div>
-                    <div className='editor-container'>
-                      <DynoInput
-                        value={editHomework.date}
-                        type='date'
-                        onChange={onChangeNewHomeworkDate}
-                        disabled
-                      />
-                      <TextEditor
-                        isOpen={homeworkEditMode}
-                        content={editHomework.content}
-                        onInputChange={onChangeHomework}
-                        isEdit={true}
-                      />
-                      <div className="button-container d-flex">
-                        <Button
-                          color='primary'
-                          disabled={!editHomework}
-                          onClick={(e) => onEditHomework(e)}
-                        >
-                          수정하기
-                        </Button>
-                        <Button
-                          color='default'
-                          onClick={onClickCloseEditHomework}
-                        >
-                          취소
-                        </Button>
+                {
+                  homeworkEditMode && (
+                    <Modal
+                      isOpen={homeworkEditMode}
+                      onClose={() => setHomeworkEditMode(false)}
+                    >
+                      <div className='editor-body'>
+                        <div className="editor-title">
+                          <div className='form-title'>
+                            과제 수정하기
+                          </div>
+                          <DynoUploader isOpen={homeworkEditMode} />
+                        </div>
+                        <div className='editor-container'>
+                          <DynoInput
+                            value={editHomework.date}
+                            type='date'
+                            onChange={onChangeNewHomeworkDate}
+                            disabled
+                          />
+                          <TextEditor
+                            isOpen={homeworkEditMode}
+                            content={editHomework.content}
+                            onInputChange={onChangeHomework}
+                            isEdit={true}
+                          />
+                          <div className="button-container d-flex">
+                            <Button
+                              color='primary'
+                              disabled={!editHomework}
+                              onClick={(e) => onEditHomework(e)}
+                            >
+                              수정하기
+                            </Button>
+                            <Button
+                              color='default'
+                              onClick={onClickCloseEditHomework}
+                            >
+                              취소
+                            </Button>
+                          </div>
+                        </div>
                       </div>
-                    </div>
-                  </div>
-                </Modal>
+                    </Modal>
+                  )
+                }
               </SwiperStyle>
             </section>
 
@@ -813,28 +833,35 @@ function ClassDetailContent({ params }: { params: { id: string } }) {
                     onClick={() => setShowAddNotice(!showAddNotice)}
                     role='add'
                   />
-                  <Modal
-                    isOpen={showAddNotice}
-                    onClose={() => setShowAddNotice(false)}
-                  >
-                    <div className='editor-body'>
-                      <div className='form-title'>
-                        수업내용 추가하기
-                      </div>
-                      <div className='editor-container'>
-                        <DynoInput value={newNotice.date} type='date' onChange={onChangeNewNoticeDate} />
-                        <TextEditor
-                          isOpen={showAddNotice}
-                          content={newNotice.content}
-                          onInputChange={onChangeNewNotice}
-                        />
-                        <div className="button-container">
-                          <Button color='primary' disabled={!newNotice.date || !newNotice.content} onClick={onClickSubmitNewNotice}>추가</Button>
-                          <Button color='default' onClick={onClickCloseNewNotice}>취소</Button>
+                  {
+                    showAddNotice && (
+                      <Modal
+                        isOpen={showAddNotice}
+                        onClose={() => setShowAddNotice(false)}
+                      >
+                        <div className='editor-body'>
+                          <div className="editor-title">
+                            <div className='form-title'>
+                              수업내용 추가하기
+                            </div>
+                            <DynoUploader isOpen={showAddNotice} />
+                          </div>
+                          <div className='editor-container'>
+                            <DynoInput value={newNotice.date} type='date' onChange={onChangeNewNoticeDate} />
+                            <TextEditor
+                              isOpen={showAddNotice}
+                              content={newNotice.content}
+                              onInputChange={onChangeNewNotice}
+                            />
+                            <div className="button-container">
+                              <Button color='primary' disabled={!newNotice.date || !newNotice.content} onClick={onClickSubmitNewNotice}>추가</Button>
+                              <Button color='default' onClick={onClickCloseNewNotice}>취소</Button>
+                            </div>
+                          </div>
                         </div>
-                      </div>
-                    </div>
-                  </Modal>
+                      </Modal>
+                    )
+                  }
                   </div>
               </div>
               <SwiperStyle>
@@ -891,45 +918,52 @@ function ClassDetailContent({ params }: { params: { id: string } }) {
                     </Swiper>
                   )
                 }
-                <Modal
-                  isOpen={noticeEditMode}
-                  onClose={() => setNoticeEditMode(false)}
-                >
-                  <div className='editor-body'>
-                    <div className='form-title'>
-                      수업내용 수정하기
-                    </div>
-                    <div className='editor-container'>
-                      <DynoInput
-                        value={editNotice.date}
-                        type='date'
-                        onChange={onChangeNewNoticeDate}
-                        disabled
-                      />
-                      <TextEditor
-                        isOpen={noticeEditMode}
-                        content={editNotice.content}
-                        onInputChange={onChangeNotice}
-                        isEdit={true}
-                      />
-                      <div className="button-container d-flex">
-                        <Button
-                          color='primary'
-                          disabled={!editNotice}
-                          onClick={(e) => onEditNotice(e)}
-                        >
-                          수정하기
-                        </Button>
-                        <Button
-                          color='default'
-                          onClick={onClickCloseEditNotice}
-                        >
-                          취소
-                        </Button>
+                {
+                  noticeEditMode && (
+                    <Modal
+                      isOpen={noticeEditMode}
+                      onClose={() => setNoticeEditMode(false)}
+                    >
+                      <div className='editor-body'>
+                        <div className="editor-title">
+                          <div className='form-title'>
+                            수업내용 수정하기
+                          </div>
+                          <DynoUploader isOpen={noticeEditMode} />
+                        </div>
+                        <div className='editor-container'>
+                          <DynoInput
+                            value={editNotice.date}
+                            type='date'
+                            onChange={onChangeNewNoticeDate}
+                            disabled
+                          />
+                          <TextEditor
+                            isOpen={noticeEditMode}
+                            content={editNotice.content}
+                            onInputChange={onChangeNotice}
+                            isEdit={true}
+                          />
+                          <div className="button-container d-flex">
+                            <Button
+                              color='primary'
+                              disabled={!editNotice}
+                              onClick={(e) => onEditNotice(e)}
+                            >
+                              수정하기
+                            </Button>
+                            <Button
+                              color='default'
+                              onClick={onClickCloseEditNotice}
+                            >
+                              취소
+                            </Button>
+                          </div>
+                        </div>
                       </div>
-                    </div>
-                  </div>
-                </Modal>
+                    </Modal>
+                  )
+                }
               </SwiperStyle>
             </section>
 

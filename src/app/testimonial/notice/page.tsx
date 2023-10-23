@@ -19,7 +19,7 @@ export default function TestimonialNotice() {
       </div>
       <div className='article-content'>
         <p>수업을 3개월 이상 수강하신 학부모님에 한해서 후기를 작성하실 수 있습니다.</p>
-        <p>만약, 3개월 이상임에도 후기를 작성하실 수 없다면 다이앤 선생님께 문의해주세요!</p>
+        <p>만약, 3개월 이상임에도 후기를 작성하실 수 없다면 다이노 선생님에게 문의해주세요!</p>
       </div>
       <div className="spacing"></div>
       <Button onClick={onClickHome} size='medium'>
