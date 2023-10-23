@@ -121,7 +121,7 @@ export default function LoginPage() {
           <div className='form-container'>
             <div className='form-description'>
               서비스 이용을 위해 로그인이 필요합니다<br />
-              다이앤 선생님이 알려드린 <span className='text-bold'>비밀번호</span>를 입력 후 카카오로 로그인해주세요!
+              다이노 선생님이 알려드린 <span className='text-bold'>비밀번호</span>를 입력 후 카카오로 로그인해주세요!
             </div>
             <form onSubmit={onSubmit}>
               <div className='input-container'>
