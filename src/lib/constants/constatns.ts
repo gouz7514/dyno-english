@@ -40,10 +40,6 @@ export const DropdownStudy = [
   {
     title: '수업료',
     link: '/study/price'
-  },
-  {
-    title: '상담 신청',
-    link: '/study/recruit'
   }
 ]
 
