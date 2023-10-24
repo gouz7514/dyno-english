@@ -14,7 +14,7 @@ const DynoTalkStyle = styled.button`
   border-radius: 12px;
   width: 60px;
   height: 60px;
-  background-color: #fee500;
+  background-color: var(--color-kakao);
   cursor: pointer;
 
   .dyno-talk-image {

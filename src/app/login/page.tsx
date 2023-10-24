@@ -23,7 +23,7 @@ const LoginStyle = styled.div`
     min-width: 183px;
     height: 45px;
     border-radius: 12px;
-    background-color: #fee500;
+    background-color: var(--color-kakao);
     cursor: pointer;
     border: 0;
     display: flex;
