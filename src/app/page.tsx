@@ -1,9 +1,10 @@
 'use client'
 
 import { useEffect, useRef } from 'react'
+import Link from 'next/link'
 import styled from 'styled-components'
 
-import Link from 'next/link'
+import { kakaoConsult } from '@/lib/utils/kakao'
 
 const MainStyle = styled.main`
   display: flex;
@@ -86,6 +87,11 @@ const MainStyle = styled.main`
     .btn-container {
       display: flex;
       gap: 24px;
+
+      button {
+        border: none;
+        cursor: pointer;
+      }
     }
 
     .dyno-btn {
@@ -176,11 +182,11 @@ export default function Home() {
                     오시는 길
                   </div>
                 </Link>
-                <Link href="/study/recruit">
+                <button onClick={kakaoConsult}>
                   <div className='dyno-btn'>
                     상담 신청
                   </div>
-                </Link>
+                </button>
               </div>
             </div>
           </div>

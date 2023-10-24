@@ -5,8 +5,9 @@ import './globals.css'
 import StyledComponentsRegistry from '@/lib/registry'
 import Script from 'next/script'
 
-import Header from './components/Header'
-import Footer from './components/Footer'
+import Header from '@/app/components/Header'
+import Footer from '@/app/components/Footer'
+import DynoTalk from '@/app/components/Molecule/DynoTalk'
 import { SessionProvider } from 'next-auth/react'
 
 const metadata = {
@@ -57,6 +58,7 @@ export default function RootLayout({
           <StyledComponentsRegistry>
             <Header />
             {children}
+            <DynoTalk />
             <Footer />
           </StyledComponentsRegistry>
         </SessionProvider>
