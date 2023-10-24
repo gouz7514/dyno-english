@@ -14,20 +14,16 @@ const DynoTalkStyle = styled.button`
   border-radius: 12px;
   width: 60px;
   height: 60px;
-  background-color: var(--primary-white);
+  background-color: #fee500;
   cursor: pointer;
 
   .dyno-talk-image {
-    background-image: url('/images/image-dyno.webp');
+    background-image: url('/images/kakao/image-kakao-btn.png');
     width: 100%;
     height: 100%;
     background-repeat: no-repeat;
-    background-size: 40px 40px;
+    background-size: 36px 36px;
     background-position: center;
-  }
-
-  &:hover {
-    transform: scale(1.05);
   }
 `
 
