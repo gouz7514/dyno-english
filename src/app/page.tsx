@@ -182,7 +182,7 @@ export default function Home() {
                     오시는 길
                   </div>
                 </Link>
-                <button onClick={kakaoConsult}>
+                <button id="kakao-btn" onClick={kakaoConsult}>
                   <div className='dyno-btn'>
                     상담 신청
                   </div>
