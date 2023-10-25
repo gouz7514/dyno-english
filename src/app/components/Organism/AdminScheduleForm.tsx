@@ -1,4 +1,4 @@
-import { useState, useEffect, Fragment } from 'react'
+import { useState, useEffect, Fragment, useCallback } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 
 import Button from '@/app/components/Button'
@@ -147,6 +147,7 @@ export default function AdminScheduleForm({ isEdit }: AdminScheduleFormProps) {
   
 
   const getAllClass = async () => {
+    console.log('get all class')
     const classRef = collection(db, 'class')
     const classSnap = await getDocs(classRef)
 
@@ -202,13 +203,57 @@ export default function AdminScheduleForm({ isEdit }: AdminScheduleFormProps) {
     setLoading(false)
   }
 
-  useEffect(() => {
-    getAllClass()
+  const memoizedScheduleInfo = useCallback(() => {
+    const getScheduleInfo = async () => {
+      console.log('schedule info')
+      const scheduleRef = doc(db, 'class_schedule', scheduleId)
+      const scheduleSnap = await getDoc(scheduleRef)
+  
+      if (!scheduleSnap.exists()) {
+        alert('존재하지 않는 수업입니다')
+        router.push('/admin/schedule')
+        return
+      }
+  
+      const scheduleData = scheduleSnap.data()
+  
+      if (scheduleData.isCustom) {
+        setSelectedClass('직접 입력')
+        setCustomClass(scheduleData.title)
+      } else {
+        setSelectedClass(scheduleData.title)
+      }
+  
+      setStartDate({
+        date: scheduleData.start.split('T')[0],
+        hour: Object.keys(Hours)[parseInt(scheduleData.start.split('T')[1].split(':')[0])],
+        minute: Object.keys(Minutes)[parseInt(scheduleData.start.split('T')[1].split(':')[1]) / 10]
+      })
+      setEndDate({
+        date: scheduleData.end.split('T')[0],
+        hour: Object.keys(Hours)[parseInt(scheduleData.end.split('T')[1].split(':')[0])],
+        minute: Object.keys(Minutes)[parseInt(scheduleData.end.split('T')[1].split(':')[1]) / 10]
+      })
+      setIsCustom(scheduleData.isCustom)
+      setBgColor(scheduleData.bgColor)
+      setIsRepeat(scheduleData.isRepeat)
+  
+      if (scheduleData.isRepeat) {
+        setRepeatRule(scheduleData.repeatRule)
+      }
+  
+      setLoading(false)
+    }
 
     if (isEdit) {
       getScheduleInfo()
     }
-  }, [])
+  }, [isEdit, scheduleId, router])
+
+  useEffect(() => {
+    getAllClass()
+    memoizedScheduleInfo()
+  }, [memoizedScheduleInfo])
 
   useEffect(() => {
     if (selectedClass === '직접 입력') {

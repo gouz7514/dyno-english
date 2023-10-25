@@ -94,6 +94,8 @@ const TestimonialSwiper = styled.div`
         display: flex;
         flex-direction: column;
         justify-content: space-between;
+        overflow-y: scroll;
+        touch-action: pan-y;
 
         @media screen and (max-width: 600px) {
           height: 400px;
@@ -209,6 +211,7 @@ export default function IntroTestimonial() {
               <div className='swiper-button-prev' onClick={() => swiperRef.current?.slidePrev()} />
               <div className='swiper-button-next' onClick={() => swiperRef.current?.slideNext()} />
               <Swiper
+                className='swiper-test'
                 slidesPerView={swiperCnt}
                 spaceBetween={12}
                 pagination={{
@@ -227,7 +230,6 @@ export default function IntroTestimonial() {
                   testimonials.map((testimonial, index) => (
                     <SwiperSlide key={index}>
                       <div className='testimonial-item'>
-                        
                         <div className="testimonial-content">
                           { testimonial.content.replaceAll('/n', '\n') }
                         </div>

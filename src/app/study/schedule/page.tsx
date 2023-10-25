@@ -36,6 +36,20 @@ const ScheduleContainer = styled.div`
     }
   }
 
+  .rbc-month-header {
+    border-bottom: 2px solid #ddd;
+
+    .rbc-header {
+      &:first-child {
+        color: #ff0000;;
+      }
+
+      &:last-child {
+        color: #0000ff;
+      }
+    }
+  }
+
   .rbc-event-label,
   .rbc-allday-cell {
     display: none !important;
@@ -77,12 +91,10 @@ export default function StudyCalendar() {
     const getSchedules = async () => {
       const docSnap = await getDocs(collection(db, 'class_schedule'))
       const schedules = docSnap.docs.map(doc => doc.data()) as ClassSchedules
-      // console.log(schedules)
 
       const convertedSchedules: Array<any> = []
 
       schedules.forEach((schedule) => {
-        // console.log(schedule)
         if (schedule.isRepeat && schedule.repeatRule) {
           schedule.repeatRule.forEach((rule) => {
             const convertedSchedule = {

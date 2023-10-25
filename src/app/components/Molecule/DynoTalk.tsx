@@ -16,6 +16,7 @@ const DynoTalkStyle = styled.button`
   height: 60px;
   background-color: var(--color-kakao);
   cursor: pointer;
+  z-index: 101;
 
   .dyno-talk-image {
     background-image: url('/images/kakao/image-kakao-btn.png');
