@@ -9,7 +9,7 @@ const InputStyle = styled.input<InputProps>`
   width: 100%;
   padding: 0 8px;
   background-color: #fff;
-  z-index: 101;
+  z-index: 100;
 
   &:focus {
     border: 1px solid var(--primary-green);
