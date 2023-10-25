@@ -1,76 +1,28 @@
 'use client'
 
 import { useEffect, useState, useCallback } from 'react'
-import Button from '@/app/components/Button'
+import { useRouter } from 'next/navigation'
+import { useSession } from 'next-auth/react'
 
-import styled from 'styled-components'
+import Button from '@/app/components/Button'
+import { FormStyle } from '@/app/styles/styles'
+import DynoInput from '@/app/components/Atom/Input/DynoInput'
 
 import { TestimonialProps } from '@/types/types'
 
-import { useSession } from 'next-auth/react'
-import { rdb } from "@/firebase/config"
-import { getDatabase, ref, set, push } from 'firebase/database'
-
-const FormStyle = styled.div`
-  display: flex;
-  flex-direction: column;
-  background-color: #eee;
-  padding: 24px;
-
-  .form-title {
-    margin-bottom: 24px;
-  }
-
-  .input-container {
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 24px;
-
-    label {
-      margin-bottom: 8px;
-    }
-
-    input[type=text] {
-      height: 40px;
-      border-radius: 8px;
-      padding-left: 8px;
-      outline: none;
-      border: 0;
-
-      &:focus {
-        border: 1px solid var(--primary-green);
-      }
-    }
-
-    .input-error {
-      margin-top: 8px;
-      color: red;
-      font-size: 12px;
-      height: 12px;
-    }
-
-    textarea {
-      height: 200px;
-      border-radius: 8px;
-      padding: 8px;
-      outline: none;
-      border: 0;
-
-      &:focus {
-        border: 1px solid var(--primary-green);
-      }
-    }
-  }
-`
+import { db } from "@/firebase/config"
+import { collection, addDoc } from 'firebase/firestore'
 
 // form 로직 분리하기
 export default function TestimonialForm() {
+  const router = useRouter()
   const { data: session, status } = useSession()
 
   const [testimonials, setTestimonials] = useState<TestimonialProps>({
-    by: '',
+    by: session?.user?.name as string,
     content: '',
-    id: ''
+    id: '',
+    createdAt: new Date()
   })
 
   const [errors, setErrors] = useState({
@@ -127,6 +79,10 @@ export default function TestimonialForm() {
       if (!session || !session?.user) {
         alert('로그인 후 이용해주세요.')
         window.location.href = '/login'
+      } else {
+        if (!session?.user.testimonialAvailable) {
+          router.push('/testimonial/notice')
+        }
       }
     }
   })
@@ -150,18 +106,16 @@ export default function TestimonialForm() {
     const newTestimonial: TestimonialProps = {
       by: testimonials.by,
       content: testimonials.content,
-      id: session?.user?.userId as string
+      id: session?.user?.userId as string,
+      createdAt: new Date()
     }
-
-    const testimonialsRef = ref(rdb, 'testimonials')
-    const newPostsRef = push(testimonialsRef)
-    await set(newPostsRef, newTestimonial).then(() => {
+    
+    await addDoc(collection(db, 'testimonials'), newTestimonial).then(() => {
       setLoading(false)
       alert('후기 등록 완료!')
-      window.location.href = '/'
+      router.push('/intro/testimonial')
     })
   }
-
 
   return (
     <FormStyle className='container'>
@@ -172,12 +126,13 @@ export default function TestimonialForm() {
         <div>
           <div className="input-container">
             <label htmlFor="name">이름</label>
-            <input
+            <DynoInput
               type="text"
               name="by"
               value={testimonials.by}
               onChange={handleChange}
               onBlur={handleBlur}
+              disabled
             />
             <div className="input-error">
               {

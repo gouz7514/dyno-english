@@ -2,10 +2,10 @@
 
 import { useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 
-import { rdb } from '@/firebase/config'
-import { ref, onValue } from "firebase/database"
+import { db } from '@/firebase/config'
+import { getDocs, collection } from 'firebase/firestore'
 
 import styled from 'styled-components'
 
@@ -46,9 +46,41 @@ const TesitmonialPage = styled.div`
 `
 
 const TestimonialSwiper = styled.div`
+  position: relative;
+
+  .swiper-button-prev {
+    width: 20px;
+    height: 35px;
+    background-image: url('/icon/icon-arrow-left.png');
+    background-size: 20px 35px;
+    background-position: center;
+    background-repeat: no-repeat;
+    left: -18px;
+  }
+
+  .swiper-button-next {
+    width: 20px;
+    height: 35px;
+    background-image: url('/icon/icon-arrow-right.png');
+    background-size: 20px 35px;
+    background-position: center;
+    background-repeat: no-repeat;
+    right: -18px;
+  }
+
+  .swiper-button-next,
+  .swiper-button-prev {
+    position: absolute;
+
+    &::after {
+      display: none;
+    }
+  }
+
   .swiper {
     position: relative;
     padding-bottom: 36px;
+    margin: 0 4px;
 
     .swiper-slide {
       padding: 4px;
@@ -62,6 +94,8 @@ const TestimonialSwiper = styled.div`
         display: flex;
         flex-direction: column;
         justify-content: space-between;
+        overflow-y: scroll;
+        touch-action: pan-y;
 
         @media screen and (max-width: 600px) {
           height: 400px;
@@ -101,6 +135,7 @@ export default function IntroTestimonial() {
   const [loading, setLoading] = useState<boolean>(true)
   const [swiperCnt, setSwiperCnt] = useState<number>(1)
   const { data: session, status } = useSession()
+  const swiperRef = useRef<SwiperCore>()
   
   const router = useRouter()
 
@@ -111,7 +146,11 @@ export default function IntroTestimonial() {
         router.push('/login')
         return
       } else {
-        router.push('/testimonial/form')
+        if (session?.user.testimonialAvailable) {
+          router.push('/testimonial/form')
+        } else {
+          router.push('/testimonial/notice')
+        }
         return
       }
     }
@@ -119,17 +158,20 @@ export default function IntroTestimonial() {
 
   useEffect(() => {
     const getTestimonials = async () => {
-      const testimonialsRef = ref(rdb, 'testimonials')
+      const docSnap = await getDocs(collection(db, 'testimonials'))
 
-      onValue(testimonialsRef, (snapshot) => {
-        const data = snapshot.val()
-        const testimonials: TestimonialProps[] = Object.keys(data).map((key) => ({
-          ...data[key]
-        })) as TestimonialProps[]
-        setTestimonials(testimonials)
+      // save docSnap to testimonials
+      setTestimonials(docSnap.docs.map((doc) => ({
+        ...doc.data()
+      })) as TestimonialProps[])
+
+      try {
+        setTestimonials(docSnap.docs.map((doc) => ({
+          ...doc.data()
+        })) as TestimonialProps[])
         setLoading(false)
-      }), {
-        onlyOnce: true
+      } catch (error) {
+        console.log(error)
       }
     }
     getTestimonials()
@@ -159,12 +201,6 @@ export default function IntroTestimonial() {
           다이노 영어의 소중한 후기를 소개합니다!
         </div>
       </div>
-      <Button onClick={onClickTestimonialFromBtn} size='medium'>
-        <div>
-          후기 작성하기
-        </div>
-      </Button>
-      <div className="spacing"></div>
       <div>
         {
           loading ? (
@@ -172,7 +208,10 @@ export default function IntroTestimonial() {
           ) :
           (
             <TestimonialSwiper>
+              <div className='swiper-button-prev' onClick={() => swiperRef.current?.slidePrev()} />
+              <div className='swiper-button-next' onClick={() => swiperRef.current?.slideNext()} />
               <Swiper
+                className='swiper-test'
                 slidesPerView={swiperCnt}
                 spaceBetween={12}
                 pagination={{
@@ -180,20 +219,22 @@ export default function IntroTestimonial() {
                 }}
                 loop={true}
                 autoplay={{
-                  delay: 5000,
+                  delay: 3000,
                   disableOnInteraction: false
+                }}
+                onBeforeInit={(swiper: SwiperCore) => {
+                  swiperRef.current = swiper
                 }}
               >
                 {
                   testimonials.map((testimonial, index) => (
                     <SwiperSlide key={index}>
                       <div className='testimonial-item'>
-                        
                         <div className="testimonial-content">
                           { testimonial.content.replaceAll('/n', '\n') }
                         </div>
                         <div className="testimonial-by">
-                          - {testimonial.by}
+                          - {testimonial.by[0] + '***'}
                         </div>
                       </div>
                     </SwiperSlide>
@@ -204,6 +245,11 @@ export default function IntroTestimonial() {
           )
         }
       </div>
+      <Button onClick={onClickTestimonialFromBtn}>
+        <div>
+          후기 작성하기
+        </div>
+      </Button>
     </TesitmonialPage>
   )
 }
