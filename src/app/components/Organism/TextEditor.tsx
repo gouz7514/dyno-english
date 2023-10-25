@@ -129,9 +129,7 @@ export default function TextEditor({ isOpen, content, onInputChange, isEdit }: T
   }
 
   useEffect(() => {
-    // When the modal is opened, focus the input field
     if (modalVisible) {
-      // Restore the saved selection range
       if (savedRange) {
         if (selection && selection.rangeCount > 0) {
           setTimeout(() => {

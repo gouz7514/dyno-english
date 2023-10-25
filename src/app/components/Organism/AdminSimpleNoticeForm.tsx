@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 
 import Button from '@/app/components/Button'
@@ -42,11 +42,29 @@ export default function AdminSimpleNoticeForm({ isEdit }: AdminSimpleNoticeFormP
     }
   }
 
-  useEffect(() => {
+  const memoizedSimpleNoticeInfo = useCallback(() => {
+    const getSimpleNoticeInfo = async (id: string) => {
+      const docRef = doc(db, 'notice_simple', id)
+      const docSnap = await getDoc(docRef)
+  
+      if (docSnap.exists()) {
+        const docData = docSnap.data()
+        setSimpleNotice(docData.content)
+        setLoading(false)
+      } else {
+        alert('존재하지 않는 간단 공지사항입니다')
+        router.replace('/admin/notice/simple')
+      }
+    }
+
     if (isEdit) {
       getSimpleNoticeInfo(simpleNoticeId)
     }
-  }, [isEdit])
+  }, [isEdit, simpleNoticeId, router])
+
+  useEffect(() => {
+    memoizedSimpleNoticeInfo()
+  }, [memoizedSimpleNoticeInfo])
 
   const handleSimpleNoticeChange = (e: any) => {
     setSimpleNotice(e.target.value)
