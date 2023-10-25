@@ -38,7 +38,7 @@ export default function AdminSimpleNoticeForm({ isEdit }: AdminSimpleNoticeFormP
       setLoading(false)
     } else {
       alert('존재하지 않는 간단 공지사항입니다')
-      router.push('/admin/notice/simple')
+      router.replace('/admin/notice/simple')
     }
   }
 
