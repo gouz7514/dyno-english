@@ -104,6 +104,7 @@ const ProfileStyle = styled.div`
         word-break: keep-all;
         height: calc(100% - 44px);
         overflow-y: scroll;
+        touch-action: pan-y;
 
         &::-webkit-scrollbar {
           display: none;

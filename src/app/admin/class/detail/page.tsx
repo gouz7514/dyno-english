@@ -133,6 +133,7 @@ const SwiperStyle = styled.div`
           word-break: keep-all;
           height: 100%;
           overflow-y: scroll;
+          touch-action: pan-y;
 
           &::-webkit-scrollbar {
             display: none;
