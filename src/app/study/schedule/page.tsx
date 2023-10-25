@@ -77,12 +77,10 @@ export default function StudyCalendar() {
     const getSchedules = async () => {
       const docSnap = await getDocs(collection(db, 'class_schedule'))
       const schedules = docSnap.docs.map(doc => doc.data()) as ClassSchedules
-      // console.log(schedules)
 
       const convertedSchedules: Array<any> = []
 
       schedules.forEach((schedule) => {
-        // console.log(schedule)
         if (schedule.isRepeat && schedule.repeatRule) {
           schedule.repeatRule.forEach((rule) => {
             const convertedSchedule = {

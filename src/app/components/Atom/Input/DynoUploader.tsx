@@ -88,7 +88,6 @@ export default function DynoUploader({ isOpen }: { isOpen: boolean }) {
 
   const onSelectFile = async (e: any) => {
     if (e.target.files && e.target.files.length > 0) {
-      console.log('wowwow')
       setSelectedFile(e.target.files[0])
       setUploading(true)
     } else {
