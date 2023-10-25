@@ -1,3 +1,4 @@
+import styled from 'styled-components'
 import React, { useState, useEffect } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 
@@ -6,7 +7,15 @@ import DynoInput from '@/app/components/Atom/Input/DynoInput'
 import Skeleton from '@/app/components/Skeleton'
 
 import { db } from "@/firebase/config"
-import { collection, addDoc, doc, getDoc, updateDoc } from 'firebase/firestore'
+import { collection, addDoc, doc, getDoc, updateDoc, deleteDoc } from 'firebase/firestore'
+
+const AdminSimpleNoticeFormStyle = styled.div`
+  .button-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+  }
+`
 
 interface AdminSimpleNoticeFormProps {
   isEdit?: boolean
@@ -77,13 +86,25 @@ export default function AdminSimpleNoticeForm({ isEdit }: AdminSimpleNoticeFormP
     })
   }
 
+  const handleDelete = async (e: any) => {
+    e.preventDefault()
+
+    if (confirm('정말로 공지사항을 삭제하시겠습니까?')) {
+      setSubmitting(true)
+      await deleteDoc(doc(db, 'notice_simple', simpleNoticeId))
+      setSubmitting(false)
+      alert('간단 공지사항을 삭제했습니다')
+      router.push('/admin/notice/simple')
+    }
+  }
+
   return (
     <div>
       {
         loading ? (
           <Skeleton />
         ) : (
-          <div>
+          <AdminSimpleNoticeFormStyle>
             <div className="input-container">
               <DynoInput
                 type="text"
@@ -95,13 +116,26 @@ export default function AdminSimpleNoticeForm({ isEdit }: AdminSimpleNoticeFormP
               />
 
             </div>
-            <Button
-              onClick={handleSubmit}
-              disabled={simpleNotice === '' || submitting}
-            >
-              { isEdit ? '수정하기' : '추가하기' }
-            </Button>
-          </div>
+            <div className="button-container">
+              <Button
+                onClick={handleSubmit}
+                disabled={simpleNotice === '' || submitting}
+              >
+                { isEdit ? '수정하기' : '추가하기' }
+              </Button>
+              {
+                isEdit && (
+                  <Button
+                    color='danger'
+                    onClick={handleDelete}
+                    disabled={submitting}
+                  >
+                    삭제하기
+                  </Button>
+                )
+              }
+            </div>
+          </AdminSimpleNoticeFormStyle>
         )
       }
     </div>

@@ -265,23 +265,25 @@ export default function ProfilePage() {
           <Skeleton height={400} />
         ) : (
           <div className='profile-container'>
+            {
+              session?.simpleNotice && session?.simpleNotice.length !== 0 && (
+                <Callout title='공지사항'>
+                  {
+                    session?.simpleNotice.map((notice, index) => (
+                      <div key={index} className='simple-notice-content'>
+                        { notice.content }
+                      </div>
+                    ))
+                  }
+                </Callout>
+              )
+            }
             <div className="profile-title">
               <div className="profile-username">
                 { session?.user.kids.length ? `${session?.user.kids.map(kid => kid.name).join(', ')} 학부모님` : `${session?.user.name} 님` }
               </div>
               <Link href='/profile/account' className='profile-setting' />
             </div>
-            <Callout title='공지사항'>
-              {
-                session?.simpleNotice && (
-                  session?.simpleNotice.map((notice, index) => (
-                    <div key={index} className='simple-notice-content'>
-                      { notice.content }
-                    </div>
-                  ))
-                )
-              }
-            </Callout>
             {
               session?.user.kids.length ? (
                 <Fragment>
