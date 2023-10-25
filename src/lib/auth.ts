@@ -91,9 +91,7 @@ export const authOptions: NextAuthOptions = {
         if (status === 200) {
           const docRef = doc(db, 'users', user?.id)
           getDoc(docRef).then(async (snapshot) => {
-            if (snapshot.exists()) {
-              // console.log('exists')
-            } else {
+            if (!snapshot.exists()) {
               await setDoc(doc(db, 'users', user?.id), {
                 id: user?.id,
                 name: user?.name,
