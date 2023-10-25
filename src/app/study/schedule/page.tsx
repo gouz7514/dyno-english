@@ -36,6 +36,20 @@ const ScheduleContainer = styled.div`
     }
   }
 
+  .rbc-month-header {
+    border-bottom: 2px solid #ddd;
+
+    .rbc-header {
+      &:first-child {
+        color: #ff0000;;
+      }
+
+      &:last-child {
+        color: #0000ff;
+      }
+    }
+  }
+
   .rbc-event-label,
   .rbc-allday-cell {
     display: none !important;
