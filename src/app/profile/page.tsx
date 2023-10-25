@@ -220,11 +220,13 @@ export default function ProfilePage() {
   }
 
   const closeMetaModal = () => {
-    setShowMetaModal(false)
     setCurrentMeta({
       url: '',
       type: ''
     })
+    setShowMetaModal(false)
+    setModalUnlocked(false)
+    setModalPassword('')
   }
 
   const unLockModal = (e: React.FormEvent<HTMLFormElement>) => {
