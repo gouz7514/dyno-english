@@ -1,7 +1,5 @@
 'use client'
 
-import { useParams } from 'next/navigation'
-
 import AdminCurriculumForm from '@/app/components/Organism/AdminCurriculumForm'
 import { FormStyle } from '@/app/styles/styles'
 import IsStaff from '@/app/components/Template/IsStaff'
