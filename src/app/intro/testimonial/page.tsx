@@ -94,6 +94,7 @@ const TestimonialSwiper = styled.div`
         display: flex;
         flex-direction: column;
         justify-content: space-between;
+        overflow-y: scroll;
 
         @media screen and (max-width: 600px) {
           height: 400px;
