@@ -135,12 +135,6 @@ export default function AdminSimpleNoticeForm({ isEdit }: AdminSimpleNoticeFormP
 
             </div>
             <div className="button-container">
-              <Button
-                onClick={handleSubmit}
-                disabled={simpleNotice === '' || submitting}
-              >
-                { isEdit ? '수정하기' : '추가하기' }
-              </Button>
               {
                 isEdit && (
                   <Button
@@ -152,6 +146,12 @@ export default function AdminSimpleNoticeForm({ isEdit }: AdminSimpleNoticeFormP
                   </Button>
                 )
               }
+              <Button
+                onClick={handleSubmit}
+                disabled={simpleNotice === '' || submitting}
+              >
+                { isEdit ? '수정하기' : '추가하기' }
+              </Button>
             </div>
           </AdminSimpleNoticeFormStyle>
         )
