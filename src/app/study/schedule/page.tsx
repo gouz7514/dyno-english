@@ -27,12 +27,16 @@ const ScheduleContainer = styled.div`
   .rbc-header {
     border-bottom: none;
 
-    &.saturday {
-      color: #0000ff;
-    }
-
+    &.saturday,
     &.sunday {
-      color: #ff0000;
+      display: none;
+    }
+  }
+
+  .rbc-time-content {
+    .sunday,
+    .saturday {
+      display: none;
     }
   }
 
