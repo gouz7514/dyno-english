@@ -47,6 +47,7 @@ export interface ButtonProps {
   disabled?: boolean,
   size?: ButtonSize,
   color?: buttontheme
+  className?: string,
 }
 
 export interface LinkButtonProps {
