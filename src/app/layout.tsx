@@ -6,7 +6,7 @@ import StyledComponentsRegistry from '@/lib/registry'
 import Script from 'next/script'
 
 import Header from '@/app/components/Organism/Header/Header'
-import Footer from '@/app/components/Footer'
+import Footer from '@/app/components/Organism/Footer'
 import DynoTalk from '@/app/components/Molecule/DynoTalk'
 import { SessionProvider } from 'next-auth/react'
 
