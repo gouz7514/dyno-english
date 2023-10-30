@@ -1,11 +1,11 @@
 'use client'
 
-import { useSearchParams } from 'next/navigation'
+import { useSearchParams, useRouter } from 'next/navigation'
 import styled from 'styled-components'
 import { useEffect, useState, Fragment } from "react"
 
 import { db } from "@/firebase/config"
-import { doc, getDoc, updateDoc, getDocs, collection, DocumentData } from 'firebase/firestore'
+import { doc, getDoc, updateDoc, getDocs, deleteDoc, collection, DocumentData } from 'firebase/firestore'
 
 import EmptyState from '@/app/components/Molecule/EmptyState'
 import ImageButton from '@/app/components/Atom/Button/ImageButton'
@@ -37,6 +37,15 @@ const ClassDetailStyle = styled.div`
   max-width: 1024px;
   padding: 40px 12px 24px;
 
+  .page-btn-container {
+    position: relative;
+
+    .delete-btn {
+      position: absolute;
+      right: 0;
+    }
+  }
+    
   .class-title {
     font-size: 2rem;
     font-weight: 700;
@@ -212,6 +221,7 @@ interface AdminClassDetailProps {
 }
 
 function ClassDetailContent({ params }: { params: { id: string } }) {
+  const router = useRouter()
   const [loading, setLoading] = useState(true)
   // 과제 편집 모드
   const [homeworkEditMode, setHomeworkEditMode] = useState<boolean>(false)
@@ -271,6 +281,28 @@ function ClassDetailContent({ params }: { params: { id: string } }) {
   const [currentCurriculum, setCurrentCurriculum] = useState<curriculumObject>()
   // 초기 커리큘럼
   const [initialCurriculum, setInitialCurriculum] = useState<curriculumObject>()
+
+  // 수업 삭제
+  const onClickDeleteClass = async () => {
+    if (confirm('수업을 삭제하시겠습니까?')) {
+      const classRef = doc(db, 'class', params.id)
+      const classSnapshot = await getDoc(classRef)
+      const classData = classSnapshot.data()
+
+      if (classData?.homework) {
+        await deleteDoc(doc(db, 'class_homework', classData.homework.id))
+      }
+
+      if (classData?.notice) {
+        await deleteDoc(doc(db, 'class_notice', classData.notice.id))
+      }
+
+      await deleteDoc(classRef)
+
+      alert('수업이 삭제되었습니다')
+      router.push('/admin/class')
+    }
+  }
 
   // 과제 수정
   const onClickEditHomework = (date: string, content: string, id: string) => {
@@ -656,15 +688,25 @@ function ClassDetailContent({ params }: { params: { id: string } }) {
 
   return (
     <ClassDetailStyle className='container'>
-      <BackButton href="/admin/class" />
-      <div className="class-title">
-        { classInfo.className }
-      </div>
       {
         loading ? (
           <Skeleton />
-        ) : (
-          <Fragment>
+          ) : (
+            <Fragment>
+              <div className="d-flex page-btn-container">
+                <BackButton href="/admin/class" />
+                <Button
+                  className='delete-btn'
+                  size='small'
+                  color='danger'
+                  onClick={onClickDeleteClass}
+                >
+                  수업 삭제
+                </Button>
+              </div>
+              <div className="class-title">
+                { classInfo.className }
+              </div>
             <section>
               <div className="section-header">
                 <div className='section-title'>
