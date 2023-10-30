@@ -696,8 +696,8 @@ function ClassDetailContent({ params }: { params: { id: string } }) {
                               onInputChange={onChangeNewHomework}
                             />
                             <div className="button-container">
-                              <Button color='primary' disabled={!newHomework.date || !newHomework.content} onClick={onClickSubmitNewHomework}>추가</Button>
                               <Button color='default' onClick={onClickCloseNewHomework}>취소</Button>
+                              <Button color='primary' disabled={!newHomework.date || !newHomework.content} onClick={onClickSubmitNewHomework}>추가</Button>
                             </div>
                           </div>
                         </div>
@@ -805,17 +805,17 @@ function ClassDetailContent({ params }: { params: { id: string } }) {
                           />
                           <div className="button-container d-flex">
                             <Button
+                              color='default'
+                              onClick={onClickCloseEditHomework}
+                            >
+                              취소
+                            </Button>
+                            <Button
                               color='primary'
                               disabled={!editHomework}
                               onClick={(e) => onEditHomework(e)}
                             >
                               수정하기
-                            </Button>
-                            <Button
-                              color='default'
-                              onClick={onClickCloseEditHomework}
-                            >
-                              취소
                             </Button>
                           </div>
                         </div>
@@ -857,8 +857,8 @@ function ClassDetailContent({ params }: { params: { id: string } }) {
                               onInputChange={onChangeNewNotice}
                             />
                             <div className="button-container">
-                              <Button color='primary' disabled={!newNotice.date || !newNotice.content} onClick={onClickSubmitNewNotice}>추가</Button>
                               <Button color='default' onClick={onClickCloseNewNotice}>취소</Button>
+                              <Button color='primary' disabled={!newNotice.date || !newNotice.content} onClick={onClickSubmitNewNotice}>추가</Button>
                             </div>
                           </div>
                         </div>
@@ -949,17 +949,17 @@ function ClassDetailContent({ params }: { params: { id: string } }) {
                           />
                           <div className="button-container d-flex">
                             <Button
+                              color='default'
+                              onClick={onClickCloseEditNotice}
+                            >
+                              취소
+                            </Button>
+                            <Button
                               color='primary'
                               disabled={!editNotice}
                               onClick={(e) => onEditNotice(e)}
                             >
                               수정하기
-                            </Button>
-                            <Button
-                              color='default'
-                              onClick={onClickCloseEditNotice}
-                            >
-                              취소
                             </Button>
                           </div>
                         </div>
