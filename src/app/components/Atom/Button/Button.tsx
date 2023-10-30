@@ -56,9 +56,9 @@ const BtnStyle = styled.button<ButtonProps>`
   `}
 `
 
-export default function Button({ onClick, children, disabled = false, size = 'large', color = 'primary' }: ButtonProps) {
+export default function Button({ onClick, children, disabled = false, size = 'large', color = 'primary', className = '' }: ButtonProps) {
   return (
-    <BtnStyle onClick={onClick} disabled={disabled} size={size} color={color}>
+    <BtnStyle onClick={onClick} disabled={disabled} size={size} color={color} className={className}>
       {children}
     </BtnStyle>
   )

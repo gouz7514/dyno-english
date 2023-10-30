@@ -8,11 +8,6 @@ import { doc, getDoc, getDocs, collection, setDoc, DocumentSnapshot } from "fire
 
 import { ClassDetail, ClassHomeworks, ClassNotices, Notice, Homework } from "@/types/types"
 
-const kakaoCustomProvider = KakaoProvider({
-  clientId: process.env.KAKAO_CLIENT_ID as string,
-  clientSecret: process.env.KAKAO_CLIENT_SECRET as string
-})
-
 // get user info from firestore
 const getUserInfo = async (userId: string) => {
   const docRef = doc(db, 'users', userId)
