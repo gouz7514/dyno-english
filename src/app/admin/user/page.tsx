@@ -9,7 +9,7 @@ import { getDocs, collection, DocumentData } from 'firebase/firestore'
 
 import EmptyState from '@/app/components/Molecule/EmptyState'
 import Skeleton from '@/app/components/Molecule/Skeleton'
-import ModalUser from '@/app/components/Modal/ModalUser'
+import ModalUser from '@/app/components/Template/Modal/ModalUser'
 import ListItem2 from '@/app/components/Atom/ListItem2'
 import IsStaff from '@/app/components/Template/IsStaff'
 import BackButton from '@/app/components/Atom/Button/BackButton'
