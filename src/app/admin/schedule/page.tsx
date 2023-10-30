@@ -10,7 +10,7 @@ import { getDocs, collection, DocumentData, deleteDoc, doc } from 'firebase/fire
 import { ClassSchedule } from '@/types/types'
 
 import EmptyState from '@/app/components/Molecule/EmptyState'
-import Skeleton from '@/app/components/Skeleton'
+import Skeleton from '@/app/components/Molecule/Skeleton'
 import LinkButton from '@/app/components/Atom/Button/LinkButton'
 import ScheduleItem from '@/app/components/Molecule/ScheduleItem'
 import IsStaff from '@/app/components/Template/IsStaff'

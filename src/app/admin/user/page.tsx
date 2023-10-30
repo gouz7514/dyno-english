@@ -8,7 +8,7 @@ import { db } from '@/firebase/config'
 import { getDocs, collection, DocumentData } from 'firebase/firestore'
 
 import EmptyState from '@/app/components/Molecule/EmptyState'
-import Skeleton from '@/app/components/Skeleton'
+import Skeleton from '@/app/components/Molecule/Skeleton'
 import ModalUser from '@/app/components/Modal/ModalUser'
 import ListItem2 from '@/app/components/Atom/ListItem2'
 import IsStaff from '@/app/components/Template/IsStaff'
