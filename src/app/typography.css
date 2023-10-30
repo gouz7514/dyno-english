@@ -25,3 +25,13 @@ h1 {
 .small-text {
   font-size: 0.8em;
 }
+
+.text-error {
+  color: var(--button-danger);
+  font-size: 0.8em;
+}
+
+.text-success {
+  color: var(--primary-green);
+  font-size: 0.8em;
+}

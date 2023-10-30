@@ -2,8 +2,8 @@ import styled from 'styled-components'
 import { useEffect, useState, useRef } from "react"
 import { DocumentData } from "firebase/firestore"
 
-import Button from '@/app/components/Button'
-import Toggle from '@/app/components/Toggle/Toggle'
+import Button from '@/app/components/Atom/Button/Button'
+import Toggle from '@/app/components/Molecule/Toggle/Toggle'
 import DynoSelect from '@/app/components/Atom/Input/DynoSelect'
 
 import { db } from "@/firebase/config"

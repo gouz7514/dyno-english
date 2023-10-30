@@ -1,12 +1,12 @@
 import { useState, useEffect, Fragment, useCallback } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 
-import Button from '@/app/components/Button'
+import Button from '@/app/components/Atom/Button/Button'
 import ImageButton from '@/app/components/Atom/Button/ImageButton'
 import DynoInput from '@/app/components/Atom/Input/DynoInput'
 import DynoSelect from '@/app/components/Atom/Input/DynoSelect'
-import Toggle from '@/app/components/Toggle/Toggle'
-import Skeleton from '@/app/components/Skeleton'
+import Toggle from '@/app/components/Molecule/Toggle/Toggle'
+import Skeleton from '@/app/components/Molecule/Skeleton'
 
 import { Hours, Minutes } from '@/lib/constants/constatns'
 import { DayKorean, scheduleRepeatRule, scheduleRepeatRules, ClassSchedule } from "@/types/types"

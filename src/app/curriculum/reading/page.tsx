@@ -4,7 +4,7 @@ import { useState, useEffect } from "react"
 
 import { ArticleStyle } from "@/app/styles/styles"
 import Image from 'next/image'
-import Divider from "@/app/components/Divider"
+import Divider from "@/app/components/Atom/Divider"
 
 import { CurriculumReading } from "@/lib/constants/constatns"
 

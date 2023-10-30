@@ -8,10 +8,11 @@ import { db } from '@/firebase/config'
 import { getDocs, collection, DocumentData } from 'firebase/firestore'
 
 import EmptyState from '@/app/components/Molecule/EmptyState'
-import Skeleton from '@/app/components/Skeleton'
-import LinkButton from '@/app/components/LinkButton'
+import Skeleton from '@/app/components/Molecule/Skeleton'
+import LinkButton from '@/app/components/Atom/Button/LinkButton'
 import ListItem from '@/app/components/Atom/ListItem'
 import IsStaff from '@/app/components/Template/IsStaff'
+import BackButton from '@/app/components/Atom/Button/BackButton'
 
 const AdminClassStyle = styled.div`
   .content-header {
@@ -25,12 +26,6 @@ const AdminClassStyle = styled.div`
     }
   }
 `
-
-/*
-  TODO List
-  1. 수업 클릭 시 해당 수업 정보 보이기 (커리큘럼, 과제, 수업 내용)
-  2. 수업 내용 및 과제 추가 form
-*/
 
 function AdminClassContent() {
   const [classList, setClassList] = useState<DocumentData[]>([])
@@ -60,6 +55,7 @@ function AdminClassContent() {
     <Suspense fallback={<Skeleton />}>
       <AdminClassStyle className='container'>
           <div>
+            <BackButton href="/admin/" />
             <div className="content-header">
               <div className='content-title'>
                 수업 목록

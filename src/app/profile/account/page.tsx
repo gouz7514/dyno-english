@@ -5,10 +5,10 @@ import { useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react'
 import styled from 'styled-components'
 
-import Button from '@/app/components/Button'
+import Button from '@/app/components/Atom/Button/Button'
 import ImageButton from '@/app/components/Atom/Button/ImageButton'
 import DynoInput from '@/app/components/Atom/Input/DynoInput'
-import Skeleton from '@/app/components/Skeleton'
+import Skeleton from '@/app/components/Molecule/Skeleton'
 
 import { UserProps } from '@/types/types'
 

@@ -80,7 +80,7 @@ body {
 .container {
   max-width: 600px;
   width: 100%;
-  padding: 60px 12px 24px;
+  padding: 40px 12px 24px;
   margin: 0 auto;
   min-height: calc(100vh - var(--height-header) - var(--height-footer));
 }

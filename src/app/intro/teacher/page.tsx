@@ -3,7 +3,7 @@
 import { useState } from "react"
 
 import { ArticleStyle } from "@/app/styles/styles"
-import Divider from "@/app/components/Divider"
+import Divider from "@/app/components/Atom/Divider"
 
 export default function IntroTeacher() {
   const [isToggled, setIsToggled] = useState<{

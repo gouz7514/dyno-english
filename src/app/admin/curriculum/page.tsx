@@ -8,10 +8,11 @@ import { db } from '@/firebase/config'
 import { getDocs, collection, DocumentData } from 'firebase/firestore'
 
 import EmptyState from '@/app/components/Molecule/EmptyState'
-import Skeleton from '@/app/components/Skeleton'
-import LinkButton from '@/app/components/LinkButton'
+import Skeleton from '@/app/components/Molecule/Skeleton'
+import LinkButton from '@/app/components/Atom/Button/LinkButton'
 import ListItem from '@/app/components/Atom/ListItem'
 import IsStaff from '@/app/components/Template/IsStaff'
+import BackButton from '@/app/components/Atom/Button/BackButton'
 
 const AdminCurriculumStyle = styled.div`
   .content-header {
@@ -57,6 +58,7 @@ function AdminCurriculmContent() {
           <Skeleton />
         ) : (
           <div>
+            <BackButton href="/admin/" />
             <div className="content-header">
               <div className="content-title">
                 커리큘럼 목록

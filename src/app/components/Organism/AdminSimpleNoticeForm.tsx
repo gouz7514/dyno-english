@@ -2,9 +2,9 @@ import styled from 'styled-components'
 import React, { useState, useEffect, useCallback } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 
-import Button from '@/app/components/Button'
+import Button from '@/app/components/Atom/Button/Button'
 import DynoInput from '@/app/components/Atom/Input/DynoInput'
-import Skeleton from '@/app/components/Skeleton'
+import Skeleton from '@/app/components/Molecule/Skeleton'
 
 import { db } from "@/firebase/config"
 import { collection, addDoc, doc, getDoc, updateDoc, deleteDoc } from 'firebase/firestore'
@@ -135,12 +135,6 @@ export default function AdminSimpleNoticeForm({ isEdit }: AdminSimpleNoticeFormP
 
             </div>
             <div className="button-container">
-              <Button
-                onClick={handleSubmit}
-                disabled={simpleNotice === '' || submitting}
-              >
-                { isEdit ? '수정하기' : '추가하기' }
-              </Button>
               {
                 isEdit && (
                   <Button
@@ -152,6 +146,12 @@ export default function AdminSimpleNoticeForm({ isEdit }: AdminSimpleNoticeFormP
                   </Button>
                 )
               }
+              <Button
+                onClick={handleSubmit}
+                disabled={simpleNotice === '' || submitting}
+              >
+                { isEdit ? '수정하기' : '추가하기' }
+              </Button>
             </div>
           </AdminSimpleNoticeFormStyle>
         )

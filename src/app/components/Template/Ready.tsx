@@ -1,4 +1,4 @@
-import { ArticleStyle } from "../styles/styles"
+import { ArticleStyle } from "../../styles/styles"
 
 export default function Ready() {
   return (

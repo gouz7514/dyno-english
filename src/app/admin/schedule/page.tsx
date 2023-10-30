@@ -10,22 +10,26 @@ import { getDocs, collection, DocumentData, deleteDoc, doc } from 'firebase/fire
 import { ClassSchedule } from '@/types/types'
 
 import EmptyState from '@/app/components/Molecule/EmptyState'
-import Skeleton from '@/app/components/Skeleton'
-import LinkButton from '@/app/components/LinkButton'
+import Skeleton from '@/app/components/Molecule/Skeleton'
+import LinkButton from '@/app/components/Atom/Button/LinkButton'
 import ScheduleItem from '@/app/components/Molecule/ScheduleItem'
 import IsStaff from '@/app/components/Template/IsStaff'
+import BackButton from '@/app/components/Atom/Button/BackButton'
 
 const AdminScheduleStyle = styled.div`
   .content-header {
     display: flex;
     flex-direction: column;
-    gap: 8px;
     justify-content: space-between;
     margin-bottom: 24px;
 
-    .content-title {
-      font-size: 1.5rem;
-      font-weight: 700;
+    .content-title-container {
+      margin-bottom: 8px;
+      
+      .content-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+      }
     }
   }
 `
@@ -69,7 +73,8 @@ function AdminScheduleContent() {
     <AdminScheduleStyle className='container'>
       <div>
         <div className="content-header">
-          <div className="d-flex justify-content-between align-items-center">
+          <BackButton href="/admin/" />
+          <div className="d-flex justify-content-between align-items-center content-title-container">
             <div className="content-title">
               수업 시간표
             </div>

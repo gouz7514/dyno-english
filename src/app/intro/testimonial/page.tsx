@@ -9,8 +9,8 @@ import { getDocs, collection } from 'firebase/firestore'
 
 import styled from 'styled-components'
 
-import Skeleton from '@/app/components/Skeleton'
-import Button from '@/app/components/Button'
+import Skeleton from '@/app/components/Molecule/Skeleton'
+import Button from '@/app/components/Atom/Button/Button'
 import { TestimonialProps } from '@/types/types'
 
 import { Swiper, SwiperSlide } from 'swiper/react'

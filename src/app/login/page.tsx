@@ -5,7 +5,7 @@ import styled from 'styled-components'
 import { useRouter } from 'next/navigation'
 import { signIn, useSession } from 'next-auth/react'
 
-import Button from '@/app/components/Button'
+import Button from '@/app/components/Atom/Button/Button'
 import DynoInput from '@/app/components/Atom/Input/DynoInput'
 
 const LoginStyle = styled.div`
