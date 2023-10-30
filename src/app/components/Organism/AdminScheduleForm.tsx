@@ -1,7 +1,7 @@
 import { useState, useEffect, Fragment, useCallback } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 
-import Button from '@/app/components/Button'
+import Button from '@/app/components/Atom/Button/Button'
 import ImageButton from '@/app/components/Atom/Button/ImageButton'
 import DynoInput from '@/app/components/Atom/Input/DynoInput'
 import DynoSelect from '@/app/components/Atom/Input/DynoSelect'

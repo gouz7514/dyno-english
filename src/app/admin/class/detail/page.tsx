@@ -9,7 +9,7 @@ import { doc, getDoc, updateDoc, getDocs, collection, DocumentData } from 'fireb
 
 import EmptyState from '@/app/components/Molecule/EmptyState'
 import ImageButton from '@/app/components/Atom/Button/ImageButton'
-import Button from '@/app/components/Button'
+import Button from '@/app/components/Atom/Button/Button'
 import Modal from '@/app/components/Organism/Modal'
 import DynoInput from '@/app/components/Atom/Input/DynoInput'
 import IsStaff from '@/app/components/Template/IsStaff'

@@ -2,7 +2,7 @@
 
 import { ArticleStyle } from '@/app/styles/styles'
 
-import Button from '@/app/components/Button'
+import Button from '@/app/components/Atom/Button/Button'
 import { useRouter } from 'next/navigation'
 
 export default function TestimonialNotice() {

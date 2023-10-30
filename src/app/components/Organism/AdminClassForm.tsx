@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation'
 import { db } from '@/firebase/config'
 import { addDoc, collection, setDoc, doc, updateDoc, getDocs, DocumentData } from 'firebase/firestore'
 
-import Button from '@/app/components/Button'
+import Button from '@/app/components/Atom/Button/Button'
 import DynoSelect from '@/app/components/Atom/Input/DynoSelect'
 import DynoInput from '@/app/components/Atom/Input/DynoInput'
 import CurriculumList from '@/app/components/Organism/CurriculumList'

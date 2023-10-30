@@ -2,7 +2,7 @@ import styled from 'styled-components'
 import React, { useState, useEffect, useCallback } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 
-import Button from '@/app/components/Button'
+import Button from '@/app/components/Atom/Button/Button'
 import DynoInput from '@/app/components/Atom/Input/DynoInput'
 import Skeleton from '@/app/components/Skeleton'
 

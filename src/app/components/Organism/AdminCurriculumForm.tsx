@@ -4,7 +4,7 @@ import { useRouter, useSearchParams } from 'next/navigation'
 import { db } from '@/firebase/config'
 import { addDoc, collection, getDoc, deleteDoc, doc, updateDoc } from 'firebase/firestore'
 
-import Button from '@/app/components/Button'
+import Button from '@/app/components/Atom/Button/Button'
 import ImageButton from '@/app/components/Atom/Button/ImageButton'
 import Badge from '@/app/components/Molecule/Badge'
 import DynoInput from '@/app/components/Atom/Input/DynoInput'

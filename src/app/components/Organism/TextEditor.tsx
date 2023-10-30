@@ -4,7 +4,7 @@ import styled from 'styled-components'
 
 import DynoSelect from '@/app/components/Atom/Input/DynoSelect'
 import DynoInput from '@/app/components/Atom/Input/DynoInput'
-import Button from '@/app/components/Button'
+import Button from '@/app/components/Atom/Button/Button'
 
 import { useState, useEffect, useRef, ChangeEvent, use } from 'react'
 
