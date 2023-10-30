@@ -8,14 +8,19 @@ import { ref, getDownloadURL, uploadBytes } from '@firebase/storage'
 
 const DynoUploaderStyle = styled.div`
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-  gap: 8px;
-  margin-bottom: 12px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  position: relative;
+  flex-direction: column;
+
+  .uploader-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    gap: 8px;
+    margin-bottom: 12px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    position: relative;
+  }
 
   label {
     display: flex;
@@ -71,12 +76,21 @@ const DynoUploaderStyle = styled.div`
   input {
     display: none;
   }
+
+  .upload-state {
+    margin-top: -6px;
+    margin-bottom: 12px;
+  }
 `
 
 export default function DynoUploader({ isOpen }: { isOpen: boolean }) {
   const [uploading, setUploading] = useState<boolean>(false)
   const [selectedFile, setSelectedFile] = useState<any>(null)
   const [fileUrl, setFileUrl] = useState<string>('')
+  const [uploadState, setUploadState] = useState({
+    type: 'error',
+    message: '',
+  })
 
   useEffect(() => {
     if (!isOpen) {
@@ -109,7 +123,10 @@ export default function DynoUploader({ isOpen }: { isOpen: boolean }) {
       uploadBytes(fileRef, file)
         .then((_) => {
           setUploading(false)
-          alert('파일 업로드가 완료되었습니다')
+          setUploadState({
+            type: 'success',
+            message: '파일 업로드가 완료되었습니다'
+          })
   
           getDownloadURL(fileRef)
             .then((url) => {
@@ -119,43 +136,60 @@ export default function DynoUploader({ isOpen }: { isOpen: boolean }) {
 
       return
     } catch (error) {
-      console.log(error)
       alert('파일 업로드에 실패했습니다')
     }
   }
 
   const onClickCopy = () => {
-    if (!fileUrl) alert('파일을 업로드해주세요')
+    if (!fileUrl) {
+      setUploadState({
+        type: 'error',
+        message: '파일을 업로드해주세요'
+      })
+      return
+    }
     navigator.clipboard.writeText(fileUrl)
       .then(() => {
-        alert('URL이 복사되었습니다')
+        setUploadState({
+          type: 'success',
+          message: 'URL이 복사되었습니다'
+        })
       })
   }
 
   return (
-    <DynoUploaderStyle className="uploder-container">
-      <label htmlFor="file">
-        <div className='uploader'>
-          <div className="btn-upload"></div>
-          <div className="file-name">
-            {selectedFile ? selectedFile.name : '파일을 선택해주세요'}
+    <DynoUploaderStyle>
+      <div className="uploader-container">
+        <label htmlFor="file">
+          <div className='uploader'>
+            <div className="btn-upload"></div>
+            <div className="file-name">
+              {selectedFile ? selectedFile.name : '파일을 선택해주세요'}
+            </div>
           </div>
-        </div>
-      </label>
+        </label>
+        {
+          uploading && (
+            <div className="uploading">
+              파일 업로드 중...
+            </div>
+          )
+        }
+        <div className="btn-copy" onClick={onClickCopy}></div>
+        <input
+          type="file"
+          name="file"
+          id="file"
+          onChange={onSelectFile}
+        />
+      </div>
       {
-        uploading && (
-          <div className="uploading">
-            파일 업로드 중...
+        uploadState && (
+          <div className={`upload-state ${uploadState.type === 'error' ? 'text-error' : 'text-success' }`} >
+            { uploadState.message }
           </div>
         )
       }
-      <div className="btn-copy" onClick={onClickCopy}></div>
-      <input
-        type="file"
-        name="file"
-        id="file"
-        onChange={onSelectFile}
-      />
     </DynoUploaderStyle>
   )
 }
