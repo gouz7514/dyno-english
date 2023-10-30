@@ -19,6 +19,7 @@ import Skeleton from '@/app/components/Skeleton'
 import TextEditor from '@/app/components/Organism/TextEditor'
 import EditableText from '@/app/components/Organism/EditableText'
 import DynoUploader from '@/app/components/Atom/Input/DynoUploader'
+import BackButton from '@/app/components/Atom/Button/BackButton'
 
 import { convertDate } from '@/lib/utils/date'
 import { Month } from '@/types/types'
@@ -34,7 +35,7 @@ SwiperCore.use([Pagination, Navigation])
 
 const ClassDetailStyle = styled.div`
   max-width: 1024px;
-  padding: 24px 12px;
+  padding: 40px 12px 24px;
 
   .class-title {
     font-size: 2rem;
@@ -655,6 +656,7 @@ function ClassDetailContent({ params }: { params: { id: string } }) {
 
   return (
     <ClassDetailStyle className='container'>
+      <BackButton href="/admin/class" />
       <div className="class-title">
         { classInfo.className }
       </div>

@@ -72,7 +72,7 @@ export const FormStyle = styled.div`
   display: flex;
   flex-direction: column;
   background-color: #eee;
-  padding: 24px;
+  padding: 40px 12px 24px;
 
   .form-title {
     margin-bottom: 24px;

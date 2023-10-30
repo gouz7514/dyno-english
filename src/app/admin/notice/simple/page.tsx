@@ -11,6 +11,7 @@ import Skeleton from '@/app/components/Skeleton'
 import LinkButton from '@/app/components/LinkButton'
 import ListItem from '@/app/components/Atom/ListItem'
 import IsStaff from '@/app/components/Template/IsStaff'
+import BackButton from '@/app/components/Atom/Button/BackButton'
 
 const AdminNoticeSimpleStyle = styled.div`
   .content-header {
@@ -64,6 +65,7 @@ function AdminNoticeSimpleContent() {
           <div>
             <div className="content-header">
               <div className="content-title-container">
+                <BackButton href="/admin/" />
                 <div className="d-flex justify-content-between">
                   <div className="content-title">
                     간단 공지사항
