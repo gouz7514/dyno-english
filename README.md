@@ -2,10 +2,10 @@
 ![dyno-english](public/images/image-dyno-english-full.webp)
 
 ## 소개
+> 💡 **구현 기능에 대한 설명은 [여기](/docs/구현_기능.md)를 확인해 주세요!**
 - 개발 기간 : 2023.06.14 ~ 2023.10.27 (약 4개월)
 - 하남시 미사에 위치한 [다이노 영어](https://naver.me/FNuOZAku)의 웹사이트입니다.
 - 다이노 영어의 운영에 필요한 기능들을 구현한 프로젝트입니다.
-- 구현 기능들은 [여기](/docs/구현_기능.md) 에서 확인할 수 있습니다.
 
 ## 설치 및 실행
 **패키지 설치**
@@ -20,7 +20,7 @@ yarn dev
 localhost:3306
 ```
 
-> **참고**<br />
+> **❗️ 참고**<br />
 로컬 환경에서 실행하기 위해서는 db와 연결을 위한 firebase api key, 카카오 로그인을 위한 kakao client id 등이 저장된 `.env` 파일이 필요합니다.<br />
 보안 상 이슈로 위 파일은 제공되지 않으며 궁금하신 점이 있는 경우 [issue](https://github.com/gouz7514/dyno-english/issues) 혹은 [메일](mailto:gouz7514@gmail.com)으로 문의해주시길 바랍니다!
 
