@@ -58,9 +58,18 @@ const ProfileStyle = styled.div`
       }
     }
 
-    .simple-notice-content {
-      &:not(:last-child) {
-        margin-bottom: 12px;
+    .simple-notice-container {
+      white-space: pre-line;
+      word-break: keep-all;
+
+      .simple-notice-content {
+        border-radius: 8px;
+        background-color: var(--primary-background-color);
+        padding: 6px 8px;
+
+        &:not(:last-child) {
+          margin-bottom: 12px;
+        }
       }
     }
 
@@ -271,13 +280,15 @@ export default function ProfilePage() {
             {
               session?.simpleNotice && session?.simpleNotice.length !== 0 && (
                 <Callout title='공지사항'>
-                  {
-                    session?.simpleNotice.map((notice, index) => (
-                      <div key={index} className='simple-notice-content'>
-                        { notice.content }
-                      </div>
-                    ))
-                  }
+                  <div className="simple-notice-container">
+                    {
+                      session?.simpleNotice.map((notice, index) => (
+                        <div key={index} className='simple-notice-content'>
+                          { notice.content }
+                        </div>
+                      ))
+                    }
+                  </div>
                 </Callout>
               )
             }

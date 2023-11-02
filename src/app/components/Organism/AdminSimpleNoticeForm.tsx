@@ -3,8 +3,8 @@ import React, { useState, useEffect, useCallback } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 
 import Button from '@/app/components/Atom/Button/Button'
-import DynoInput from '@/app/components/Atom/Input/DynoInput'
 import Skeleton from '@/app/components/Molecule/Skeleton'
+import DynoTextArea from '@/app/components/Atom//Input/DynoTextArea'
 
 import { db } from "@/firebase/config"
 import { collection, addDoc, doc, getDoc, updateDoc, deleteDoc } from 'firebase/firestore'
@@ -27,20 +27,6 @@ export default function AdminSimpleNoticeForm({ isEdit }: AdminSimpleNoticeFormP
   const [loading, setLoading] = useState(isEdit ? true : false)
   const simpleNoticeId = useSearchParams().get('id') as string
   const router = useRouter()
-
-  const getSimpleNoticeInfo = async (id: string) => {
-    const docRef = doc(db, 'notice_simple', id)
-    const docSnap = await getDoc(docRef)
-
-    if (docSnap.exists()) {
-      const docData = docSnap.data()
-      setSimpleNotice(docData.content)
-      setLoading(false)
-    } else {
-      alert('존재하지 않는 간단 공지사항입니다')
-      router.replace('/admin/notice/simple')
-    }
-  }
 
   const memoizedSimpleNoticeInfo = useCallback(() => {
     const getSimpleNoticeInfo = async (id: string) => {
@@ -124,15 +110,21 @@ export default function AdminSimpleNoticeForm({ isEdit }: AdminSimpleNoticeFormP
         ) : (
           <AdminSimpleNoticeFormStyle>
             <div className="input-container">
-              <DynoInput
+              {/* <DynoInput
                 type="text"
                 id="simpleNotice"
                 name="simpleNotice"
                 placeholder={ isEdit ? "수정할 간단 공지사항을 입력해주세요" : "새롭게 추가할 간단 공지사항을 입력해주세요" }
                 value={simpleNotice}
                 onChange={handleSimpleNoticeChange}
+              /> */}
+              <DynoTextArea
+                id="simpleNotice"
+                name="simpleNotice"
+                placeholder={ isEdit ? "수정할 간단 공지사항을 입력해주세요" : "새롭게 추가할 간단 공지사항을 입력해주세요" }
+                value={simpleNotice}
+                onChange={handleSimpleNoticeChange}
               />
-
             </div>
             <div className="button-container">
               {
