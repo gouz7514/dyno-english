@@ -763,7 +763,7 @@ function ClassDetailContent({ params }: { params: { id: string } }) {
                       initialSlide={Object.values(classInfo.homework as Object)[0]?.length - 1}
                     >
                       {
-                        Object.entries(classInfo.homework as Object).map(([key, value]) => (
+                        Object.entries(classInfo.homework as Object).slice(-14).map(([key, value]) => (
                           <div key={key}>
                             {
                               value.map((item: { content: string, date: string, id: string }, idx: number) => (
@@ -925,7 +925,7 @@ function ClassDetailContent({ params }: { params: { id: string } }) {
                     >
                       {
                         classInfo.notice && (
-                          Object.entries(classInfo.notice as Object).map(([key, value]) => (
+                          Object.entries(classInfo.notice as Object).slice(-14).map(([key, value]) => (
                             <div key={key}>
                               {
                                 value.map((item: { content: string, date: string, id: string }, idx: number) => (

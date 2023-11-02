@@ -328,11 +328,11 @@ export default function ProfilePage() {
                                 <Swiper
                                   slidesPerView={1}
                                   pagination={{ clickable: true }}
-                                  initialSlide={selectedClass ? Object.keys(selectedClass).length - 1 : 0}
+                                  initialSlide={selectedClass ? Object.keys(selectedClass.details).length - 1 : 0}
                                 >
                                   {
                                     Object.keys(selectedClass).length && (
-                                      Object.entries(selectedClass.details).map(([key, value]: [string, any]) => (
+                                      Object.entries(selectedClass.details).slice(-7).map(([key, value]: [string, any]) => (
                                         <SwiperSlide key={key} className='class-info'>
                                           <div className="class-notice">
                                             <div className='content-title'>
