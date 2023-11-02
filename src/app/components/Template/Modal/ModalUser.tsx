@@ -247,12 +247,12 @@ export default function Modal({ isOpen, onClose, currentUser, allClass }: ModalP
           </div>
           <div className="button-container">
             <Button
+              color='default'
               onClick={onClose}
             >
               닫기
             </Button>
             <Button
-              color='default'
               onClick={onSubmit}
             >
               확인
