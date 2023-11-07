@@ -13,6 +13,14 @@ import { SessionProvider } from 'next-auth/react'
 const metadata = {
   title: '다이노 영어',
   description: '다이노 영어와 함께 영어를 배워보세요!',
+  opengraph: {
+    title: '다이노 영어',
+    type: 'website',
+    image: 'https://dyno-english.vercel.app/logo/og_dyno_english.webp',
+    url: 'https://dynoenglish.com',
+    description: '다이노 영어와 함께 영어를 배워보세요!',
+    locale: 'ko_KR',
+  }
 }
 
 declare global {
@@ -34,13 +42,14 @@ export default function RootLayout({
     <html lang="en">
       <head>
         <title>{metadata.title}</title>
-        <meta charSet="utf-8" />
         <meta name="title" content={metadata.title} />
         <meta name="description" content={metadata.description} />
-        <meta property="og:type" content="website" />
-        <meta property="og:title" content={metadata.title} />
-        <meta property="og:description" content={metadata.description} />
-        <meta property="og:image" content="https://dyno-english.vercel.app/logo/og_dyno_english.webp" />
+        <meta property="og:title" content={metadata.opengraph.title} />
+        <meta property="og:type" content={metadata.opengraph.type} />
+        <meta property="og:image" content={metadata.opengraph.image} />
+        <meta property="og:url" content={metadata.opengraph.url} />
+        <meta property="og:description" content={metadata.opengraph.description} />
+        <meta property="og:locale" content={metadata.opengraph.locale} />
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
         <Script
           type="text/javascript"

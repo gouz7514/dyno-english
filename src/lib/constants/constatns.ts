@@ -156,3 +156,54 @@ export const Minutes = {
   '40분' : 40,
   '50분' : 50,
 }
+
+const TITLE = {
+  home: '다이노 영어',
+  introMap: '오시는 길',
+  introTeacher: '선생님 소개',
+  introTestimonial: '소중한 후기',
+}
+
+const DESCRIPTION = {
+  home: '다이노 영어와 함께 영어를 배워보세요!',
+  introMap: '다이노 영어 공부방 오시는 길입니다.',
+  introTeacher: '다이노 선생님을 소개합니다.',
+  introTestimonial: '다이노 영어의 소중한 후기를 소개합니다.',
+}
+
+const extendTitle = (title: string) => `${TITLE.home} | ${title}`
+
+export const METADATA = {
+  home: {
+    title: TITLE.home,
+    description: DESCRIPTION.home,
+    openGraph: {
+      title: TITLE.home,
+      description: DESCRIPTION.home,
+    }
+  },
+  introMap: {
+    title: extendTitle(TITLE.introMap),
+    description: DESCRIPTION.introMap,
+    openGraph: {
+      title: extendTitle(TITLE.introMap),
+      description: DESCRIPTION.introMap,
+    }
+  },
+  introTeacher: {
+    title: extendTitle(TITLE.introTeacher),
+    description: DESCRIPTION.introTeacher,
+    openGraph: {
+      title: extendTitle(TITLE.introTeacher),
+      description: DESCRIPTION.introTeacher,
+    }
+  },
+  introTestimonial: {
+    title: extendTitle(TITLE.introTestimonial),
+    description: DESCRIPTION.introTestimonial,
+    openGraph: {
+      title: extendTitle(TITLE.introTestimonial),
+      description: DESCRIPTION.introTestimonial,
+    }
+  },
+}
