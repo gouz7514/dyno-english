@@ -50,6 +50,7 @@ export default function RootLayout({
         <meta property="og:url" content={metadata.opengraph.url} />
         <meta property="og:description" content={metadata.opengraph.description} />
         <meta property="og:locale" content={metadata.opengraph.locale} />
+        <meta name="naver-site-verification" content="63f93978ef407fabe9271f046062a63e08227120" />
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
         <Script
           type="text/javascript"
