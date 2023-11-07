@@ -2,6 +2,7 @@
 
 import { useRef } from 'react'
 import Image from 'next/image'
+import styled from 'styled-components'
 
 import { Swiper, SwiperSlide } from 'swiper/react'
 import SwiperCore, { Pagination, Navigation } from "swiper"
@@ -10,7 +11,31 @@ import 'swiper/css/navigation'
 import 'swiper/css/pagination'
 import 'swiper/css/scrollbar'
 
-import styled from 'styled-components'
+import ImageDynoMap1 from '../../../../../public/images/intro/map/image-dyno-english-map-1.webp'
+import ImageDynoMap2 from '../../../../../public/images/intro/map/image-dyno-english-map-2-2.webp'
+import ImageDynoMap3 from '../../../../../public/images/intro/map/image-dyno-english-map-3.webp'
+import ImageDynoMap4 from '../../../../../public/images/intro/map/image-dyno-english-map-4.webp'
+import ImageDynoMap5 from '../../../../../public/images/intro/map/image-dyno-english-map-5.webp'
+import ImageDynoMap6 from '../../../../../public/images/intro/map/image-dyno-english-map-6.webp'
+import ImageDynoMap7 from '../../../../../public/images/intro/map/image-dyno-english-map-7.webp'
+import ImageDynoMap8 from '../../../../../public/images/intro/map/image-dyno-english-map-8.webp'
+import ImageDynoMap9 from '../../../../../public/images/intro/map/image-dyno-english-map-9.webp'
+import ImageDynoMap10 from '../../../../../public/images/intro/map/image-dyno-english-map-10-2.webp'
+import ImageDynoMap11 from '../../../../../public/images/intro/map/image-dyno-english-map-11.webp'
+
+const MAP_IMAGES = [
+  ImageDynoMap1,
+  ImageDynoMap2,
+  ImageDynoMap3,
+  ImageDynoMap4,
+  ImageDynoMap5,
+  ImageDynoMap6,
+  ImageDynoMap7,
+  ImageDynoMap8,
+  ImageDynoMap9,
+  ImageDynoMap10,
+  ImageDynoMap11,
+]
 
 SwiperCore.use([Pagination, Navigation])
 
@@ -120,8 +145,6 @@ const SwiperStyleRoot = styled.div`
     }
 
     .swiper-text {
-      // position: absolute;
-      // bottom: 0;
       width: 100%;
       margin-top: 12px;
       text-align: center;
@@ -155,9 +178,10 @@ export default function IntroMapDetail() {
         <SwiperSlide>
           <div className="swiper-image">
             <Image
-              src="/images/intro/image-dyno-english-map-1.webp"
+              src={MAP_IMAGES[0]}
               alt="다이노 영어 찾아오는 길 1"
               fill
+              placeholder="blur"
             />
           </div>
           <div className="swiper-text">
@@ -167,9 +191,10 @@ export default function IntroMapDetail() {
         <SwiperSlide>
           <div className="swiper-image">
             <Image
-              src="/images/intro/image-dyno-english-map-2-2.webp"
+              src={MAP_IMAGES[1]}
               alt="다이노 영어 찾아오는 길 2"
               fill
+              placeholder="blur"
             />
           </div>
           <div className="swiper-text">
@@ -179,9 +204,10 @@ export default function IntroMapDetail() {
         <SwiperSlide>
           <div className="swiper-image">
             <Image
-              src="/images/intro/image-dyno-english-map-3.webp"
+              src={MAP_IMAGES[2]}
               alt="다이노 영어 찾아오는 길 3"
               fill
+              placeholder="blur"
             />
           </div>
           <div className="swiper-text">
@@ -191,9 +217,10 @@ export default function IntroMapDetail() {
         <SwiperSlide>
           <div className="swiper-image">
             <Image
-              src="/images/intro/image-dyno-english-map-4.webp"
+              src={MAP_IMAGES[3]}
               alt="다이노 영어 찾아오는 길 4"
               fill
+              placeholder="blur"
             />
           </div>
           <div className="swiper-text">
@@ -203,9 +230,10 @@ export default function IntroMapDetail() {
         <SwiperSlide>
           <div className="swiper-image">
             <Image
-              src="/images/intro/image-dyno-english-map-5.webp"
+              src={MAP_IMAGES[4]}
               alt="다이노 영어 찾아오는 길 5"
               fill
+              placeholder="blur"
             />
           </div>
           <div className="swiper-text">
@@ -215,9 +243,10 @@ export default function IntroMapDetail() {
         <SwiperSlide>
           <div className="swiper-image">
             <Image
-              src="/images/intro/image-dyno-english-map-6.webp"
+              src={MAP_IMAGES[5]}
               alt="다이노 영어 찾아오는 길 6"
               fill
+              placeholder="blur"
             />
           </div>
           <div className="swiper-text">
@@ -227,9 +256,10 @@ export default function IntroMapDetail() {
         <SwiperSlide>
           <div className="swiper-image">
             <Image
-              src="/images/intro/image-dyno-english-map-7.webp"
+              src={MAP_IMAGES[6]}
               alt="다이노 영어 찾아오는 길 7"
               fill
+              placeholder="blur"
             />
           </div>
           <div className="swiper-text">
@@ -239,7 +269,7 @@ export default function IntroMapDetail() {
         <SwiperSlide>
           <div className="swiper-image">
             <Image
-              src="/images/intro/image-dyno-english-map-8.webp"
+              src={MAP_IMAGES[7]}
               alt="다이노 영어 찾아오는 길 8"
               fill
             />
@@ -251,9 +281,10 @@ export default function IntroMapDetail() {
         <SwiperSlide>
           <div className="swiper-image">
             <Image
-              src="/images/intro/image-dyno-english-map-9.webp"
+              src={MAP_IMAGES[8]}
               alt="다이노 영어 찾아오는 길 9"
               fill
+              placeholder="blur"
             />
           </div>
           <div className="swiper-text">
@@ -263,9 +294,10 @@ export default function IntroMapDetail() {
         <SwiperSlide>
           <div className="swiper-image">
             <Image
-              src="/images/intro/image-dyno-english-map-10-2.webp"
+              src={MAP_IMAGES[9]}
               alt="다이노 영어 찾아오는 길 10"
               fill
+              placeholder="blur"
             />
           </div>
           <div className="swiper-text">
@@ -275,9 +307,10 @@ export default function IntroMapDetail() {
         <SwiperSlide>
           <div className="swiper-image">
             <Image
-              src="/images/intro/image-dyno-english-map-11.webp"
+              src={MAP_IMAGES[10]}
               alt="다이노 영어 찾아오는 길 11"
               fill
+              placeholder="blur"
             />
           </div>
           <div className="swiper-text">
