@@ -108,11 +108,14 @@ const SwiperStyleRoot = styled.div`
       gap: 8px;
       margin: 0 auto;
       margin-top: 24px;
+      width: 100%;
+      max-width: 400px;
+      padding: 12px;
 
       @media screen and (max-width: 600px) {
         flex-direction: column;
         align-items: center;
-        justify-content: flex-end
+        justify-content: center;
       }
 
       img {
@@ -122,25 +125,6 @@ const SwiperStyleRoot = styled.div`
         border-radius: 12px;
         margin: 0 auto;
         box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
-
-        &:not(.img-flex) {
-          @media screen and (max-width: 600px) {
-            max-width: 300px !important;
-            max-height: 300px !important;
-          }
-        }
-
-        &.img-flex {
-          max-width: 350px !important;
-          max-height: 350px !important;
-          position: relative !important;
-          margin: 0 auto !important;
-
-          @media screen and (max-width: 600px) {
-            max-width: 200px !important;
-            max-height: 200px !important;
-          }
-        }
       }
     }
 
