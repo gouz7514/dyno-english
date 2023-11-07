@@ -64,7 +64,7 @@ const IntroTeacherSwiper = styled.div`
 
       .swiper-teacher {
         position: relative;
-        height: 500px;
+        height: 512px;
         padding: 12px 18px;
         border-radius: 12px;
         box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
@@ -107,8 +107,7 @@ const IntroTeacherSwiper = styled.div`
   }
 
   @media screen and (max-width: 850px) {
-    margin-top: 12px;
-    height: 500px;
+    height: 512px;
   }
 
   @media screen and (max-width: 450px) {
@@ -117,23 +116,6 @@ const IntroTeacherSwiper = styled.div`
 `
 
 export default function IntroTeacher() {
-  const [isToggled, setIsToggled] = useState<{
-    first: boolean;
-    second: boolean;
-    third: boolean;
-  }>({
-    first: false,
-    second: false,
-    third: false,
-  })
-
-  const onClickToggle = function(toggleName: keyof typeof isToggled) {
-    setIsToggled((prevState) => ({
-      ...prevState,
-      [toggleName]: !prevState[toggleName],
-    }))
-  }
-
   return (
     <IntroTeacherStyle>
       <div className="profile-container">
@@ -145,6 +127,7 @@ export default function IntroTeacher() {
           height={0}
           sizes="100vw"
           style={{ width: '100%', height: 'auto' }}
+          placeholder="blur"
         />
       </div>
       <IntroTeacherSwiper className="intro-teacher-swiper">
