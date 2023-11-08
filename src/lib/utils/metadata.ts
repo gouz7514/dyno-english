@@ -29,12 +29,4 @@ export class CustomMetadata extends Metadata {
     this.openGraph.title = openGraph?.title || '다이노 영어';
     this.openGraph.description = openGraph?.description || '다이노 영어와 함께 영어를 배워보세요!';
   }
-
-  getMetadata() {
-    return {
-      title: this.title,
-      description: this.description,
-      openGraph: this.openGraph,
-    }
-  }
 }

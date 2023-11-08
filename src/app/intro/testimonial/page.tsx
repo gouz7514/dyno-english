@@ -4,7 +4,7 @@ import IntroTestimonialPage from "@/app/components/Page/intro/IntroTestimonialPa
 import { METADATA } from '@/lib/constants/constatns'
 import { CustomMetadata } from '@/lib/utils/metadata'
 
-export const metadata: Metadata = new CustomMetadata(METADATA.introTestimonial)
+// export const metadata: Metadata = new CustomMetadata(METADATA.introTestimonial)
 
 export default function IntroTestimonial() {
   return (
