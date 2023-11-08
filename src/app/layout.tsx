@@ -1,4 +1,5 @@
 import { Metadata } from 'next'
+import { Metadata as MetadataClass } from '@/lib/utils/metadata'
 
 import Script from 'next/script'
 import Head from 'next/head'
@@ -10,20 +11,7 @@ declare global {
   }
 }
 
-const METADATA = {
-  title: '다이노 영어',
-  description: '다이노 영어와 함께 영어를 배워보세요!',
-  openGraph: {
-    title: '다이노 영어',
-    type: 'website',
-    image: 'https://dyno-english.vercel.app/logo/og_dyno_english.webp',
-    url: 'https://dynoenglish.com',
-    description: '다이노 영어와 함께 영어를 배워보세요!',
-    locale: 'ko_KR',
-  }
-}
-
-export const metadata: Metadata = METADATA
+export const metadata: Metadata = new MetadataClass()
 
 export default function RootLayout({
   children,
@@ -33,7 +21,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <Head>
-        <title>{ METADATA.title }</title>
+        <title>다이노 영어</title>
         <meta name="naver-site-verification" content="63f93978ef407fabe9271f046062a63e08227120" />
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
       </Head>

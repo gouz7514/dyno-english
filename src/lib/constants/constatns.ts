@@ -180,6 +180,10 @@ export const METADATA = {
     openGraph: {
       title: TITLE.home,
       description: DESCRIPTION.home,
+      type: 'website',
+      image: 'https://dyno-english.vercel.app/logo/og_dyno_english.webp',
+      url: 'https://dynoenglish.com',
+      locale: 'ko_KR',
     }
   },
   introMap: {

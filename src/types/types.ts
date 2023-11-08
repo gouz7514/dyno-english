@@ -168,3 +168,11 @@ export interface scheduleRepeatRule {
 }
 
 export interface scheduleRepeatRules extends Array<scheduleRepeatRule> {}
+
+export interface IMetadata {
+  title: string,
+  description: string,
+  openGraph: {
+    [key: string]: string
+  }
+}
