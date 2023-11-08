@@ -181,7 +181,14 @@ export const METADATA = {
       title: TITLE.home,
       description: DESCRIPTION.home,
       type: 'website',
-      image: 'https://dyno-english.vercel.app/logo/og_dyno_english.webp',
+      images: [
+        {
+          url: 'https://dynoenglish.com/logo/og_dyno_english.png',
+          width: 1200,
+          height: 849,
+          alt: '다이노 영어',
+        }
+      ],
       url: 'https://dynoenglish.com',
       locale: 'ko_KR',
     }
