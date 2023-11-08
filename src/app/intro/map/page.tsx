@@ -1,16 +1,10 @@
 import { Metadata } from 'next'
 
 import Map from '@/app/components/Page/intro/IntroMap'
+import { genPageMetadata } from '@/lib/utils/metadata'
 import { METADATA } from '@/lib/constants/constatns'
-import { CustomMetadata } from '@/lib/utils/metadata'
 
-const IntroMapMetadta = new CustomMetadata(METADATA.introMap)
-const { title, description, openGraph } = IntroMapMetadta
-export const metadata: Metadata = {
-  title,
-  description,
-  openGraph,
-}
+export const metadata: Metadata = genPageMetadata(METADATA.introMap)
 
 export default function IntroMap() {
   return (

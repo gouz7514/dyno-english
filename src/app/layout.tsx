@@ -1,9 +1,10 @@
 import { Metadata } from 'next'
-import { Metadata as MetadataClass } from '@/lib/utils/metadata'
 
 import Script from 'next/script'
 import Head from 'next/head'
 import LayoutCore from "@/lib/layoutCore"
+
+import { METADATA } from '@/lib/constants/constatns'
 
 declare global {
   interface Window {
@@ -11,7 +12,7 @@ declare global {
   }
 }
 
-export const metadata: Metadata = new MetadataClass()
+export const metadata: Metadata = METADATA.home
 
 export default function RootLayout({
   children,
