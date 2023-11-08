@@ -4,7 +4,13 @@ import Map from '@/app/components/Page/intro/IntroMap'
 import { METADATA } from '@/lib/constants/constatns'
 import { CustomMetadata } from '@/lib/utils/metadata'
 
-// export const metadata: Metadata = new CustomMetadata(METADATA.introMap).getMetadata()
+const IntroMapMetadta = new CustomMetadata(METADATA.introMap)
+const { title, description, openGraph } = IntroMapMetadta
+export const metadata: Metadata = {
+  title,
+  description,
+  openGraph,
+}
 
 export default function IntroMap() {
   return (
