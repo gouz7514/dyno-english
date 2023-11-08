@@ -1,19 +1,19 @@
-'use client'
+import { Metadata } from 'next'
 
-import './globals.css'
-
-import StyledComponentsRegistry from '@/lib/registry'
 import Script from 'next/script'
+import Head from 'next/head'
+import LayoutCore from "@/lib/layoutCore"
 
-import Header from '@/app/components/Organism/Header/Header'
-import Footer from '@/app/components/Organism/Footer'
-import DynoTalk from '@/app/components/Molecule/DynoTalk'
-import { SessionProvider } from 'next-auth/react'
+declare global {
+  interface Window {
+    Kakao: any
+  }
+}
 
-const metadata = {
+const METADATA = {
   title: '다이노 영어',
   description: '다이노 영어와 함께 영어를 배워보세요!',
-  opengraph: {
+  openGraph: {
     title: '다이노 영어',
     type: 'website',
     image: 'https://dyno-english.vercel.app/logo/og_dyno_english.webp',
@@ -23,55 +23,28 @@ const metadata = {
   }
 }
 
-declare global {
-  interface Window {
-    Kakao: any
-  }
-}
+export const metadata: Metadata = METADATA
 
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode
-}) {
-  function kakaoInit() {
-    window.Kakao.init(process.env.NEXT_PUBLIC_KAKAO_JS_KEY)
-  }
-
+}) {  
   return (
     <html lang="en">
-      <head>
-        <title>{metadata.title}</title>
-        <meta name="title" content={metadata.title} />
-        <meta name="description" content={metadata.description} />
-        <meta property="og:title" content={metadata.opengraph.title} />
-        <meta property="og:type" content={metadata.opengraph.type} />
-        <meta property="og:image" content={metadata.opengraph.image} />
-        <meta property="og:url" content={metadata.opengraph.url} />
-        <meta property="og:description" content={metadata.opengraph.description} />
-        <meta property="og:locale" content={metadata.opengraph.locale} />
+      <Head>
+        <title>{ METADATA.title }</title>
         <meta name="naver-site-verification" content="63f93978ef407fabe9271f046062a63e08227120" />
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
-        <Script
-          type="text/javascript"
-          src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=3u3f8mt3gd"
-        ></Script>
-        <Script
-          src="https://t1.kakaocdn.net/kakao_js_sdk/2.3.0/kakao.min.js"
-          integrity="sha384-70k0rrouSYPWJt7q9rSTKpiTfX6USlMYjZUtr1Du+9o4cGvhPAWxngdtVZDdErlh"
-          crossOrigin='anonymous'
-          onLoad={kakaoInit} 
-        ></Script>
-      </head>
+      </Head>
+      <Script
+        type="text/javascript"
+        src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=3u3f8mt3gd"
+      ></Script>
       <body>
-        <SessionProvider>
-          <StyledComponentsRegistry>
-            <Header />
-            {children}
-            <DynoTalk />
-            <Footer />
-          </StyledComponentsRegistry>
-        </SessionProvider>
+        <LayoutCore>
+          {children}
+        </LayoutCore>
       </body>
     </html>
   )
