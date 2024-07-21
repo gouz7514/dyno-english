@@ -1,3 +1,5 @@
+'use client'
+
 import Script from 'next/script'
 
 export default function KakaoScript() {
@@ -12,7 +14,7 @@ export default function KakaoScript() {
         integrity="sha384-70k0rrouSYPWJt7q9rSTKpiTfX6USlMYjZUtr1Du+9o4cGvhPAWxngdtVZDdErlh"
         crossOrigin='anonymous'
         onLoad={kakaoInit} 
-      ></Script>
+      />
     </>
   )
 }
